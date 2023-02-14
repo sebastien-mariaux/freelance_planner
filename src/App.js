@@ -8,10 +8,6 @@ const WEEKS_IN_YEAR = 52;
 
 const defaultSimulations = [
   (new Simulation()).serialize(),
-  (new Simulation()).serialize(),
-  (new Simulation()).serialize(),
-  (new Simulation()).serialize(),
-  (new Simulation()).serialize()
 ]
 
 
@@ -48,6 +44,7 @@ const totals = [
   { label: 'dividend', title: 'Dividende versé', style: {} },
   { label: 'netDividend', title: 'Dividende perçu', style: { fontWeight: 'bold' } },
   { label: 'managerMonthlyIncome', title: 'Revenu mensuel moyen du dirigeant', style: { fontWeight: 'bold', fontSize: '1.2rem' } },
+  { label: 'manageIncomeRevenuRatio', title: 'Ratio revenu / CA', style: { fontWeight: 'bold' } },
 ]
 function ControlledField({ field, simulation, fieldIndex, simulationIndex, updateSimulation, checker }) {
   const [isError, setIsError] = useState(false)
@@ -116,6 +113,8 @@ function App() {
       case 'dividend':
       case 'netDividend':
       case 'managerMonthlyIncome':
+      case 'manageIncomeRevenuRatio':
+      case 'yearlyFoodCost':
         return (
           <div
             key={`${fieldIndex}-${simulationIndex}`}
@@ -127,7 +126,6 @@ function App() {
         )
 
       default:
-        console.log({ ...field.style, gridColumn: simulationIndex + 2, gridRow: fieldIndex + 1 })
         return (
           <div
             key={`${fieldIndex}-${simulationIndex}`}

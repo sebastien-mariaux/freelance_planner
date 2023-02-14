@@ -3,23 +3,30 @@ const TAX_THRESHOLD = 42500;
 
 export class Simulation {
   constructor(initialValues = {}) {
+    console.log(initialValues)
     this.name = initialValues.name || 'Simulation';
-    this.dailyRate = initialValues.dailyRate || 500;
-    this._weeksOff = initialValues.weeksOff || 10;
-    this._weeksOn = initialValues.weeksOn || 42;
-    this._daysPerWeek = initialValues.daysPerWeek || 5;
-    this._dailyFoodCost = initialValues.dailyFoodCost || 10;
-    this._yearlyRent = initialValues.yearlyRent || 3500;
-    this._yearlyAccountingCost = initialValues.yearlyAccountingCost || 1200;
-    this._yearlyInternetCost = initialValues.yearlyInternetCost || 0;
-    this._yearlyPhoneCost = initialValues.yearlyPhoneCost || 0;
-    this._yearlyProInsuranceCost = initialValues.yearlyProInsuranceCost || 450;
-    this._yearlyOtherInsuranceCost = initialValues.yearlyOtherInsuranceCost || 0;
-    this._yearlyBankingCost = initialValues.yearlyBankingCost || 120;
-    this._yearlyFurnitureCost = initialValues.yearlyFurnitureCost || 400;
-    this._yearlyOtherCost = initialValues.yearlyOtherCost || 100;
+    this.dailyRate = this.getDefaultValue(initialValues.dailyRate, 500);
+    this._weeksOff = this.getDefaultValue(initialValues.weeksOff, 10);
+    this._weeksOn = this.getDefaultValue(initialValues.weeksOn, 42);
+    this._daysPerWeek = this.getDefaultValue(initialValues.daysPerWeek, 5);
+    this._dailyFoodCost = this.getDefaultValue(initialValues.dailyFoodCost, 10);
+    this._yearlyRent = this.getDefaultValue(initialValues.yearlyRent, 3500);
+    this._yearlyAccountingCost = this.getDefaultValue(initialValues.yearlyAccountingCost, 1200);
+    this._yearlyInternetCost = this.getDefaultValue(initialValues.yearlyInternetCost, 0);
+    this._yearlyPhoneCost = this.getDefaultValue(initialValues.yearlyPhoneCost, 0);
+    this._yearlyProInsuranceCost = this.getDefaultValue(initialValues.yearlyProInsuranceCost, 450);
+    this._yearlyOtherInsuranceCost = this.getDefaultValue(initialValues.yearlyOtherInsuranceCost, 0);
+    this._yearlyBankingCost = this.getDefaultValue(initialValues.yearlyBankingCost, 120);
+    this._yearlyFurnitureCost = this.getDefaultValue(initialValues.yearlyFurnitureCost, 400);
+    this._yearlyOtherCost = this.getDefaultValue(initialValues.yearlyOtherCost, 100);
   }
 
+  getDefaultValue(value, defaultValue) {
+    if (value === 0) {
+      return 0;
+    }
+    return value || defaultValue;
+  }
 
   get weeksOff() {
     return this._weeksOff;
@@ -48,61 +55,61 @@ export class Simulation {
     return this._dailyFoodCost;
   }
   set dailyFoodCost(value) {
-    return this._dailyFoodCost = parseFloat(value) || 0;
+    return this._dailyFoodCost = parseFloat(value) || 0.0;
   }
   get yearlyRent() {
     return this._yearlyRent
   }
   set yearlyRent(value) {
-    this._yearlyRent = parseFloat(value) || 0
+    this._yearlyRent = parseFloat(value) || 0.0
   }
   get yearlyAccountingCost() {
     return this._yearlyAccountingCost
   }
   set yearlyAccountingCost(value) {
-    this._yearlyAccountingCost = parseFloat(value) || 0
+    this._yearlyAccountingCost = parseFloat(value) || 0.0
   }
   get yearlyInternetCost() {
     return this._yearlyInternetCost
   }
   set yearlyInternetCost(value) {
-    this._yearlyInternetCost = parseFloat(value) || 0
+    this._yearlyInternetCost = parseFloat(value) || 0.0
   }
   get yearlyPhoneCost() {
     return this._yearlyPhoneCost
   }
   set yearlyPhoneCost(value) {
-    this._yearlyPhoneCost = parseFloat(value) || 0
+    this._yearlyPhoneCost = parseFloat(value) || 0.0
   }
   get yearlyProInsuranceCost() {
     return this._yearlyProInsuranceCost
   }
   set yearlyProInsuranceCost(value) {
-    this._yearlyProInsuranceCost = parseFloat(value) || 0
+    this._yearlyProInsuranceCost = parseFloat(value) || 0.0
   }
   get yearlyOtherInsuranceCost() {
     return this._yearlyOtherInsuranceCost
   }
   set yearlyOtherInsuranceCost(value) {
-    this._yearlyOtherInsuranceCost = parseFloat(value) || 0
+    this._yearlyOtherInsuranceCost = parseFloat(value) || 0.0
   }
   get yearlyBankingCost() {
     return this._yearlyBankingCost
   }
   set yearlyBankingCost(value) {
-    this._yearlyBankingCost = parseFloat(value) || 0
+    this._yearlyBankingCost = parseFloat(value) || 0.0
   }
   get yearlyFurnitureCost() {
     return this._yearlyFurnitureCost
   }
   set yearlyFurnitureCost(value) {
-    this._yearlyFurnitureCost = parseFloat(value) || 0
+    this._yearlyFurnitureCost = parseFloat(value) || 0.0
   }
   get yearlyOtherCost() {
     return this._yearlyOtherCost
   }
   set yearlyOtherCost(value) {
-    this._yearlyOtherCost = parseFloat(value) || 0
+    this._yearlyOtherCost = parseFloat(value) || 0.0
   }
 
 
@@ -135,6 +142,8 @@ export class Simulation {
       dividend: this.netIncome(),
       netDividend: this.netDividend(),
       managerMonthlyIncome: this.managerMonthlyIncome(),
+      manageIncomeRevenuRatio: this.manageIncomeRevenuRatio(),
+
     }
   }
 
@@ -190,6 +199,10 @@ export class Simulation {
 
   managerMonthlyIncome() {
     return this.netDividend() / 12;
+  }
+
+  manageIncomeRevenuRatio() {
+    return (this.managerMonthlyIncome() / this.monthlyIncome()) * 100;
   }
 }
 
