@@ -10,9 +10,11 @@ export class Simulation {
     this._weeksOn = this.getDefaultValue(initialValues.weeksOn, 42);
     this._daysPerWeek = this.getDefaultValue(initialValues.daysPerWeek, 5);
     this._dailyFoodCost = this.getDefaultValue(initialValues.dailyFoodCost, 10);
-    this._yearlyRent = this.getDefaultValue(initialValues.yearlyRent, 3500);
+    this._yearlyRentRepayed = this.getDefaultValue(initialValues.yearlyRentRepayed, 3500);
+    this._yearlyRent = this.getDefaultValue(initialValues.yearlyRent, 0);
     this._yearlyAccountingCost = this.getDefaultValue(initialValues.yearlyAccountingCost, 1200);
-    this._yearlyInternetCost = this.getDefaultValue(initialValues.yearlyInternetCost, 0);
+    this._yearlyPowerCostRepayed = this.getDefaultValue(initialValues.yearlyPowerCostRepayed, 0);
+    this._yearlyInternetCostRepayed = this.getDefaultValue(initialValues.yearlyInternetCostRepayed, 0);
     this._yearlyPhoneCost = this.getDefaultValue(initialValues.yearlyPhoneCost, 0);
     this._yearlyProInsuranceCost = this.getDefaultValue(initialValues.yearlyProInsuranceCost, 450);
     this._yearlyOtherInsuranceCost = this.getDefaultValue(initialValues.yearlyOtherInsuranceCost, 0);
@@ -51,11 +53,23 @@ export class Simulation {
     }
     this._daysPerWeek = value;
   }
+  get yearlyPowerCostRepayed() {
+    return this._yearlyPowerCostRepayed;
+  }
+  set yearlyPowerCostRepayed(value) {
+    this._yearlyPowerCostRepayed = parseFloat(value) || 0.0;
+  }
   get dailyFoodCost() {
     return this._dailyFoodCost;
   }
   set dailyFoodCost(value) {
     return this._dailyFoodCost = parseFloat(value) || 0.0;
+  }
+  get yearlyRentRepayed() {
+    return this._yearlyRentRepayed
+  }
+  set yearlyRentRepayed(value) {
+    this._yearlyRentRepayed = parseFloat(value) || 0.0
   }
   get yearlyRent() {
     return this._yearlyRent
@@ -69,11 +83,11 @@ export class Simulation {
   set yearlyAccountingCost(value) {
     this._yearlyAccountingCost = parseFloat(value) || 0.0
   }
-  get yearlyInternetCost() {
-    return this._yearlyInternetCost
+  get yearlyInternetCostRepayed() {
+    return this._yearlyInternetCostRepayed
   }
-  set yearlyInternetCost(value) {
-    this._yearlyInternetCost = parseFloat(value) || 0.0
+  set yearlyInternetCostRepayed(value) {
+    this._yearlyInternetCostRepayed = parseFloat(value) || 0.0
   }
   get yearlyPhoneCost() {
     return this._yearlyPhoneCost
@@ -126,8 +140,9 @@ export class Simulation {
       dailyFoodCost: this.dailyFoodCost,
       yearlyFoodCost: this.yearlyFoodCost(),
       yearlyRent: this.yearlyRent,
+      yearlyRentRepayed: this.yearlyRentRepayed,
       yearlyAccountingCost: this.yearlyAccountingCost,
-      yearlyInternetCost: this.yearlyInternetCost,
+      yearlyInternetCostRepayed: this.yearlyInternetCostRepayed,
       yearlyPhoneCost: this.yearlyPhoneCost,
       yearlyProInsuranceCost: this.yearlyProInsuranceCost,
       yearlyOtherInsuranceCost: this.yearlyOtherInsuranceCost,
@@ -143,6 +158,7 @@ export class Simulation {
       netDividend: this.netDividend(),
       managerMonthlyIncome: this.managerMonthlyIncome(),
       manageIncomeRevenuRatio: this.manageIncomeRevenuRatio(),
+      yearlyPowerCostRepayed: this.yearlyPowerCostRepayed,
 
     }
   }
@@ -163,7 +179,7 @@ export class Simulation {
     return this.yearlyFoodCost()
       + this.yearlyRent
       + this.yearlyAccountingCost
-      + this.yearlyInternetCost
+      + this.yearlyInternetCostRepayed
       + this.yearlyPhoneCost
       + this.yearlyProInsuranceCost
       + this.yearlyOtherInsuranceCost
@@ -198,11 +214,15 @@ export class Simulation {
   }
 
   managerMonthlyIncome() {
-    return this.netDividend() / 12;
+    return this.managerYearlyIncome() / 12;
+  }
+
+  managerYearlyIncome() {
+    return this.netDividend() + this.yearlyRentRepayed + this.yearlyPowerCostRepayed + this.yearlyInternetCostRepayed;
   }
 
   manageIncomeRevenuRatio() {
-    return (this.managerMonthlyIncome() / this.monthlyIncome()) * 100;
+    return this.managerMonthlyIncome() / this.monthlyIncome();
   }
 }
 

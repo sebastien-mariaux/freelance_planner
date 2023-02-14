@@ -2,39 +2,47 @@ import { useState } from 'react';
 import './App.css';
 import { Simulation } from './models/simulation';
 
-const WEEKS_IN_YEAR = 52;
-
-
-
 const defaultSimulations = [
+  (new Simulation()).serialize(),
   (new Simulation()).serialize(),
 ]
 
+const incomes = [
+  { label: 'yearlyIncome', title: 'CA annuel', style: { fontWeight: 'bold', fontSize: '1.2em' } },
+  { label: 'monthlyIncome', title: 'CA moyen mensuel', style: { fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' } },
+];
 
-const fields = [
+const workload = [
   { label: 'name', title: 'Titre', style: {} },
   { label: 'dailyRate', title: 'TJM', style: {} },
   { label: 'daysPerWeek', title: 'Jours par semaine', style: {} },
   { label: 'weeksOff', title: 'Semaines off', style: {} },
   { label: 'weeksOn', title: 'Semaines travaillées', style: {} },
-  { label: 'yearlyIncome', title: 'CA annuel', style: { fontWeight: 'bold', fontSize: '1.2em' } },
-  { label: 'monthlyIncome', title: 'CA moyen mensuel', style: { fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' } },
-];
+]
 
 const expenses = [
   { label: 'dailyFoodCost', title: 'Prix moyen repas', style: {} },
   { label: 'yearlyFoodCost', title: 'Coût annuel repas', style: {} },
   { label: 'yearlyRent', title: 'Coût annuel loyer', style: {} },
   { label: 'yearlyAccountingCost', title: 'Coût annuel comptabilité', style: {} },
-  { label: 'yearlyInternetCost', title: 'Coût annuel internet', style: {} },
   { label: 'yearlyPhoneCost', title: 'Coût annuel téléphone', style: {} },
   { label: 'yearlyProInsuranceCost', title: 'Coût annuel RC Pro', style: {} },
   { label: 'yearlyOtherInsuranceCost', title: 'Coût annuel autres assurances', style: {} },
   { label: 'yearlyBankingCost', title: 'Frais bancaires annuels', style: {} },
   { label: 'yearlyFurnitureCost', title: 'Coût annuel fournitures', style: {} },
   { label: 'yearlyOtherCost', title: 'Autres coûts annuels', style: {} },
+]
+
+const repayableFees = [
+  { label: 'yearlyRentRepayed', title: 'Remboursement loyer', style: {} },
+  { label: 'yearlyInternetCostRepayed', title: 'Remboursement internet', style: {} },
+  { label: 'yearlyPowerCostRepayed', title: 'Remboursement électricité', style: {} },
+]
+
+const totalExpenses = [
   { label: 'yearlyTotalCost', title: 'Total des charges', style: { fontWeight: 'bold', fontSize: '1.2em' } },
   { label: 'montlyAverageCost', title: 'Charges moyennes mensuelles', style: { fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' } },
+
 ]
 
 const totals = [
@@ -44,150 +52,160 @@ const totals = [
   { label: 'dividend', title: 'Dividende versé', style: {} },
   { label: 'netDividend', title: 'Dividende perçu', style: { fontWeight: 'bold' } },
   { label: 'managerMonthlyIncome', title: 'Revenu mensuel moyen du dirigeant', style: { fontWeight: 'bold', fontSize: '1.2rem' } },
+]
+
+const ratios  = [
   { label: 'manageIncomeRevenuRatio', title: 'Ratio revenu / CA', style: { fontWeight: 'bold' } },
 ]
-function ControlledField({ field, simulation, fieldIndex, simulationIndex, updateSimulation, checker }) {
-  const [isError, setIsError] = useState(false)
 
-  const onChange = (e) => {
-    if (checker(e.target.value)) {
-      setIsError(false)
-      updateSimulation(simulationIndex, field, e.target.value)
-    } else {
-      setIsError(true)
-    }
-  }
-
-  return (
-    <div
-      style={{ gridColumn: simulationIndex + 2, gridRow: fieldIndex + 1 }}
-      className={field.label}
-    >
-      <input type="text"
-        defaultValue={simulation[field.label]}
-        onChange={onChange}
-        style={{ color: isError ? 'red' : 'inherit' }}
-      />
-    </div>
-  )
+const displayAmount = (amount) => {
+  return amount.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
 }
 
-const checkDaysPerWeek = (value) => {
-  if (value < 0 || value > 7) {
-    return false
-  }
-  return true
+const displayPercent = (amount) => {
+  return amount.toLocaleString('fr-FR', { style: 'percent', minimumFractionDigits: 2 });
 }
 
 function App() {
   const [simulations, setSimulations] = useState(defaultSimulations);
 
-  const updateSimulation = (index, field, value) => {
+  const updateSimulation = (index, label, value) => {
     let newSimulations = simulations.map(simulation => new Simulation(simulation));
-    newSimulations[index][field.label] = value;
+    newSimulations[index][label] = value;
     newSimulations = newSimulations.map(simulation => simulation.serialize());
     console.log(newSimulations)
     setSimulations([...newSimulations]);
   }
 
-  const displayField = (field, simulation, fieldIndex, simulationIndex) => {
-    switch (field.label) {
-      case 'daysPerWeek':
-
-        return (<ControlledField
-          key={`${fieldIndex}-${simulationIndex}`}
-          field={field}
-          simulation={simulation}
-          fieldIndex={fieldIndex}
-          simulationIndex={simulationIndex}
-          updateSimulation={updateSimulation}
-          checker={checkDaysPerWeek}
-        />)
-      case 'yearlyIncome':
-      case 'monthlyIncome':
-      case 'yearlyTotalCost':
-      case 'montlyAverageCost':
-      case 'rawIncome':
-      case 'incomeTax':
-      case 'netIncome':
-      case 'dividend':
-      case 'netDividend':
-      case 'managerMonthlyIncome':
-      case 'manageIncomeRevenuRatio':
-      case 'yearlyFoodCost':
-        return (
-          <div
-            key={`${fieldIndex}-${simulationIndex}`}
-            style={{ ...field.style, gridColumn: simulationIndex + 2, gridRow: fieldIndex + 1 }}
-            className={field.label}
-          >
-            {simulation[field.label]}
-          </div>
-        )
-
-      default:
-        return (
-          <div
-            key={`${fieldIndex}-${simulationIndex}`}
-            style={{ ...field.style, gridColumn: simulationIndex + 2, gridRow: fieldIndex + 1 }}
-            className={field.label}
-          >
-            <input type="text"
-              value={simulation[field.label]}
-              onChange={(e) => updateSimulation(simulationIndex, field, e.target.value)}
-            />
-          </div>
-        )
-    }
-  }
-
-
-
-
-
-
-
   return (
     <>
-      <h1>STARTUP PLANNER</h1>
+      <h1>FREELANCE PLANNER</h1>
       <h2>SASU</h2>
-      <h3>Revenus</h3>
 
-      <div className="wrapper" style={styles.wrapper}>
-        {fields.map((field, index) => (
-          <div key={index} style={{ ...field.style, gridColumn: 1, gridRow: index + 1 }} className={field.label}>
-            {field.title}
+      <div>
+        <h3>Revenus</h3>
+        {workload.map((w, index) => (
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={styles.leftCol}>
+              {w.title}
+            </div>
+            {simulations.map((simulation, index) => (
+              <div key={index} style={styles.col}>
+                <input
+                  style={{ width: '100%' }}
+                  type="text"
+                  value={simulation[w.label]}
+                  onChange={(e) => updateSimulation(index, w.label, e.target.value)}
+                />
+              </div>
+            ))}
           </div>
         ))}
-        < h3>Charges</h3>
+
+        {incomes.map((income, index) => (
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ ...income.style, ...styles.leftCol }} >
+              {income.title}
+            </div>
+            {simulations.map((simulation, index) => (
+              <div key={index} style={styles.col} >
+                <div style={income.style}>
+                  {displayAmount(simulation[income.label])}
+                </div>
+              </div>
+            ))}
+          </div>
+        ))}
+
+        <h3>Charges</h3>
         {expenses.map((expense, index) => (
-          <div key={index} style={{ ...expense.style, gridColumn: 1, gridRow: index + fields.length + 1 + 1 }} className={expense.label}>
-            {expense.title}
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ ...expense.style, ...styles.leftCol }} >
+              {expense.title}
+            </div>
+            {simulations.map((simulation, index) => (
+              <div key={index} style={styles.col} >
+                <input
+                  style={{ width: '100%' }}
+                  type="text"
+                  value={simulation[expense.label]}
+                  onChange={(e) => updateSimulation(index, expense.label, e.target.value)}
+                />
+              </div>
+            ))}
           </div>
         ))}
-        {totals.map((total, index) => (
-          <div key={index} style={{ ...total.style, gridColumn: 1, gridRow: index + fields.length + expenses.length + 1 + 1 }} className={total.label}>
-            {total.title}
+
+
+        <h4 style={{ marginBottom: '0', marginTop: '0.5em' }}>Frais remboursables</h4>
+        <div style={{ fontSize: '0.75rem', fontStyle: 'italic', marginBottom: '0.5em' }}>
+          *Frais avancés par l'employeur mais remboursables en partie. Indiquer le montant remboursé.
+        </div>
+
+
+        {repayableFees.map((expense, index) => (
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ ...expense.style, ...styles.leftCol }} >
+              {expense.title}
+            </div>
+            {simulations.map((simulation, index) => (
+              <div key={index} style={styles.col} >
+                <input
+                  style={{ width: '100%' }}
+                  type="text"
+                  value={simulation[expense.label]}
+                  onChange={(e) => updateSimulation(index, expense.label, e.target.value)}
+                />
+              </div>
+            ))}
+          </div>
+        ))}
+        <div style={{ height: '1em' }}></div>
+
+        {totalExpenses.map((expense, index) => (
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ ...expense.style, ...styles.leftCol }} >
+              {expense.title}
+            </div>
+            {simulations.map((simulation, index) => (
+              <div key={index} style={styles.col} >
+                <div style={expense.style}>
+                  {displayAmount(simulation[expense.label])}
+                </div>
+              </div>
+            ))}
           </div>
         ))}
 
+        <h3>Soldes</h3>
 
-        {simulations.map((simulation, simulationIndex) => (
-          fields.map((field, fieldIndex) => {
-            return displayField(field, simulation, fieldIndex, simulationIndex)
-          })
+        {totals.map((expense, index) => (
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ ...expense.style, ...styles.leftCol }} >
+              {expense.title}
+            </div>
+            {simulations.map((simulation, index) => (
+              <div key={index} style={styles.col} >
+                <div style={expense.style}>
+                  {displayAmount(simulation[expense.label])}
+                </div>
+              </div>
+            ))}
+          </div>
         ))}
-
-        {simulations.map((simulation, simulationIndex) => (
-          expenses.map((expense, expenseIndex) => {
-            return displayField(expense, simulation, expenseIndex + fields.length + 1, simulationIndex)
-          })
-        ))}
-
-        {simulations.map((simulation, simulationIndex) => (
-          totals.map((total, totalIndex) => {
-            return displayField(total, simulation, totalIndex + fields.length + expenses.length + 1, simulationIndex)
-          })
+        {ratios.map((expense, index) => (
+          <div style={{ display: 'flex', flexDirection: 'row' }}>
+            <div style={{ ...expense.style, ...styles.leftCol }} >
+              {expense.title}
+            </div>
+            {simulations.map((simulation, index) => (
+              <div key={index} style={styles.col} >
+                <div style={expense.style}>
+                  {displayPercent(simulation[expense.label])}
+                </div>
+              </div>
+            ))}
+          </div>
         ))}
       </div>
     </>
@@ -195,11 +213,13 @@ function App() {
 }
 
 const styles = {
-  wrapper: {
-    display: "grid",
-    // gridTemplateColumns: "repeat(3, 1fr)",
-    gridGap: "2px",
-    // gridAutoRows: "minmax(100px, auto)"
+  col: {
+    width: '150px',
+    marginLeft: '1em',
+    textAlign: 'right',
+  },
+  leftCol: {
+    width: '250px',
   }
 }
 
