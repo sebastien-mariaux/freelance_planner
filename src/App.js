@@ -4,7 +4,6 @@ import { Simulation } from './models/simulation';
 
 const defaultSimulations = [
   (new Simulation()).serialize(),
-  (new Simulation()).serialize(),
 ]
 
 const incomes = [
@@ -54,7 +53,7 @@ const totals = [
   { label: 'managerMonthlyIncome', title: 'Revenu mensuel moyen du dirigeant', style: { fontWeight: 'bold', fontSize: '1.2rem' } },
 ]
 
-const ratios  = [
+const ratios = [
   { label: 'manageIncomeRevenuRatio', title: 'Ratio revenu / CA', style: { fontWeight: 'bold' } },
 ]
 
@@ -80,12 +79,18 @@ function App() {
   return (
     <>
       <h1>FREELANCE PLANNER</h1>
-      <h2>SASU</h2>
+      <h2>SASU - paiement en dividendes</h2>
+
+      <button
+        onClick={() => setSimulations([...simulations, (new Simulation()).serialize()])}
+      >
+        Ajouter une simulation
+      </button>
 
       <div>
         <h3>Revenus</h3>
         {workload.map((w, index) => (
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <section style={styles.row}>
             <div style={styles.leftCol}>
               {w.title}
             </div>
@@ -99,11 +104,11 @@ function App() {
                 />
               </div>
             ))}
-          </div>
+          </section>
         ))}
 
         {incomes.map((income, index) => (
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <section style={styles.row}>
             <div style={{ ...income.style, ...styles.leftCol }} >
               {income.title}
             </div>
@@ -114,12 +119,12 @@ function App() {
                 </div>
               </div>
             ))}
-          </div>
+          </section>
         ))}
 
         <h3>Charges</h3>
         {expenses.map((expense, index) => (
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <section style={styles.row}>
             <div style={{ ...expense.style, ...styles.leftCol }} >
               {expense.title}
             </div>
@@ -133,7 +138,7 @@ function App() {
                 />
               </div>
             ))}
-          </div>
+          </section>
         ))}
 
 
@@ -144,7 +149,7 @@ function App() {
 
 
         {repayableFees.map((expense, index) => (
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <section style={styles.row}>
             <div style={{ ...expense.style, ...styles.leftCol }} >
               {expense.title}
             </div>
@@ -158,12 +163,12 @@ function App() {
                 />
               </div>
             ))}
-          </div>
+          </section>
         ))}
         <div style={{ height: '1em' }}></div>
 
         {totalExpenses.map((expense, index) => (
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <section style={styles.row}>
             <div style={{ ...expense.style, ...styles.leftCol }} >
               {expense.title}
             </div>
@@ -174,13 +179,13 @@ function App() {
                 </div>
               </div>
             ))}
-          </div>
+          </section>
         ))}
 
         <h3>Soldes</h3>
 
         {totals.map((expense, index) => (
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <section style={styles.row}>
             <div style={{ ...expense.style, ...styles.leftCol }} >
               {expense.title}
             </div>
@@ -191,10 +196,10 @@ function App() {
                 </div>
               </div>
             ))}
-          </div>
+          </section>
         ))}
         {ratios.map((expense, index) => (
-          <div style={{ display: 'flex', flexDirection: 'row' }}>
+          <section style={styles.row}>
             <div style={{ ...expense.style, ...styles.leftCol }} >
               {expense.title}
             </div>
@@ -205,9 +210,39 @@ function App() {
                 </div>
               </div>
             ))}
-          </div>
+          </section>
         ))}
       </div>
+
+      <section style={styles.row}>
+        <div style={{ ...styles.leftCol }} ></div>
+        {simulations.map((simulation, index) => (
+          <div key={index} style={styles.col} >
+            <button
+              onClick={() => {
+                let newSimulation = new Simulation(simulation);
+                newSimulation.name = newSimulation.name + ' (copie)';
+                setSimulations([...simulations, newSimulation.serialize()]);
+              }}
+            >
+              Dupliquer
+            </button>
+            <button
+              onClick={() => {
+                let newSimulations = [...simulations];
+                newSimulations.splice(index, 1);
+                setSimulations(newSimulations);
+              }}
+            >
+              Supprimer
+            </button>
+          </div>
+        ))}
+      </section>
+
+      <footer style={{ height: '50px' }}>
+
+      </footer>
     </>
   )
 }
@@ -220,6 +255,9 @@ const styles = {
   },
   leftCol: {
     width: '250px',
+  },
+  row: {
+    display: 'flex', flexDirection: 'row'
   }
 }
 
