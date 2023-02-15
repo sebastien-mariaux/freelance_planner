@@ -12,7 +12,7 @@ const incomes = [
 ];
 
 const workload = [
-  { label: 'name', title: 'Titre', style: {} },
+  // { label: 'name', title: 'Titre', style: {} },
   { label: 'dailyRate', title: 'TJM', style: {} },
   { label: 'daysPerWeek', title: 'Jours par semaine', style: {} },
   { label: 'weeksOff', title: 'Semaines off', style: {} },
@@ -45,9 +45,9 @@ const totalExpenses = [
 ]
 
 const totals = [
-  { label: 'rawIncome', title: 'Bénéfice brut', style: {} },
-  { label: 'incomeTax', title: 'Impôts sur les sociétés', style: {} },
-  { label: 'netIncome', title: 'Bénéfice net', style: { fontWeight: 'bold' } },
+  { label: 'rawEarnings', title: 'Bénéfice brut', style: {} },
+  { label: 'earningsTax', title: 'Impôts sur les sociétés', style: {} },
+  { label: 'netEarnings', title: 'Bénéfice net', style: { fontWeight: 'bold' } },
   { label: 'dividend', title: 'Dividende versé', style: {} },
   { label: 'netDividend', title: 'Dividende perçu', style: { fontWeight: 'bold' } },
   { label: 'managerMonthlyIncome', title: 'Revenu mensuel moyen du dirigeant', style: { fontWeight: 'bold', fontSize: '1.2rem' } },
@@ -76,9 +76,18 @@ function App() {
     setSimulations([...newSimulations]);
   }
 
+  const repartition = [
+    { label: 'percentDividend', title: 'Pourcentage de dividendes', style: { } },
+    { label: 'percentSalary', title: 'Pourcentage de salaire', style: { } },
+  ]
+
   return (
     <>
+    <header style={{textAlign: 'center'}}>
       <h1>FREELANCE PLANNER</h1>
+    </header>
+    <div style={{margin: '50px'}}>
+
       <h2>SASU - paiement en dividendes</h2>
 
       <button
@@ -88,6 +97,26 @@ function App() {
       </button>
 
       <div>
+        <h3>Paramétrage</h3>
+        {repartition.map((r, index) => (
+          <section style={styles.row}>
+            <div style={styles.leftCol}>
+              {r.title}
+            </div>
+            {simulations.map((simulation, index) => (
+              <div key={index} style={styles.col}>
+                <input
+                  style={{ width: '100%' }}
+                  type="text"
+                  inputmode="numeric"
+                  value={simulation[r.label]}
+                  onChange={(e) => updateSimulation(index, r.label, e.target.value)}
+                />
+              </div>
+            ))}
+          </section>
+        ))}
+
         <h3>Revenus</h3>
         {workload.map((w, index) => (
           <section style={styles.row}>
@@ -98,7 +127,7 @@ function App() {
               <div key={index} style={styles.col}>
                 <input
                   style={{ width: '100%' }}
-                  type="text"
+                  type="text" inputmode="numeric"
                   value={simulation[w.label]}
                   onChange={(e) => updateSimulation(index, w.label, e.target.value)}
                 />
@@ -239,10 +268,7 @@ function App() {
           </div>
         ))}
       </section>
-
-      <footer style={{ height: '50px' }}>
-
-      </footer>
+    </div>
     </>
   )
 }

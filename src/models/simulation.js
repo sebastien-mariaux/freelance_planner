@@ -1,11 +1,11 @@
 const WEEKS_IN_YEAR = 52;
-const TAX_THRESHOLD = 42500;
+export const TAX_THRESHOLD = 42500;
 
 export class Simulation {
   constructor(initialValues = {}) {
     console.log(initialValues)
     this.name = initialValues.name || 'Simulation';
-    this.dailyRate = this.getDefaultValue(initialValues.dailyRate, 500);
+    this._dailyRate = this.getDefaultValue(initialValues.dailyRate, 500);
     this._weeksOff = this.getDefaultValue(initialValues.weeksOff, 10);
     this._weeksOn = this.getDefaultValue(initialValues.weeksOn, 42);
     this._daysPerWeek = this.getDefaultValue(initialValues.daysPerWeek, 5);
@@ -21,6 +21,8 @@ export class Simulation {
     this._yearlyBankingCost = this.getDefaultValue(initialValues.yearlyBankingCost, 120);
     this._yearlyFurnitureCost = this.getDefaultValue(initialValues.yearlyFurnitureCost, 400);
     this._yearlyOtherCost = this.getDefaultValue(initialValues.yearlyOtherCost, 100);
+    this._percentDividend = this.getDefaultValue(initialValues.percentDividend, 100);
+    this._percentSalary = this.getDefaultValue(initialValues.percentSalary, 0);
   }
 
   getDefaultValue(value, defaultValue) {
@@ -30,26 +32,64 @@ export class Simulation {
     return value || defaultValue;
   }
 
+  get dailyRate() {
+    return this._dailyRate;
+  }
+  set dailyRate(value) {
+    value = this._checkInput(0, null, value, 0)
+    this._dailyRate = value
+  }
+
   get weeksOff() {
     return this._weeksOff;
   }
   set weeksOff(value) {
-    this._weeksOff = parseInt(value);
+    value = this._checkInput(0, WEEKS_IN_YEAR, value, 0)
+    this._weeksOff = value;
     this._weeksOn = WEEKS_IN_YEAR - this._weeksOff;
   }
   get weeksOn() {
     return this._weeksOn;
   }
   set weeksOn(value) {
-    this._weeksOn = parseInt(value);
+    value = this._checkInput(0, WEEKS_IN_YEAR, value, 0)
+    this._weeksOn = value;
     this._weeksOff = WEEKS_IN_YEAR - this._weeksOn;
+  }
+  get percentDividend() {
+    return this._percentDividend;
+  }
+  set percentDividend(value) {
+    value = this._checkInput(0, 100, value, 0)
+    console.log(value)
+    this._percentDividend = value;
+    console.log(this._percentDividend + this._percentSalary)
+    if (this._percentDividend + this._percentSalary > 100) {
+      this._percentSalary = 100 - this._percentDividend;
+    }
+  }
+  get percentSalary() {
+    return this._percentSalary;
+  }
+  set percentSalary(value) {
+    value = this._checkInput(0, 100, value, 0)
+    console.log(value)
+    this._percentSalary = value;
+    console.log(this._percentDividend + this._percentSalary)
+    if (this._percentDividend + this._percentSalary > 100) {
+      this._percentDividend = 100 - this._percentSalary;
+    }
   }
   get daysPerWeek() {
     return this._daysPerWeek;
   }
   set daysPerWeek(value) {
-    if (value < 0 || value > 7) {
-      throw new Error('daysPerWeek must be between 0 and 7');
+    if (!value) {
+      value = 0;
+    } else if (value < 0) {
+      value = 0;
+    } else if (value > 7) {
+      value = 7;
     }
     this._daysPerWeek = value;
   }
@@ -151,15 +191,16 @@ export class Simulation {
       yearlyOtherCost: this.yearlyOtherCost,
       yearlyTotalCost: this.yearlyTotalCost(),
       montlyAverageCost: this.montlyAverageCost(),
-      rawIncome: this.rawIncome(),
-      incomeTax: this.incomeTax(),
-      netIncome: this.netIncome(),
-      dividend: this.netIncome(),
+      rawEarnings: this.rawEarnings(),
+      earningsTax: this.earningsTax(),
+      netEarnings: this.netEarnings(),
+      dividend: this.dividend(),
       netDividend: this.netDividend(),
       managerMonthlyIncome: this.managerMonthlyIncome(),
       manageIncomeRevenuRatio: this.manageIncomeRevenuRatio(),
       yearlyPowerCostRepayed: this.yearlyPowerCostRepayed,
-
+      percentDividend: this.percentDividend,
+      percentSalary: this.percentSalary,
     }
   }
 
@@ -179,38 +220,49 @@ export class Simulation {
     return this.yearlyFoodCost()
       + this.yearlyRent
       + this.yearlyAccountingCost
-      + this.yearlyInternetCostRepayed
       + this.yearlyPhoneCost
       + this.yearlyProInsuranceCost
       + this.yearlyOtherInsuranceCost
       + this.yearlyBankingCost
       + this.yearlyFurnitureCost
-      + this.yearlyOtherCost;
+      + this.yearlyOtherCost
+      + this.yearlyRentRepayed
+      + this.yearlyInternetCostRepayed
+      + this.yearlyPowerCostRepayed;
+
   }
 
   montlyAverageCost() {
     return this.yearlyTotalCost() / 12.0;
   }
 
-  rawIncome() {
+  rawEarnings() {
     return this.yearlyIncome() - this.yearlyTotalCost();
   }
 
-  incomeTax() {
-    if (this.rawIncome() <=0) {
+  earningsTax() {
+    if (this.rawEarnings() <= 0) {
       return 0
     }
-    const belowThreshold = Math.min(this.rawIncome(), TAX_THRESHOLD);
-    const overThreshold = Math.max(this.rawIncome() - TAX_THRESHOLD, 0);
+    const belowThreshold = Math.min(this.rawEarnings(), TAX_THRESHOLD);
+    const overThreshold = Math.max(this.rawEarnings() - TAX_THRESHOLD, 0);
     return 0.15 * belowThreshold + 0.25 * overThreshold;
   }
 
-  netIncome() {
-    return this.rawIncome() - this.incomeTax();
+  netEarnings() {
+    return this.rawEarnings() - this.earningsTax();
+  }
+
+  dividend(){
+    const netEarnings = this.netEarnings();
+    if (netEarnings <= 0) {
+      return 0;
+    }
+    return netEarnings * this.percentDividend / 100;
   }
 
   netDividend() {
-    return this.netIncome() * 0.7;
+    return this.dividend() * 0.7;
   }
 
   managerMonthlyIncome() {
@@ -224,7 +276,18 @@ export class Simulation {
   manageIncomeRevenuRatio() {
     return this.managerMonthlyIncome() / this.monthlyIncome();
   }
+
+  _checkInput(min, max, value, defaultValue) {
+    value = parseFloat(value || 0);
+    if (!value && defaultValue) {
+      return defaultValue;
+    } else if ((min || min === 0) && value < min) {
+      return min;
+    } else if ((max || max === 0) && value > max) {
+      return max;
+    }
+    return value
+  }
+
 }
-
-
 
