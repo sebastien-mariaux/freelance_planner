@@ -17,65 +17,6 @@ const defaultExpenses = {
 // write test for simulation class
 describe('Simulation', () => {
   const simulation = new Simulation();
-
-  describe('set percentDividend', () => {
-    it('should set percentDividend to 0 if value is less than 0', () => {
-      simulation.percentDividend = -1;
-      expect(simulation.percentDividend).toBe(0);
-    })
-    it('should set percentDividend to 0 if value is null', () => {
-      simulation.percentDividend = null;
-      expect(simulation.percentDividend).toBe(0);
-    })
-    it('should set percentDividend to 0 if value is undefined', () => {
-      simulation.percentDividend = undefined;
-      expect(simulation.percentDividend).toBe(0);
-    })
-
-    it('should set percentDividend to 100 if value is greater than 100', () => {
-      simulation.percentDividend = 101;
-      expect(simulation.percentDividend).toBe(100);
-    })
-    it('should modify percentSalary', () => {
-      simulation.percentSalary = 80;
-      simulation.percentDividend = 60;
-      expect(simulation.percentSalary).toBe(40);
-    })
-    it('should not modify percentSalary', () => {
-      simulation.percentSalary = 10;
-      simulation.percentDividend = 60;
-      expect(simulation.percentSalary).toBe(10);
-    })
-  })
-  describe('set percentSalary', () => {
-    it('should set percentSalary to 0 if value is less than 0', () => {
-      simulation.percentSalary = -1;
-      expect(simulation.percentSalary).toBe(0);
-    })
-    it('should set percentSalary to 0 if value is null', () => {
-      simulation.percentSalary = null;
-      expect(simulation.percentSalary).toBe(0);
-    })
-    it('should set percentSalary to 0 if value is undefined', () => {
-      simulation.percentSalary = undefined;
-      expect(simulation.percentSalary).toBe(0);
-    })
-
-    it('should set percentSalary to 100 if value is greater than 100', () => {
-      simulation.percentSalary = 101;
-      expect(simulation.percentSalary).toBe(100);
-    })
-    it('should modify percentDividend', () => {
-      simulation.percentDividend = 80;
-      simulation.percentSalary = 60;
-      expect(simulation.percentDividend).toBe(40);
-    })
-    it('should not modify percentDividend', () => {
-      simulation.percentDividend = 10;
-      simulation.percentSalary = 60;
-      expect(simulation.percentDividend).toBe(10);
-    })
-  })
   describe('set dailyRate', () => {
     it('should set dailyRate to 0 if value is less than 0', () => {
       simulation.dailyRate = -1;
@@ -196,6 +137,10 @@ describe('Simulation', () => {
     it('should return 106650', () => {
       expect(round2(simulation.rawEarnings())).toBe(106650);
     })
+    it('should return 106650-19800 with deducted yearlyRawSalary', () => {
+      simulation.monthlyNetSalary = 1000;
+      expect(round2(simulation.rawEarnings())).toBe(106650-19800);
+    })
   })
   describe('earningsTax', () => {
     describe('with big earnings', () => {
@@ -245,64 +190,38 @@ describe('Simulation', () => {
     })
   })
   describe('dividend', () => {
-    it('should return 0 if percentDividend is 0', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, percentDividend: 0, ...defaultExpenses });
-      expect(simulation.netEarnings()).toBeGreaterThan(0);
-      expect(round2(simulation.dividend())).toBe(0);
-    })
     it('should return 0 if netEarnings is negative', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 1, weeksOff: 51, percentDividend: 10, ...defaultExpenses });
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 1, weeksOff: 51, ...defaultExpenses });
       expect(simulation.netEarnings()).toBeLessThan(0);
       expect(round2(simulation.dividend())).toBe(0);
     })
-    it('should return netEarnings if percentDividend is 100', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, percentDividend: 100, ...defaultExpenses });
+    it('should return netEarnings if netEarnings is positive', () => {
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, ...defaultExpenses });
       expect(simulation.netEarnings()).toBeGreaterThan(0);
       expect(round2(simulation.dividend())).toBe(84237.5);
     })
-    it('should return netEarnings * percentDividend / 100', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, percentDividend: 10, ...defaultExpenses });
-      expect(simulation.netEarnings()).toBeGreaterThan(0);
-      expect(round2(simulation.dividend())).toBe(8423.75);
-    })
   })
   describe('netDividend', () => {
-    it('should return 0 if percentDividend is 0', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, percentDividend: 0, ...defaultExpenses });
-      expect(simulation.netEarnings()).toBeGreaterThan(0);
-      expect(round2(simulation.netDividend())).toBe(0);
-    })
-    it('should return 0.7*netEarnings if percentDividend is 100', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, percentDividend: 100, ...defaultExpenses });
-      expect(simulation.dividend()).toBe(84237.5);
-      expect(round2(simulation.netDividend())).toBe(58966.25);
-    })
     it('should return 0.7*dividend', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, percentDividend: 10, ...defaultExpenses });
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, ...defaultExpenses });
       expect(simulation.dividend()).toBe(8423.75);
       expect(round2(simulation.netDividend())).toBe(5896.63);
     })
   })
-  describe('salary', () => {
-    it('should return 0 if percentSalary is 0', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, percentSalary: 0, ...defaultExpenses });
-      expect(simulation.netEarnings()).toBeGreaterThan(0);
-      expect(round2(simulation.salary())).toBe(0);
+  // write test for yearlyNetSalary. it is a function of Simulation that should return 12*monthlyNetSalary
+  describe('yearlyNetSalary', () => {
+    it('should return 12*monthlyNetSalary', () => {
+      const simulation = new Simulation({ monthlyNetSalary: 2000 });
+      expect(round2(simulation.yearlyNetSalary())).toBe(24000);
     })
-    it('should return 0 if netEarnings is negative', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 1, weeksOff: 51, percentSalary: 10, ...defaultExpenses });
-      expect(simulation.netEarnings()).toBeLessThan(0);
-      expect(round2(simulation.salary())).toBe(0);
-    })
-    it('should return netEarnings if percentSalary is 100', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, percentSalary: 100, ...defaultExpenses });
-      expect(simulation.netEarnings()).toBeGreaterThan(0);
-      expect(round2(simulation.salary())).toBe(84237.5);
-    })
-    it('should return netEarnings * percentSalary / 100', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, percentSalary: 10, ...defaultExpenses });
-      expect(simulation.netEarnings()).toBeGreaterThan(0);
-      expect(round2(simulation.salary())).toBe(8423.75);
+  })
+
+
+  // write test for yearlyRawSalary. it is a function of Simulation that should return 1.65*yearlyNetSalary
+  describe('yearlyRawSalary', () => {
+    it('should return 1.65*yearlyNetSalary', () => {
+      const simulation = new Simulation({ monthlyNetSalary: 2000 });
+      expect(round2(simulation.yearlyRawSalary())).toBe(39600);
     })
   })
 })

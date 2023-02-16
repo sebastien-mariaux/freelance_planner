@@ -21,8 +21,7 @@ export class Simulation {
     this._yearlyBankingCost = this.getDefaultValue(initialValues.yearlyBankingCost, 120);
     this._yearlyFurnitureCost = this.getDefaultValue(initialValues.yearlyFurnitureCost, 400);
     this._yearlyOtherCost = this.getDefaultValue(initialValues.yearlyOtherCost, 100);
-    this._percentDividend = this.getDefaultValue(initialValues.percentDividend, 100);
-    this._percentSalary = this.getDefaultValue(initialValues.percentSalary, 0);
+    this._monthlyNetSalary = this.getDefaultValue(initialValues.monthlyNetSalary, 0);
   }
 
   getDefaultValue(value, defaultValue) {
@@ -32,6 +31,13 @@ export class Simulation {
     return value || defaultValue;
   }
 
+  get monthlyNetSalary() {
+    return this._monthlyNetSalary;
+  }
+  set monthlyNetSalary(value) {
+    value = this._checkInput(0, null, value, 0)
+    this._monthlyNetSalary = value;
+  }
   get dailyRate() {
     return this._dailyRate;
   }
@@ -55,30 +61,6 @@ export class Simulation {
     value = this._checkInput(0, WEEKS_IN_YEAR, value, 0)
     this._weeksOn = value;
     this._weeksOff = WEEKS_IN_YEAR - this._weeksOn;
-  }
-  get percentDividend() {
-    return this._percentDividend;
-  }
-  set percentDividend(value) {
-    value = this._checkInput(0, 100, value, 0)
-    console.log(value)
-    this._percentDividend = value;
-    console.log(this._percentDividend + this._percentSalary)
-    if (this._percentDividend + this._percentSalary > 100) {
-      this._percentSalary = 100 - this._percentDividend;
-    }
-  }
-  get percentSalary() {
-    return this._percentSalary;
-  }
-  set percentSalary(value) {
-    value = this._checkInput(0, 100, value, 0)
-    console.log(value)
-    this._percentSalary = value;
-    console.log(this._percentDividend + this._percentSalary)
-    if (this._percentDividend + this._percentSalary > 100) {
-      this._percentDividend = 100 - this._percentSalary;
-    }
   }
   get daysPerWeek() {
     return this._daysPerWeek;
@@ -166,7 +148,101 @@ export class Simulation {
     this._yearlyOtherCost = parseFloat(value) || 0.0
   }
 
+  yearlyIncome() {
+    return this.dailyRate * this.daysPerWeek * this.weeksOn;
+  }
 
+  monthlyIncome() {
+    return this.yearlyIncome() / 12;
+  }
+
+  yearlyFoodCost() {
+    return this.dailyFoodCost * this.daysPerWeek * this.weeksOn;
+  }
+
+  yearlyTotalCost() {
+    return this.yearlyFoodCost()
+      + this.yearlyRent
+      + this.yearlyAccountingCost
+      + this.yearlyPhoneCost
+      + this.yearlyProInsuranceCost
+      + this.yearlyOtherInsuranceCost
+      + this.yearlyBankingCost
+      + this.yearlyFurnitureCost
+      + this.yearlyOtherCost
+      + this.yearlyRentRepayed
+      + this.yearlyInternetCostRepayed
+      + this.yearlyPowerCostRepayed;
+  }
+
+  montlyAverageCost() {
+    return this.yearlyTotalCost() / 12.0;
+  }
+
+  rawEarnings() {
+    return this.yearlyIncome() - this.yearlyTotalCost() - this.yearlyRawSalary();
+  }
+
+  earningsTax() {
+    if (this.rawEarnings() <= 0) {
+      return 0
+    }
+    const belowThreshold = Math.min(this.rawEarnings(), TAX_THRESHOLD);
+    const overThreshold = Math.max(this.rawEarnings() - TAX_THRESHOLD, 0);
+    return 0.15 * belowThreshold + 0.25 * overThreshold;
+  }
+
+  netEarnings() {
+    return this.rawEarnings() - this.earningsTax();
+  }
+
+  dividend() {
+    const netEarnings = this.netEarnings();
+    if (netEarnings <= 0) {
+      return 0;
+    }
+    return netEarnings;
+  }
+
+  netDividend() {
+    return this.dividend() * 0.7;
+  }
+
+  managerMonthlyIncome() {
+    return this.managerYearlyIncome() / 12;
+  }
+
+  managerYearlyIncome() {
+    return this.netDividend() + this.yearlyRentRepayed + this.yearlyPowerCostRepayed + this.yearlyInternetCostRepayed;
+  }
+
+  manageIncomeRevenuRatio() {
+    return this.managerMonthlyIncome() / this.monthlyIncome();
+  }
+
+  netResult() {
+    return this.netEarnings() - this.dividend();
+  }
+
+  yearlyNetSalary() {
+    return 12 * this.monthlyNetSalary;
+  }
+
+  yearlyRawSalary() {
+    return 1.65 * this.yearlyNetSalary();
+  }
+
+  _checkInput(min, max, value, defaultValue) {
+    value = parseFloat(value || 0);
+    if (!value && defaultValue) {
+      return defaultValue;
+    } else if ((min || min === 0) && value < min) {
+      return min;
+    } else if ((max || max === 0) && value > max) {
+      return max;
+    }
+    return value
+  }
 
   serialize() {
     return {
@@ -200,99 +276,11 @@ export class Simulation {
       manageIncomeRevenuRatio: this.manageIncomeRevenuRatio(),
       yearlyPowerCostRepayed: this.yearlyPowerCostRepayed,
       percentDividend: this.percentDividend,
-      percentSalary: this.percentSalary,
       netResult: this.netResult(),
+      monthlyNetSalary: this.monthlyNetSalary,
+      yearlyNetSalary: this.yearlyNetSalary(),
+      yearlyRawSalary: this.yearlyRawSalary(),
     }
   }
-
-  yearlyIncome() {
-    return this.dailyRate * this.daysPerWeek * this.weeksOn;
-  }
-
-  monthlyIncome() {
-    return this.yearlyIncome() / 12;
-  }
-
-  yearlyFoodCost() {
-    return this.dailyFoodCost * this.daysPerWeek * this.weeksOn;
-  }
-
-  yearlyTotalCost() {
-    return this.yearlyFoodCost()
-      + this.yearlyRent
-      + this.yearlyAccountingCost
-      + this.yearlyPhoneCost
-      + this.yearlyProInsuranceCost
-      + this.yearlyOtherInsuranceCost
-      + this.yearlyBankingCost
-      + this.yearlyFurnitureCost
-      + this.yearlyOtherCost
-      + this.yearlyRentRepayed
-      + this.yearlyInternetCostRepayed
-      + this.yearlyPowerCostRepayed;
-
-  }
-
-  montlyAverageCost() {
-    return this.yearlyTotalCost() / 12.0;
-  }
-
-  rawEarnings() {
-    return this.yearlyIncome() - this.yearlyTotalCost();
-  }
-
-  earningsTax() {
-    if (this.rawEarnings() <= 0) {
-      return 0
-    }
-    const belowThreshold = Math.min(this.rawEarnings(), TAX_THRESHOLD);
-    const overThreshold = Math.max(this.rawEarnings() - TAX_THRESHOLD, 0);
-    return 0.15 * belowThreshold + 0.25 * overThreshold;
-  }
-
-  netEarnings() {
-    return this.rawEarnings() - this.earningsTax();
-  }
-
-  dividend(){
-    const netEarnings = this.netEarnings();
-    if (netEarnings <= 0) {
-      return 0;
-    }
-    return netEarnings * this.percentDividend / 100;
-  }
-
-  netDividend() {
-    return this.dividend() * 0.7;
-  }
-
-  managerMonthlyIncome() {
-    return this.managerYearlyIncome() / 12;
-  }
-
-  managerYearlyIncome() {
-    return this.netDividend() + this.yearlyRentRepayed + this.yearlyPowerCostRepayed + this.yearlyInternetCostRepayed;
-  }
-
-  manageIncomeRevenuRatio() {
-    return this.managerMonthlyIncome() / this.monthlyIncome();
-  }
-
-  netResult() {
-    return this.netEarnings() - this.dividend();
-  }
-
-  _checkInput(min, max, value, defaultValue) {
-    value = parseFloat(value || 0);
-    if (!value && defaultValue) {
-      return defaultValue;
-    } else if ((min || min === 0) && value < min) {
-      return min;
-    } else if ((max || max === 0) && value > max) {
-      return max;
-    }
-    return value
-  }
-
 }
 
