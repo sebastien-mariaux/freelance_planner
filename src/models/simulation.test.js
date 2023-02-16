@@ -1,19 +1,19 @@
 import { Simulation, TAX_THRESHOLD } from "./simulation";
 
-const defaultExpenses = {
-  dailyFoodCost: 10,
-  yearlyRent: 3000,
-  yearlyAccountingCost: 1000,
-  yearlyPhoneCost: 500,
-  yearlyProInsuranceCost: 400,
-  yearlyOtherInsuranceCost: 0,
-  yearlyBankingCost: 0,
-  yearlyFurnitureCost: 0,
-  yearlyOtherCost: 0,
-  yearlyRentRepayed: 3500,
-  yearlyInternetCostRepayed: 100,
-  yearlyPowerCostRepayed: 0
-}
+// const defaultExpenses = {
+//   dailyFoodCost: 10,
+//   yearlyRent: 3000,
+//   yearlyAccountingCost: 1000,
+//   yearlyPhoneCost: 500,
+//   yearlyProInsuranceCost: 400,
+//   yearlyOtherInsuranceCost: 0,
+//   yearlyBankingCost: 0,
+//   yearlyFurnitureCost: 0,
+//   yearlyOtherCost: 0,
+//   yearlyRentRepayed: 3500,
+//   yearlyInternetCostRepayed: 100,
+//   yearlyPowerCostRepayed: 0
+// }
 // write test for simulation class
 describe('Simulation', () => {
   const simulation = new Simulation();
@@ -131,45 +131,43 @@ describe('Simulation', () => {
     })
   })
   describe('rawEarnings', () => {
-    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, ...defaultExpenses });
+    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, yearlyExpenses: 10000 });
     expect(simulation.yearlyIncome()).toBe(117500);
-    expect(round2(simulation.yearlyTotalCost())).toBe(10850);
-    it('should return 106650', () => {
-      expect(round2(simulation.rawEarnings())).toBe(106650);
+    it('should return 107500', () => {
+      expect(round2(simulation.rawEarnings())).toBe(107500);
     })
-    it('should return 106650-19800 with deducted yearlyRawSalary', () => {
+    it('should return 107500-19800 with deducted yearlyRawSalary', () => {
       simulation.monthlyNetSalary = 1000;
-      expect(round2(simulation.rawEarnings())).toBe(106650-19800);
+      expect(round2(simulation.rawEarnings())).toBe(107500-19800);
     })
   })
   describe('earningsTax', () => {
     describe('with big earnings', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, ...defaultExpenses });
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, yearlyExpenses: 10000 });
       expect(simulation.yearlyIncome()).toBe(117500);
-      expect(round2(simulation.yearlyTotalCost())).toBe(10850);
-      expect(round2(simulation.rawEarnings())).toBe(106650);
+      expect(round2(simulation.rawEarnings())).toBe(107500);
 
       it('should compute', () => {
-        const expected = TAX_THRESHOLD * 0.15 + (106650 - TAX_THRESHOLD) * 0.25
+        const expected = TAX_THRESHOLD * 0.15 + (107500 - TAX_THRESHOLD) * 0.25
         expect(round2(simulation.earningsTax())).toBe(expected);
       })
     })
     describe('with no earnings', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 0, weeksOff: 52, ...defaultExpenses });
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 0, weeksOff: 52, yearlyExpenses: 10000 });
       it('should compute 0', () => {
         expect(round2(simulation.rawEarnings())).toBeLessThan(0);
         expect(round2(simulation.earningsTax())).toBe(0);
       })
     })
     describe('with negative earnings', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 1, weeksOff: 51, ...defaultExpenses });
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 1, weeksOff: 51, yearlyExpenses: 10000 });
       it('should compute 0', () => {
         expect(round2(simulation.rawEarnings())).toBeLessThan(0);
         expect(round2(simulation.earningsTax())).toBe(0);
       })
     })
     describe('with small earnings', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 10, weeksOff: 42, ...defaultExpenses });
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 10, weeksOff: 42, yearlyExpenses: 10000 });
       it('should compute 0', () => {
         expect(simulation.rawEarnings()).toBeLessThan(TAX_THRESHOLD)
         expect(simulation.rawEarnings()).toBeGreaterThan(0)
@@ -179,11 +177,10 @@ describe('Simulation', () => {
     })
   })
   describe('netEarnings', () => {
-    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, ...defaultExpenses });
+    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, yearlyExpenses: 10000 });
     expect(simulation.yearlyIncome()).toBe(117500);
-    expect(round2(simulation.yearlyTotalCost())).toBe(10850);
-    expect(round2(simulation.rawEarnings())).toBe(106650);
-    expect(round2(simulation.earningsTax())).toBe(22412.5);
+    expect(round2(simulation.rawEarnings())).toBe(107500);
+    expect(round2(simulation.earningsTax())).toBe(22625);
 
     it('should compute', () => {
       expect(round2(simulation.netEarnings())).toBe(84237.5);
@@ -191,19 +188,19 @@ describe('Simulation', () => {
   })
   describe('dividend', () => {
     it('should return 0 if netEarnings is negative', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 1, weeksOff: 51, ...defaultExpenses });
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 1, weeksOff: 51, yearlyExpenses: 10000 });
       expect(simulation.netEarnings()).toBeLessThan(0);
       expect(round2(simulation.dividend())).toBe(0);
     })
     it('should return netEarnings if netEarnings is positive', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, ...defaultExpenses });
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, yearlyExpenses: 10000 });
       expect(simulation.netEarnings()).toBeGreaterThan(0);
       expect(round2(simulation.dividend())).toBe(84237.5);
     })
   })
   describe('netDividend', () => {
     it('should return 0.7*dividend', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, ...defaultExpenses });
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, yearlyExpenses: 10000 });
       expect(simulation.dividend()).toBe(8423.75);
       expect(round2(simulation.netDividend())).toBe(5896.63);
     })

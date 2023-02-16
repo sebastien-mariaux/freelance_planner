@@ -9,19 +9,21 @@ export class Simulation {
     this._weeksOff = this.getDefaultValue(initialValues.weeksOff, 10);
     this._weeksOn = this.getDefaultValue(initialValues.weeksOn, 42);
     this._daysPerWeek = this.getDefaultValue(initialValues.daysPerWeek, 5);
-    this._dailyFoodCost = this.getDefaultValue(initialValues.dailyFoodCost, 10);
-    this._yearlyRentRepayed = this.getDefaultValue(initialValues.yearlyRentRepayed, 3500);
-    this._yearlyRent = this.getDefaultValue(initialValues.yearlyRent, 0);
-    this._yearlyAccountingCost = this.getDefaultValue(initialValues.yearlyAccountingCost, 1200);
-    this._yearlyPowerCostRepayed = this.getDefaultValue(initialValues.yearlyPowerCostRepayed, 0);
-    this._yearlyInternetCostRepayed = this.getDefaultValue(initialValues.yearlyInternetCostRepayed, 0);
-    this._yearlyPhoneCost = this.getDefaultValue(initialValues.yearlyPhoneCost, 0);
-    this._yearlyProInsuranceCost = this.getDefaultValue(initialValues.yearlyProInsuranceCost, 450);
-    this._yearlyOtherInsuranceCost = this.getDefaultValue(initialValues.yearlyOtherInsuranceCost, 0);
-    this._yearlyBankingCost = this.getDefaultValue(initialValues.yearlyBankingCost, 120);
-    this._yearlyFurnitureCost = this.getDefaultValue(initialValues.yearlyFurnitureCost, 400);
-    this._yearlyOtherCost = this.getDefaultValue(initialValues.yearlyOtherCost, 100);
+    this._yearlyExpenses = this.getDefaultValue(initialValues.yearlyExpenses, 10000);
+    // this._dailyFoodCost = this.getDefaultValue(initialValues.dailyFoodCost, 10);
+    // this._yearlyRentRepayed = this.getDefaultValue(initialValues.yearlyRentRepayed, 3500);
+    // this._yearlyRent = this.getDefaultValue(initialValues.yearlyRent, 0);
+    // this._yearlyAccountingCost = this.getDefaultValue(initialValues.yearlyAccountingCost, 1200);
+    // this._yearlyPowerCostRepayed = this.getDefaultValue(initialValues.yearlyPowerCostRepayed, 0);
+    // this._yearlyInternetCostRepayed = this.getDefaultValue(initialValues.yearlyInternetCostRepayed, 0);
+    // this._yearlyPhoneCost = this.getDefaultValue(initialValues.yearlyPhoneCost, 0);
+    // this._yearlyProInsuranceCost = this.getDefaultValue(initialValues.yearlyProInsuranceCost, 450);
+    // this._yearlyOtherInsuranceCost = this.getDefaultValue(initialValues.yearlyOtherInsuranceCost, 0);
+    // this._yearlyBankingCost = this.getDefaultValue(initialValues.yearlyBankingCost, 120);
+    // this._yearlyFurnitureCost = this.getDefaultValue(initialValues.yearlyFurnitureCost, 400);
+    // this._yearlyOtherCost = this.getDefaultValue(initialValues.yearlyOtherCost, 100);
     this._monthlyNetSalary = this.getDefaultValue(initialValues.monthlyNetSalary, 0);
+    this._incomeTaxRate = this.getDefaultValue(initialValues.incomeTaxRate, 10);
   }
 
   getDefaultValue(value, defaultValue) {
@@ -29,6 +31,22 @@ export class Simulation {
       return 0;
     }
     return value || defaultValue;
+  }
+
+  get incomeTaxRate() {
+    return this._incomeTaxRate;
+  }
+  set incomeTaxRate(value) {
+    value = this._checkInput(0, 100, value, 0)
+    this._incomeTaxRate = value;
+  }
+
+  get yearlyExpenses() {
+    return this._yearlyExpenses;
+  }
+  set yearlyExpenses(value) {
+    value = this._checkInput(0, null, value, 10000)
+    this._yearlyExpenses = value;
   }
 
   get monthlyNetSalary() {
@@ -75,78 +93,78 @@ export class Simulation {
     }
     this._daysPerWeek = value;
   }
-  get yearlyPowerCostRepayed() {
-    return this._yearlyPowerCostRepayed;
-  }
-  set yearlyPowerCostRepayed(value) {
-    this._yearlyPowerCostRepayed = parseFloat(value) || 0.0;
-  }
-  get dailyFoodCost() {
-    return this._dailyFoodCost;
-  }
-  set dailyFoodCost(value) {
-    return this._dailyFoodCost = parseFloat(value) || 0.0;
-  }
-  get yearlyRentRepayed() {
-    return this._yearlyRentRepayed
-  }
-  set yearlyRentRepayed(value) {
-    this._yearlyRentRepayed = parseFloat(value) || 0.0
-  }
-  get yearlyRent() {
-    return this._yearlyRent
-  }
-  set yearlyRent(value) {
-    this._yearlyRent = parseFloat(value) || 0.0
-  }
-  get yearlyAccountingCost() {
-    return this._yearlyAccountingCost
-  }
-  set yearlyAccountingCost(value) {
-    this._yearlyAccountingCost = parseFloat(value) || 0.0
-  }
-  get yearlyInternetCostRepayed() {
-    return this._yearlyInternetCostRepayed
-  }
-  set yearlyInternetCostRepayed(value) {
-    this._yearlyInternetCostRepayed = parseFloat(value) || 0.0
-  }
-  get yearlyPhoneCost() {
-    return this._yearlyPhoneCost
-  }
-  set yearlyPhoneCost(value) {
-    this._yearlyPhoneCost = parseFloat(value) || 0.0
-  }
-  get yearlyProInsuranceCost() {
-    return this._yearlyProInsuranceCost
-  }
-  set yearlyProInsuranceCost(value) {
-    this._yearlyProInsuranceCost = parseFloat(value) || 0.0
-  }
-  get yearlyOtherInsuranceCost() {
-    return this._yearlyOtherInsuranceCost
-  }
-  set yearlyOtherInsuranceCost(value) {
-    this._yearlyOtherInsuranceCost = parseFloat(value) || 0.0
-  }
-  get yearlyBankingCost() {
-    return this._yearlyBankingCost
-  }
-  set yearlyBankingCost(value) {
-    this._yearlyBankingCost = parseFloat(value) || 0.0
-  }
-  get yearlyFurnitureCost() {
-    return this._yearlyFurnitureCost
-  }
-  set yearlyFurnitureCost(value) {
-    this._yearlyFurnitureCost = parseFloat(value) || 0.0
-  }
-  get yearlyOtherCost() {
-    return this._yearlyOtherCost
-  }
-  set yearlyOtherCost(value) {
-    this._yearlyOtherCost = parseFloat(value) || 0.0
-  }
+  // get yearlyPowerCostRepayed() {
+  //   return this._yearlyPowerCostRepayed;
+  // }
+  // set yearlyPowerCostRepayed(value) {
+  //   this._yearlyPowerCostRepayed = parseFloat(value) || 0.0;
+  // }
+  // get dailyFoodCost() {
+  //   return this._dailyFoodCost;
+  // }
+  // set dailyFoodCost(value) {
+  //   return this._dailyFoodCost = parseFloat(value) || 0.0;
+  // }
+  // get yearlyRentRepayed() {
+  //   return this._yearlyRentRepayed
+  // }
+  // set yearlyRentRepayed(value) {
+  //   this._yearlyRentRepayed = parseFloat(value) || 0.0
+  // }
+  // get yearlyRent() {
+  //   return this._yearlyRent
+  // }
+  // set yearlyRent(value) {
+  //   this._yearlyRent = parseFloat(value) || 0.0
+  // }
+  // get yearlyAccountingCost() {
+  //   return this._yearlyAccountingCost
+  // }
+  // set yearlyAccountingCost(value) {
+  //   this._yearlyAccountingCost = parseFloat(value) || 0.0
+  // }
+  // get yearlyInternetCostRepayed() {
+  //   return this._yearlyInternetCostRepayed
+  // }
+  // set yearlyInternetCostRepayed(value) {
+  //   this._yearlyInternetCostRepayed = parseFloat(value) || 0.0
+  // }
+  // get yearlyPhoneCost() {
+  //   return this._yearlyPhoneCost
+  // }
+  // set yearlyPhoneCost(value) {
+  //   this._yearlyPhoneCost = parseFloat(value) || 0.0
+  // }
+  // get yearlyProInsuranceCost() {
+  //   return this._yearlyProInsuranceCost
+  // }
+  // set yearlyProInsuranceCost(value) {
+  //   this._yearlyProInsuranceCost = parseFloat(value) || 0.0
+  // }
+  // get yearlyOtherInsuranceCost() {
+  //   return this._yearlyOtherInsuranceCost
+  // }
+  // set yearlyOtherInsuranceCost(value) {
+  //   this._yearlyOtherInsuranceCost = parseFloat(value) || 0.0
+  // }
+  // get yearlyBankingCost() {
+  //   return this._yearlyBankingCost
+  // }
+  // set yearlyBankingCost(value) {
+  //   this._yearlyBankingCost = parseFloat(value) || 0.0
+  // }
+  // get yearlyFurnitureCost() {
+  //   return this._yearlyFurnitureCost
+  // }
+  // set yearlyFurnitureCost(value) {
+  //   this._yearlyFurnitureCost = parseFloat(value) || 0.0
+  // }
+  // get yearlyOtherCost() {
+  //   return this._yearlyOtherCost
+  // }
+  // set yearlyOtherCost(value) {
+  //   this._yearlyOtherCost = parseFloat(value) || 0.0
+  // }
 
   yearlyIncome() {
     return this.dailyRate * this.daysPerWeek * this.weeksOn;
@@ -156,31 +174,36 @@ export class Simulation {
     return this.yearlyIncome() / 12;
   }
 
-  yearlyFoodCost() {
-    return this.dailyFoodCost * this.daysPerWeek * this.weeksOn;
-  }
+  // yearlyFoodCost() {
+  //   return this.dailyFoodCost * this.daysPerWeek * this.weeksOn;
+  // }
+
+  // yearlyTotalCost() {
+  //   return this.yearlyFoodCost()
+  //     + this.yearlyRent
+  //     + this.yearlyAccountingCost
+  //     + this.yearlyPhoneCost
+  //     + this.yearlyProInsuranceCost
+  //     + this.yearlyOtherInsuranceCost
+  //     + this.yearlyBankingCost
+  //     + this.yearlyFurnitureCost
+  //     + this.yearlyOtherCost
+  //     + this.yearlyRentRepayed
+  //     + this.yearlyInternetCostRepayed
+  //     + this.yearlyPowerCostRepayed;
+  // }
 
   yearlyTotalCost() {
-    return this.yearlyFoodCost()
-      + this.yearlyRent
-      + this.yearlyAccountingCost
-      + this.yearlyPhoneCost
-      + this.yearlyProInsuranceCost
-      + this.yearlyOtherInsuranceCost
-      + this.yearlyBankingCost
-      + this.yearlyFurnitureCost
-      + this.yearlyOtherCost
-      + this.yearlyRentRepayed
-      + this.yearlyInternetCostRepayed
-      + this.yearlyPowerCostRepayed;
+    return this.yearlyExpenses + this.yearlyRawSalary();
   }
 
-  montlyAverageCost() {
-    return this.yearlyTotalCost() / 12.0;
+  monthlyExpenses() {
+    return this.yearlyExpenses / 12.0;
   }
+
 
   rawEarnings() {
-    return this.yearlyIncome() - this.yearlyTotalCost() - this.yearlyRawSalary();
+    return this.yearlyIncome() - this.yearlyExpenses - this.yearlyRawSalary();
   }
 
   earningsTax() {
@@ -213,7 +236,7 @@ export class Simulation {
   }
 
   managerYearlyIncome() {
-    return this.netDividend() + this.yearlyRentRepayed + this.yearlyPowerCostRepayed + this.yearlyInternetCostRepayed;
+    return this.netDividend() + this.yearlyNetSalary() - this.incomeTax();
   }
 
   manageIncomeRevenuRatio() {
@@ -230,6 +253,10 @@ export class Simulation {
 
   yearlyRawSalary() {
     return 1.65 * this.yearlyNetSalary();
+  }
+
+  incomeTax() {
+    return this.yearlyNetSalary() * 1.1 * this._incomeTaxRate / 100;
   }
 
   _checkInput(min, max, value, defaultValue) {
@@ -253,26 +280,28 @@ export class Simulation {
       daysPerWeek: this.daysPerWeek,
       yearlyIncome: this.yearlyIncome(),
       monthlyIncome: this.monthlyIncome(),
-      dailyFoodCost: this.dailyFoodCost,
-      yearlyFoodCost: this.yearlyFoodCost(),
-      yearlyRent: this.yearlyRent,
-      yearlyRentRepayed: this.yearlyRentRepayed,
-      yearlyAccountingCost: this.yearlyAccountingCost,
-      yearlyInternetCostRepayed: this.yearlyInternetCostRepayed,
-      yearlyPhoneCost: this.yearlyPhoneCost,
-      yearlyProInsuranceCost: this.yearlyProInsuranceCost,
-      yearlyOtherInsuranceCost: this.yearlyOtherInsuranceCost,
-      yearlyBankingCost: this.yearlyBankingCost,
-      yearlyFurnitureCost: this.yearlyFurnitureCost,
-      yearlyOtherCost: this.yearlyOtherCost,
+      // dailyFoodCost: this.dailyFoodCost,
+      // yearlyFoodCost: this.yearlyFoodCost(),
+      // yearlyRent: this.yearlyRent,
+      // yearlyRentRepayed: this.yearlyRentRepayed,
+      // yearlyAccountingCost: this.yearlyAccountingCost,
+      // yearlyInternetCostRepayed: this.yearlyInternetCostRepayed,
+      // yearlyPhoneCost: this.yearlyPhoneCost,
+      // yearlyProInsuranceCost: this.yearlyProInsuranceCost,
+      // yearlyOtherInsuranceCost: this.yearlyOtherInsuranceCost,
+      // yearlyBankingCost: this.yearlyBankingCost,
+      // yearlyFurnitureCost: this.yearlyFurnitureCost,
+      // yearlyOtherCost: this.yearlyOtherCost,
+      yearlyExpenses: this.yearlyExpenses,
       yearlyTotalCost: this.yearlyTotalCost(),
-      montlyAverageCost: this.montlyAverageCost(),
+      monthlyExpenses: this.monthlyExpenses(),
       rawEarnings: this.rawEarnings(),
       earningsTax: this.earningsTax(),
       netEarnings: this.netEarnings(),
       dividend: this.dividend(),
       netDividend: this.netDividend(),
       managerMonthlyIncome: this.managerMonthlyIncome(),
+      managerYearlyIncome: this.managerYearlyIncome(),
       manageIncomeRevenuRatio: this.manageIncomeRevenuRatio(),
       yearlyPowerCostRepayed: this.yearlyPowerCostRepayed,
       percentDividend: this.percentDividend,
@@ -280,6 +309,8 @@ export class Simulation {
       monthlyNetSalary: this.monthlyNetSalary,
       yearlyNetSalary: this.yearlyNetSalary(),
       yearlyRawSalary: this.yearlyRawSalary(),
+      incomeTaxRate: this.incomeTaxRate,
+      incomeTax: this.incomeTax(),
     }
   }
 }
