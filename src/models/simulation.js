@@ -201,6 +201,7 @@ export class Simulation {
       yearlyPowerCostRepayed: this.yearlyPowerCostRepayed,
       percentDividend: this.percentDividend,
       percentSalary: this.percentSalary,
+      netResult: this.netResult(),
     }
   }
 
@@ -275,6 +276,10 @@ export class Simulation {
 
   manageIncomeRevenuRatio() {
     return this.managerMonthlyIncome() / this.monthlyIncome();
+  }
+
+  netResult() {
+    return this.netEarnings() - this.dividend();
   }
 
   _checkInput(min, max, value, defaultValue) {

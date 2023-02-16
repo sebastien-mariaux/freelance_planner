@@ -283,6 +283,28 @@ describe('Simulation', () => {
       expect(round2(simulation.netDividend())).toBe(5896.63);
     })
   })
+  describe('salary', () => {
+    it('should return 0 if percentSalary is 0', () => {
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, percentSalary: 0, ...defaultExpenses });
+      expect(simulation.netEarnings()).toBeGreaterThan(0);
+      expect(round2(simulation.salary())).toBe(0);
+    })
+    it('should return 0 if netEarnings is negative', () => {
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 1, weeksOff: 51, percentSalary: 10, ...defaultExpenses });
+      expect(simulation.netEarnings()).toBeLessThan(0);
+      expect(round2(simulation.salary())).toBe(0);
+    })
+    it('should return netEarnings if percentSalary is 100', () => {
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, percentSalary: 100, ...defaultExpenses });
+      expect(simulation.netEarnings()).toBeGreaterThan(0);
+      expect(round2(simulation.salary())).toBe(84237.5);
+    })
+    it('should return netEarnings * percentSalary / 100', () => {
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, percentSalary: 10, ...defaultExpenses });
+      expect(simulation.netEarnings()).toBeGreaterThan(0);
+      expect(round2(simulation.salary())).toBe(8423.75);
+    })
+  })
 })
 
 // function to round number to 2 decimal places
