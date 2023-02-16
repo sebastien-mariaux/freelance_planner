@@ -1,4 +1,4 @@
-import { simulationStyles } from "./simulationStyles";
+import { simulationStyles } from "../simulationStyles";
 
 export default function InputRow({ title, simulations, updateSimulation, label }) {
   return (

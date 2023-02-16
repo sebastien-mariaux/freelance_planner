@@ -3,6 +3,7 @@ import { Simulation } from '../models/simulation';
 import InputRow from './SimulationRow/InputRow';
 import PercentTextRow from './SimulationRow/PercentTextRow';
 import TextRow from './SimulationRow/TextRow';
+import { simulationStyles } from './simulationStyles';
 
 
 const styles = {
@@ -84,7 +85,7 @@ const managerIncomes = [
 
 
 
-export default function Simulations()  {
+export default function Simulations() {
   const [simulations, setSimulations] = useState(defaultSimulations);
 
   const updateSimulation = (index, label, value) => {
@@ -263,33 +264,34 @@ export default function Simulations()  {
             label='manageIncomeRevenuRatio'
             style={{ fontWeight: 'bold' }}
           />
+
+          <section style={simulationStyles.row}>
+            <div style={{ ...simulationStyles.leftCol }} ></div>
+            {simulations.map((simulation, index) => (
+              <div key={index} style={simulationStyles.col} >
+                <button
+                  onClick={() => {
+                    let newSimulation = new Simulation(simulation);
+                    newSimulation.name = newSimulation.name + ' (copie)';
+                    setSimulations([...simulations, newSimulation.serialize()]);
+                  }}
+                >
+                  Dupliquer
+                </button>
+                <button
+                  onClick={() => {
+                    let newSimulations = [...simulations];
+                    newSimulations.splice(index, 1);
+                    setSimulations(newSimulations);
+                  }}
+                >
+                  Supprimer
+                </button>
+              </div>
+            ))}
+          </section>
         </div>
 
-        <section style={styles.row}>
-          <div style={{ ...styles.leftCol }} ></div>
-          {simulations.map((simulation, index) => (
-            <div key={index} style={styles.col} >
-              <button
-                onClick={() => {
-                  let newSimulation = new Simulation(simulation);
-                  newSimulation.name = newSimulation.name + ' (copie)';
-                  setSimulations([...simulations, newSimulation.serialize()]);
-                }}
-              >
-                Dupliquer
-              </button>
-              <button
-                onClick={() => {
-                  let newSimulations = [...simulations];
-                  newSimulations.splice(index, 1);
-                  setSimulations(newSimulations);
-                }}
-              >
-                Supprimer
-              </button>
-            </div>
-          ))}
-        </section>
       </div>
     </>
   )

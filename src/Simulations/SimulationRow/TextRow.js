@@ -1,5 +1,5 @@
 import { displayAmount } from "../simulationsHelper";
-import { simulationStyles } from "./simulationStyles";
+import { simulationStyles } from "../simulationStyles";
 
 export default function TextRow({ title, simulations, label, style }) {
   return (

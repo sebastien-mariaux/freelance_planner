@@ -1,5 +1,5 @@
 import { displayPercent } from "../simulationsHelper";
-import { simulationStyles } from "./simulationStyles";
+import { simulationStyles } from "../simulationStyles";
 
 export default function PercentTextRow({ title, simulations, label, style }) {
   return (
