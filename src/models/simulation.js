@@ -3,7 +3,6 @@ export const TAX_THRESHOLD = 42500;
 
 export class Simulation {
   constructor(initialValues = {}) {
-    console.log(initialValues)
     this.name = initialValues.name || 'Simulation';
     this._dailyRate = this.getDefaultValue(initialValues.dailyRate, 500);
     this._weeksOff = this.getDefaultValue(initialValues.weeksOff, 10);

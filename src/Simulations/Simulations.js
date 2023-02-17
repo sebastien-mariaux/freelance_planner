@@ -15,6 +15,11 @@ const styles = {
   mainIndicator: {
     fontWeight: 'bold',
     fontSize: '1.2em'
+  },
+  titleButton: {
+    marginTop: 'auto',
+    marginBottom: 'auto',
+    marginLeft: '25px'
   }
 }
 
@@ -28,7 +33,7 @@ const incomes = [
 ];
 
 const workload = [
-  // { label: 'name', title: 'Titre', style: {} },
+  { label: 'name', title: 'Titre', style: styles.mainIndicator },
   { label: 'dailyRate', title: 'TJM', style: {} },
   { label: 'daysPerWeek', title: 'Jours par semaine', style: {} },
   { label: 'weeksOff', title: 'Semaines off', style: {} },
@@ -82,11 +87,10 @@ const managerIncomes = [
 ]
 
 
-
-
-
 export default function Simulations() {
-  const [simulations, setSimulations] = useState(defaultSimulations);
+  const savedSimulations = JSON.parse(localStorage.getItem('simulations'));
+  const [simulations, setSimulations] = useState(savedSimulations || defaultSimulations);
+
 
   const updateSimulation = (index, label, value) => {
     let newSimulations = simulations.map(simulation => new Simulation(simulation));
@@ -95,42 +99,64 @@ export default function Simulations() {
     setSimulations([...newSimulations]);
   }
 
+  const saveSimulations = () => {
+    localStorage.setItem('simulations', JSON.stringify(simulations));
+    alert("Les données ont bien été enregistrées")
+  }
+
+  const resetSimulations = () => {
+    localStorage.removeItem('simulations');
+    setSimulations(defaultSimulations);
+  }
 
   return (
     <>
-      <header style={{ textAlign: 'center' }}>
-        <h1>FREELANCE PLANNER</h1>
-      </header>
-      <div style={{ margin: '50px' }}>
+
+      <div style={{ display: 'flex' }}>
         <h2>SASU</h2>
         <button
+          style={styles.titleButton}
           onClick={() => setSimulations([...simulations, (new Simulation()).serialize()])}
         >
           Ajouter une simulation
         </button>
+        <button
+          style={styles.titleButton}
+          onClick={saveSimulations}
+        >
+          Enregistrer les données
+        </button>
+        <button
+          style={styles.titleButton}
+          onClick={resetSimulations}
+        >
+          Réinitialiser les données
+        </button>
+      </div>
 
-        <div>
-          <h3>Revenus</h3>
-          {workload.map((w) => (
-            <InputRow
-              title={w.title}
-              updateSimulation={updateSimulation}
-              simulations={simulations}
-              label={w.label}
-            />
-          ))}
 
-          {incomes.map((income) => (
-            <TextRow
-              title={income.title}
-              simulations={simulations}
-              label={income.label}
-              style={income.style}
-            />
-          ))}
+      <div>
+        <h3>Revenus</h3>
+        {workload.map((w) => (
+          <InputRow
+            title={w.title}
+            updateSimulation={updateSimulation}
+            simulations={simulations}
+            label={w.label}
+          />
+        ))}
 
-          <h3>Charges</h3>
-          {/* {expenses.map((expense, index) => (
+        {incomes.map((income) => (
+          <TextRow
+            title={income.title}
+            simulations={simulations}
+            label={income.label}
+            style={income.style}
+          />
+        ))}
+
+        <h3>Charges</h3>
+        {/* {expenses.map((expense, index) => (
             <section style={styles.row}>
               <div style={{ ...expense.style, ...styles.leftCol }} >
                 {expense.title}
@@ -174,7 +200,7 @@ export default function Simulations() {
           ))}
           <div style={{ height: '1em' }}></div> */}
 
-          {/* {totalExpenses.map((expense, index) => (
+        {/* {totalExpenses.map((expense, index) => (
             <section style={styles.row}>
               <div style={{ ...expense.style, ...styles.leftCol }} >
                 {expense.title}
@@ -188,13 +214,13 @@ export default function Simulations() {
               ))}
             </section>
           ))} */}
-          <InputRow
-            title="Charges annuelles"
-            simulations={simulations}
-            label="yearlyExpenses"
-            updateSimulation={updateSimulation}
-          />
-          {/* <section style={styles.row}>
+        <InputRow
+          title="Charges annuelles"
+          simulations={simulations}
+          label="yearlyExpenses"
+          updateSimulation={updateSimulation}
+        />
+        {/* <section style={styles.row}>
             <div style={styles.leftCol} >
               Charges mensuelles moyennes
             </div>
@@ -208,91 +234,90 @@ export default function Simulations() {
             ))}
           </section> */}
 
-          <InputRow
-            title="Salaire net mensuel (avant IR)"
-            updateSimulation={updateSimulation}
-            simulations={simulations}
-            label="monthlyNetSalary"
-          />
+        <InputRow
+          title="Salaire net mensuel (avant IR)"
+          updateSimulation={updateSimulation}
+          simulations={simulations}
+          label="monthlyNetSalary"
+        />
 
-          {salaries.map((salary, index) => (
-            <TextRow
-              title={salary.title}
-              simulations={simulations}
-              label={salary.label}
-              style={salary.style}
-            />
-          ))}
+        {salaries.map((salary, index) => (
           <TextRow
-            title="Total des charges"
+            title={salary.title}
             simulations={simulations}
-            label="yearlyTotalCost"
-            style={{ fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' }}
+            label={salary.label}
+            style={salary.style}
           />
+        ))}
+        <TextRow
+          title="Total des charges"
+          simulations={simulations}
+          label="yearlyTotalCost"
+          style={{ fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' }}
+        />
 
 
-          <h3>Soldes</h3>
-          {totals.map((expense) => (
-            <TextRow
-              title={expense.title}
-              simulations={simulations}
-              label={expense.label}
-              style={expense.style}
-            />
+        <h3>Soldes</h3>
+        {totals.map((expense) => (
+          <TextRow
+            title={expense.title}
+            simulations={simulations}
+            label={expense.label}
+            style={expense.style}
+          />
+        ))}
+
+        <h3>Revenus dirigeant.e</h3>
+        <InputRow
+          title="Taux d'IR"
+          updateSimulation={updateSimulation}
+          simulations={simulations}
+          label="incomeTaxRate"
+        />
+
+        {managerIncomes.map((expense) => (
+          <TextRow
+            title={expense.title}
+            simulations={simulations}
+            label={expense.label}
+            style={expense.style}
+          />
+        ))}
+
+        <PercentTextRow
+          title='Ratio revenu / CA'
+          simulations={simulations}
+          label='manageIncomeRevenuRatio'
+          style={{ fontWeight: 'bold' }}
+        />
+
+        <section style={simulationStyles.row}>
+          <div style={{ ...simulationStyles.leftCol }} ></div>
+          {simulations.map((simulation, index) => (
+            <div key={index} style={simulationStyles.col} >
+              <button
+                onClick={() => {
+                  let newSimulation = new Simulation(simulation);
+                  newSimulation.name = newSimulation.name + ' (copie)';
+                  setSimulations([...simulations, newSimulation.serialize()]);
+                }}
+              >
+                Dupliquer
+              </button>
+              <button
+                onClick={() => {
+                  let newSimulations = [...simulations];
+                  newSimulations.splice(index, 1);
+                  setSimulations(newSimulations);
+                }}
+              >
+                Supprimer
+              </button>
+            </div>
           ))}
-
-          <h3>Revenus dirigeant.e</h3>
-          <InputRow
-            title="Taux d'IR"
-            updateSimulation={updateSimulation}
-            simulations={simulations}
-            label="incomeTaxRate"
-          />
-
-          {managerIncomes.map((expense) => (
-            <TextRow
-              title={expense.title}
-              simulations={simulations}
-              label={expense.label}
-              style={expense.style}
-            />
-          ))}
-
-          <PercentTextRow
-            title='Ratio revenu / CA'
-            simulations={simulations}
-            label='manageIncomeRevenuRatio'
-            style={{ fontWeight: 'bold' }}
-          />
-
-          <section style={simulationStyles.row}>
-            <div style={{ ...simulationStyles.leftCol }} ></div>
-            {simulations.map((simulation, index) => (
-              <div key={index} style={simulationStyles.col} >
-                <button
-                  onClick={() => {
-                    let newSimulation = new Simulation(simulation);
-                    newSimulation.name = newSimulation.name + ' (copie)';
-                    setSimulations([...simulations, newSimulation.serialize()]);
-                  }}
-                >
-                  Dupliquer
-                </button>
-                <button
-                  onClick={() => {
-                    let newSimulations = [...simulations];
-                    newSimulations.splice(index, 1);
-                    setSimulations(newSimulations);
-                  }}
-                >
-                  Supprimer
-                </button>
-              </div>
-            ))}
-          </section>
-        </div>
-
+        </section>
       </div>
+
     </>
   )
 }
