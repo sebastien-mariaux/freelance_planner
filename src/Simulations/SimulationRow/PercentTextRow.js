@@ -3,7 +3,7 @@ import { simulationStyles } from "../simulationStyles";
 
 export default function PercentTextRow({ title, simulations, label, style }) {
   return (
-    <section style={simulationStyles.row}>
+    <section style={simulationStyles.row} >
       <div style={{ ...style, ...simulationStyles.leftCol }} >
         {title}
       </div>

@@ -1,10 +1,14 @@
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
 export default function SiteLayout({children}){
+  const navigate = useNavigate();
+
   return(
     < div style={{ margin: '0 50px 20px 50px' }}>
     <header style={{ display: 'flex' }} >
-      <h1 style={{ display: 'block' }}>FREELANCE PLANNER</h1>
+      <h1 style={{ display: 'block' }} onClick={()=>{navigate('/')}}>
+        FREELANCE PLANNER
+        </h1>
       <a
         href='/a-propos'
         alt='A  propos du site'

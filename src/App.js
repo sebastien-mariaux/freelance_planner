@@ -1,4 +1,6 @@
+import './App.scss';
 import Simulations from './Simulations/Simulations';
+
 import {
   BrowserRouter as Router,
   Routes,
@@ -11,8 +13,6 @@ function App() {
 
   return (
     <Router>
-
-
       <Routes>
         <Route element={<SiteLayout />}>
           <Route path="/a-propos" element={<About />} />

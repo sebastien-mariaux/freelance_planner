@@ -1,10 +1,10 @@
+
 import { useState } from 'react';
 import { Simulation } from '../models/simulation';
 import InputRow from './SimulationRow/InputRow';
 import PercentTextRow from './SimulationRow/PercentTextRow';
 import TextRow from './SimulationRow/TextRow';
 import { simulationStyles } from './simulationStyles';
-
 
 const styles = {
   endOfSection: {
@@ -24,7 +24,29 @@ const styles = {
 }
 
 const defaultSimulations = [
-  (new Simulation()).serialize(),
+  (new Simulation({
+    name: '100% dividendes',
+    dailyRate: 500,
+    daysPerWeek: 5,
+    weeksOff: 5,
+    incomeTaxRate: 12
+  })).serialize(),
+  (new Simulation({
+    name: 'Avec salaire',
+    dailyRate: 500,
+    daysPerWeek: 5,
+    weeksOff: 5,
+    incomeTaxRate: 12,
+    monthlyNetSalary: 4750
+  })).serialize(),
+  (new Simulation({
+    name: 'Mix salaire/dividendes',
+    dailyRate: 500,
+    daysPerWeek: 5,
+    weeksOff: 5,
+    incomeTaxRate: 10,
+    monthlyNetSalary: 2000
+  })).serialize(),
 ]
 
 const incomes = [
@@ -73,8 +95,8 @@ const totals = [
   { label: 'rawEarnings', title: 'Bénéfice brut', style: {} },
   { label: 'earningsTax', title: 'Impôts sur les sociétés', style: {} },
   { label: 'netEarnings', title: 'Bénéfice net', style: { fontWeight: 'bold' } },
-  { label: 'dividend', title: 'Dividende versé', style: {} },
-  { label: 'netResult', title: 'Résultat net', style: { ...styles.mainIndicator, ...styles.endOfSection } },
+  // { label: 'dividend', title: 'Dividende versé', style: {} },
+  // { label: 'netResult', title: 'Résultat net', style: { ...styles.mainIndicator, ...styles.endOfSection } },
   // { label: 'managerMonthlyIncome', title: 'Revenu mensuel moyen du dirigeant', style: { fontWeight: 'bold', fontSize: '1.2rem' } },
 ]
 
@@ -109,9 +131,27 @@ export default function Simulations() {
     setSimulations(defaultSimulations);
   }
 
-  return (
-    <>
+  const displayRow = (label, title, style, type) => {
+    const RowCompoment = {
+      'text': TextRow,
+      'input': InputRow,
+      'percent': PercentTextRow,
+    }[type || 'text'];
 
+    return (
+      <RowCompoment
+        key={label}
+        title={title}
+        updateSimulation={updateSimulation}
+        simulations={simulations}
+        label={label}
+        style={style}
+      />
+    )
+  }
+
+  return (
+    <div className='simulations'>
       <div style={{ display: 'flex' }}>
         <h2>SASU</h2>
         <button
@@ -134,162 +174,42 @@ export default function Simulations() {
         </button>
       </div>
 
-
-      <div>
+      <div className='div'>
         <h3>Revenus</h3>
         {workload.map((w) => (
-          <InputRow
-            title={w.title}
-            updateSimulation={updateSimulation}
-            simulations={simulations}
-            label={w.label}
-          />
+          displayRow(w.label, w.title, w.style, 'input')
         ))}
-
         {incomes.map((income) => (
-          <TextRow
-            title={income.title}
-            simulations={simulations}
-            label={income.label}
-            style={income.style}
-          />
+          displayRow(income.label, income.title, income.style, 'text')
         ))}
 
         <h3>Charges</h3>
-        {/* {expenses.map((expense, index) => (
-            <section style={styles.row}>
-              <div style={{ ...expense.style, ...styles.leftCol }} >
-                {expense.title}
-              </div>
-              {simulations.map((simulation, index) => (
-                <div key={index} style={styles.col} >
-                  <input
-                    style={{ width: '100%' }}
-                    type="text"
-                    value={simulation[expense.label]}
-                    onChange={(e) => updateSimulation(index, expense.label, e.target.value)}
-                  />
-                </div>
-              ))}
-            </section>
-          ))}
-
-
-          <h4 style={{ marginBottom: '0', marginTop: '0.5em' }}>Frais remboursables</h4>
-          <div style={{ fontSize: '0.75rem', fontStyle: 'italic', marginBottom: '0.5em' }}>
-            *Frais avancés par l'employeur mais remboursables en partie. Indiquer le montant remboursé.
-          </div>
-
-
-          {repayableFees.map((expense, index) => (
-            <section style={styles.row}>
-              <div style={{ ...expense.style, ...styles.leftCol }} >
-                {expense.title}
-              </div>
-              {simulations.map((simulation, index) => (
-                <div key={index} style={styles.col} >
-                  <input
-                    style={{ width: '100%' }}
-                    type="text"
-                    value={simulation[expense.label]}
-                    onChange={(e) => updateSimulation(index, expense.label, e.target.value)}
-                  />
-                </div>
-              ))}
-            </section>
-          ))}
-          <div style={{ height: '1em' }}></div> */}
-
-        {/* {totalExpenses.map((expense, index) => (
-            <section style={styles.row}>
-              <div style={{ ...expense.style, ...styles.leftCol }} >
-                {expense.title}
-              </div>
-              {simulations.map((simulation, index) => (
-                <div key={index} style={styles.col} >
-                  <div style={expense.style}>
-                    {displayAmount(simulation[expense.label])}
-                  </div>
-                </div>
-              ))}
-            </section>
-          ))} */}
-        <InputRow
-          title="Charges annuelles"
-          simulations={simulations}
-          label="yearlyExpenses"
-          updateSimulation={updateSimulation}
-        />
-        {/* <section style={styles.row}>
-            <div style={styles.leftCol} >
-              Charges mensuelles moyennes
-            </div>
-            {simulations.map((simulation, index) => (
-              <div key={index} style={styles.col} >
-
-                <div >
-                    {displayAmount(simulation['monthlyNetSalary'])}
-                  </div>
-              </div>
-            ))}
-          </section> */}
-
-        <InputRow
-          title="Salaire net mensuel (avant IR)"
-          updateSimulation={updateSimulation}
-          simulations={simulations}
-          label="monthlyNetSalary"
-        />
-
+        {displayRow('yearlyExpenses', 'Charges annuelles', {}, 'input')}
+        {displayRow('monthlyNetSalary', 'Salaire net mensuel (avant IR)', {}, 'input')}
         {salaries.map((salary, index) => (
-          <TextRow
-            title={salary.title}
-            simulations={simulations}
-            label={salary.label}
-            style={salary.style}
-          />
+          displayRow(salary.label, salary.title, salary.style, 'text')
         ))}
-        <TextRow
-          title="Total des charges"
-          simulations={simulations}
-          label="yearlyTotalCost"
-          style={{ fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' }}
-        />
-
+        {displayRow(
+          'yearlyTotalCost',
+          'Total des charges',
+          { fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' },
+          'text'
+        )}
 
         <h3>Soldes</h3>
         {totals.map((expense) => (
-          <TextRow
-            title={expense.title}
-            simulations={simulations}
-            label={expense.label}
-            style={expense.style}
-          />
+          displayRow(expense.label, expense.title, expense.style, 'text')
         ))}
+        {displayRow("percentDividend", "Pourcentage de divende", {}, 'input')}
+        {displayRow("dividend", "Dividende versé", {}, 'text')}
+        {displayRow("netResult", "Résultat net", { fontWeight: 'bold' }, 'text')}
 
         <h3>Revenus dirigeant.e</h3>
-        <InputRow
-          title="Taux d'IR"
-          updateSimulation={updateSimulation}
-          simulations={simulations}
-          label="incomeTaxRate"
-        />
-
+        {displayRow('incomeTaxRate', "Taux d'IR", {}, 'input')}
         {managerIncomes.map((expense) => (
-          <TextRow
-            title={expense.title}
-            simulations={simulations}
-            label={expense.label}
-            style={expense.style}
-          />
+          displayRow(expense.label, expense.title, expense.style, 'text')
         ))}
-
-        <PercentTextRow
-          title='Ratio revenu / CA'
-          simulations={simulations}
-          label='manageIncomeRevenuRatio'
-          style={{ fontWeight: 'bold' }}
-        />
+        {displayRow('manageIncomeRevenuRatio', 'Ratio revenu / CA', { fontWeight: 'bold' }, 'percent')}
 
         <section style={simulationStyles.row}>
           <div style={{ ...simulationStyles.leftCol }} ></div>
@@ -318,6 +238,6 @@ export default function Simulations() {
         </section>
       </div>
 
-    </>
+    </div>
   )
 }

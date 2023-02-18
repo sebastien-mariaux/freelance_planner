@@ -7,13 +7,15 @@ export default function TextRow({ title, simulations, label, style }) {
       <div style={{ ...style, ...simulationStyles.leftCol }} >
         {title}
       </div>
-      {simulations.map((simulation, index) => (
-        <div key={index} style={simulationStyles.col} >
-          <div style={style}>
-            {displayAmount(simulation[label])}
+      {simulations.map((simulation, index) => {
+        const value = simulation[label]
+        return (
+        <div style={simulationStyles.col} key={index}>
+          <div style={{...style, color: value < 0 ? 'red' : ''}}>
+            {displayAmount(value)}
           </div>
         </div>
-      ))}
+      )})}
     </section>
   )
 }
