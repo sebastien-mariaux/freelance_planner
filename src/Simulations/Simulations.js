@@ -11,7 +11,7 @@ const styles = {
   endOfSection: {
     fontWeight: 'bold',
     borderBottom: '2px solid black',
-    paddingBottom: '15px'
+    paddingBottom: '5px'
   },
   mainIndicator: {
     fontWeight: 'bold',
@@ -32,7 +32,7 @@ const defaultSimulations = [
     dailyRate: 500,
     daysPerWeek: 5,
     weeksOff: 10,
-    incomeTaxRate: 12
+    incomeTaxRate: 20
   })).serialize(),
   (new Simulation({
     companyType: 'EURL',
@@ -40,7 +40,7 @@ const defaultSimulations = [
     dailyRate: 500,
     daysPerWeek: 5,
     weeksOff: 10,
-    incomeTaxRate: 12,
+    incomeTaxRate: 20,
     monthlyNetSalary: 4500
   })).serialize(),
 
@@ -131,19 +131,19 @@ export default function Simulations() {
 
       <div >
         <DisplayRow label='name' title='Titre' style={styles.mainIndicator} type='input' />
-        <DisplayRow label='companyType' title='Type de société' style={styles.mainIndicator} type='select' options={['SASU', 'EURL']} />
+        <DisplayRow label='companyType' title='Type de société' type='select' options={['SASU', 'EURL']} />
 
         <h3>Revenus</h3>
         <DisplayRow label='dailyRate' title='TJM' type='input' />
         <DisplayRow label='daysPerWeek' title='Jours par semaine' type='input' />
-        <DisplayRow label='weeksOff' title='Semaines off' type='input' />
+        <DisplayRow label='weeksOff' titl6e='Semaines off' type='input' />
         <DisplayRow label='weeksOn' title='Semaines travaillées' type='input' />
 
         <DisplayRow label='yearlyRevenu' title='CA annuel' style={styles.mainIndicator} type='text' />
         <DisplayRow
           label='montlyRevenu'
           title='CA moyen mensuel'
-          style={{ fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' }}
+          style={styles.endOfSection}
           type='text'
         />
 
@@ -157,7 +157,7 @@ export default function Simulations() {
         <DisplayRow
           label='yearlyTotalCost'
           title='Total des charges'
-          style={{ fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' }}
+          style={styles.endOfSection}
           type='text' />
 
         <h3>Soldes</h3>

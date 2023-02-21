@@ -6,7 +6,7 @@ export default function SiteLayout({children}){
   return(
     < div style={{ margin: '0 50px 20px 50px' }}>
     <header style={{ display: 'flex' }} >
-      <h1 style={{ display: 'block' }} onClick={()=>{navigate('/')}}>
+      <h1 style={{ display: 'block', marginBottom: '0px' }} onClick={()=>{navigate('/')}}>
         FREELANCE PLANNER
         </h1>
       <a
