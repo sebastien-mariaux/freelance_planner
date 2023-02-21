@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { Simulation } from '../models/simulation';
 import InputRow from './SimulationRow/InputRow';
 import PercentTextRow from './SimulationRow/PercentTextRow';
+import SelectRow from './SimulationRow/SelectRow';
 import TextRow from './SimulationRow/TextRow';
 import { simulationStyles } from './simulationStyles';
 
@@ -24,95 +25,44 @@ const styles = {
 }
 
 const defaultSimulations = [
+
   (new Simulation({
-    name: '100% dividendes',
+    companyType: 'SASU',
+    name: 'SASU 100% dividendes',
     dailyRate: 500,
     daysPerWeek: 5,
-    weeksOff: 5,
+    weeksOff: 10,
     incomeTaxRate: 12
   })).serialize(),
   (new Simulation({
-    name: 'Avec salaire',
+    companyType: 'EURL',
+    name: 'EURL',
     dailyRate: 500,
     daysPerWeek: 5,
-    weeksOff: 5,
+    weeksOff: 10,
     incomeTaxRate: 12,
-    monthlyNetSalary: 4750
+    monthlyNetSalary: 4500
   })).serialize(),
-  (new Simulation({
-    name: 'Mix salaire/dividendes',
-    dailyRate: 500,
-    daysPerWeek: 5,
-    weeksOff: 5,
-    incomeTaxRate: 10,
-    monthlyNetSalary: 2000
-  })).serialize(),
+
 ]
 
-const incomes = [
-  { label: 'yearlyIncome', title: 'CA annuel', style: styles.mainIndicator },
-  { label: 'monthlyIncome', title: 'CA moyen mensuel', style: { fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' } },
-];
-
-const workload = [
-  { label: 'name', title: 'Titre', style: styles.mainIndicator },
-  { label: 'dailyRate', title: 'TJM', style: {} },
-  { label: 'daysPerWeek', title: 'Jours par semaine', style: {} },
-  { label: 'weeksOff', title: 'Semaines off', style: {} },
-  { label: 'weeksOn', title: 'Semaines travaillées', style: {} },
-]
-
-// const expenses = [
-//   { label: 'dailyFoodCost', title: 'Prix moyen repas', style: {} },
-//   { label: 'yearlyFoodCost', title: 'Coût annuel repas', style: {} },
-//   { label: 'yearlyRent', title: 'Coût annuel loyer', style: {} },
-//   { label: 'yearlyAccountingCost', title: 'Coût annuel comptabilité', style: {} },
-//   { label: 'yearlyPhoneCost', title: 'Coût annuel téléphone', style: {} },
-//   { label: 'yearlyProInsuranceCost', title: 'Coût annuel RC Pro', style: {} },
-//   { label: 'yearlyOtherInsuranceCost', title: 'Coût annuel autres assurances', style: {} },
-//   { label: 'yearlyBankingCost', title: 'Frais bancaires annuels', style: {} },
-//   { label: 'yearlyFurnitureCost', title: 'Coût annuel fournitures', style: {} },
-//   { label: 'yearlyOtherCost', title: 'Autres coûts annuels', style: {} },
-// ]
-
-// const repayableFees = [
-//   { label: 'yearlyRentRepayed', title: 'Remboursement loyer', style: {} },
-//   { label: 'yearlyInternetCostRepayed', title: 'Remboursement internet', style: {} },
-//   { label: 'yearlyPowerCostRepayed', title: 'Remboursement électricité', style: {} },
-// ]
-
-// const totalExpenses = [
-//   { label: 'yearlyTotalCost', title: 'Total des charges', style: { fontWeight: 'bold', fontSize: '1.2em' } },
-//   { label: 'monthlyExpenses', title: 'Charges moyennes mensuelles', style: { fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' } },
-// ]
-
-const salaries = [
-  { label: 'yearlyNetSalary', title: 'Salaire annuel net', style: {} },
-  { label: 'yearlyRawSalary', title: 'Salaire annuel chargé', style: {} },
-]
-
-const totals = [
-  { label: 'rawEarnings', title: 'Bénéfice brut', style: {} },
-  { label: 'earningsTax', title: 'Impôts sur les sociétés', style: {} },
-  { label: 'netEarnings', title: 'Bénéfice net', style: { fontWeight: 'bold' } },
-  // { label: 'dividend', title: 'Dividende versé', style: {} },
-  // { label: 'netResult', title: 'Résultat net', style: { ...styles.mainIndicator, ...styles.endOfSection } },
-  // { label: 'managerMonthlyIncome', title: 'Revenu mensuel moyen du dirigeant', style: { fontWeight: 'bold', fontSize: '1.2rem' } },
-]
-
-const managerIncomes = [
-  { label: 'yearlyNetSalary', title: 'Salaire annuel net', style: {} },
-  { label: 'incomeTax', title: 'IR (estimation)', style: {} },
-  { label: 'netDividend', title: 'Dividende perçu', style: {} },
-  { label: 'managerYearlyIncome', title: 'Revenu annuel ', style: { fontWeight: 'bold' } },
-  { label: 'managerMonthlyIncome', title: 'Revenu mensuel moyen', style: { ...styles.endOfSection, ...styles.mainIndicator } },
-]
 
 
 export default function Simulations() {
   const savedSimulations = JSON.parse(localStorage.getItem('simulations'));
   const [simulations, setSimulations] = useState(savedSimulations || defaultSimulations);
 
+  const duplicateSimulation = (simulation) => {
+    let newSimulation = new Simulation(simulation);
+    newSimulation.name = newSimulation.name + ' (copie)';
+    setSimulations([...simulations, newSimulation.serialize()]);
+  }
+
+  const deleteSimulation = (index) => {
+    let newSimulations = [...simulations];
+    newSimulations.splice(index, 1);
+    setSimulations(newSimulations);
+  }
 
   const updateSimulation = (index, label, value) => {
     let newSimulations = simulations.map(simulation => new Simulation(simulation));
@@ -131,11 +81,12 @@ export default function Simulations() {
     setSimulations(defaultSimulations);
   }
 
-  const displayRow = (label, title, style, type) => {
+  const DisplayRow = ({ label, title, style = {}, type, options }) => {
     const RowCompoment = {
       'text': TextRow,
       'input': InputRow,
       'percent': PercentTextRow,
+      'select': SelectRow,
     }[type || 'text'];
 
     return (
@@ -145,15 +96,17 @@ export default function Simulations() {
         updateSimulation={updateSimulation}
         simulations={simulations}
         label={label}
+        options={options}
         style={style}
       />
     )
   }
 
+
   return (
     <div className='simulations'>
       <div style={{ display: 'flex' }}>
-        <h2>SASU</h2>
+        <h2>Comparateur</h2>
         <button
           style={styles.titleButton}
           onClick={() => setSimulations([...simulations, (new Simulation()).serialize()])}
@@ -174,63 +127,70 @@ export default function Simulations() {
         </button>
       </div>
 
-      <div className='div'>
+
+
+      <div >
+        <DisplayRow label='name' title='Titre' style={styles.mainIndicator} type='input' />
+        <DisplayRow label='companyType' title='Type de société' style={styles.mainIndicator} type='select' options={['SASU', 'EURL']} />
+
         <h3>Revenus</h3>
-        {workload.map((w) => (
-          displayRow(w.label, w.title, w.style, 'input')
-        ))}
-        {incomes.map((income) => (
-          displayRow(income.label, income.title, income.style, 'text')
-        ))}
+        <DisplayRow label='dailyRate' title='TJM' type='input' />
+        <DisplayRow label='daysPerWeek' title='Jours par semaine' type='input' />
+        <DisplayRow label='weeksOff' title='Semaines off' type='input' />
+        <DisplayRow label='weeksOn' title='Semaines travaillées' type='input' />
+
+        <DisplayRow label='yearlyRevenu' title='CA annuel' style={styles.mainIndicator} type='text' />
+        <DisplayRow
+          label='montlyRevenu'
+          title='CA moyen mensuel'
+          style={{ fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' }}
+          type='text'
+        />
 
         <h3>Charges</h3>
-        {displayRow('yearlyExpenses', 'Charges annuelles', {}, 'input')}
-        {displayRow('monthlyNetSalary', 'Salaire net mensuel (avant IR)', {}, 'input')}
-        {salaries.map((salary, index) => (
-          displayRow(salary.label, salary.title, salary.style, 'text')
-        ))}
-        {displayRow(
-          'yearlyTotalCost',
-          'Total des charges',
-          { fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' },
-          'text'
-        )}
+        <DisplayRow label='yearlyExpenses' title='Charges annuelles' type='input' />
+        <DisplayRow label='monthlyNetSalary' title='Salaire net mensuel (avant IR)' type='input' />
+
+        <DisplayRow label='yearlyNetSalary' title='Salaire net annuel' type='text' />
+        <DisplayRow label='yearlySalaryCotisations' title='Cotisations sur salaire' type='text' />
+
+        <DisplayRow
+          label='yearlyTotalCost'
+          title='Total des charges'
+          style={{ fontWeight: 'bold', borderBottom: '2px solid black', paddingBottom: '15px' }}
+          type='text' />
 
         <h3>Soldes</h3>
-        {totals.map((expense) => (
-          displayRow(expense.label, expense.title, expense.style, 'text')
-        ))}
-        {displayRow("percentDividend", "Pourcentage de divende", {}, 'input')}
-        {displayRow("dividend", "Dividende versé", {}, 'text')}
-        {displayRow("netResult", "Résultat net", { fontWeight: 'bold' }, 'text')}
+        <DisplayRow label='rawEarnings' title='Bénéfice brut' type='text' />
+        <DisplayRow label='earningsTax' title="Impôts sur les sociétés" type='text' />
+        <DisplayRow label='netEarnings' title='Bénéfice net' styles={styles.endOfSection} type='text' />
+
+        <h3>Affectation du résultat</h3>
+        <DisplayRow label="percentDividend" title="Pourcentage de divende" type='input' />
+        <DisplayRow label="netDividend" title="Dividende versé" type='text' />
+        <DisplayRow label="dividendCotisations" title="Cotisations sur dividende" type='text' />
+        <DisplayRow label="netResult" title="Résultat mis en réserve" style={styles.endOfSection} type='text' />
 
         <h3>Revenus dirigeant.e</h3>
-        {displayRow('incomeTaxRate', "Taux d'IR", {}, 'input')}
-        {managerIncomes.map((expense) => (
-          displayRow(expense.label, expense.title, expense.style, 'text')
-        ))}
-        {displayRow('manageIncomeRevenuRatio', 'Ratio revenu / CA', { fontWeight: 'bold' }, 'percent')}
+        <DisplayRow label='incomeTaxRate' title="Taux d'IR" type='input' />
+
+        <DisplayRow label='yearlyNetSalary' title='Salaire annuel net' type='text' />
+        <DisplayRow label='incomeTax' title="IR sur salaire (estimation)" type='text' />
+        <DisplayRow label='netDividend' title='Dividende reçu' type='text' />
+        <DisplayRow label='incomeTaxOnDividend' title='IR sur dividendes (taux fixe 12.8)' type='text' />
+        <DisplayRow label='manageryearlyRevenu' title='Revenu annuel ' style={{ fontWeight: 'bold' }} type='text' />
+        <DisplayRow label='managermontlyRevenu' title='Revenu mensuel moyen' style={{ ...styles.endOfSection, ...styles.mainIndicator }} type='text' />
+
+        <DisplayRow label='manageIncomeRevenuRatio' title='Ratio revenu / CA' style={{ fontWeight: 'bold' }} type='percent' />
 
         <section style={simulationStyles.row}>
           <div style={{ ...simulationStyles.leftCol }} ></div>
           {simulations.map((simulation, index) => (
             <div key={index} style={simulationStyles.col} >
-              <button
-                onClick={() => {
-                  let newSimulation = new Simulation(simulation);
-                  newSimulation.name = newSimulation.name + ' (copie)';
-                  setSimulations([...simulations, newSimulation.serialize()]);
-                }}
-              >
+              <button onClick={duplicateSimulation} >
                 Dupliquer
               </button>
-              <button
-                onClick={() => {
-                  let newSimulations = [...simulations];
-                  newSimulations.splice(index, 1);
-                  setSimulations(newSimulations);
-                }}
-              >
+              <button onClick={() => deleteSimulation(index)} >
                 Supprimer
               </button>
             </div>

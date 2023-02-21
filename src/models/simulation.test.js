@@ -94,45 +94,45 @@ describe('Simulation', () => {
     })
   })
 
-  describe('yearlyIncome', () => {
+  describe('yearlyRevenu', () => {
     const simulation = new Simulation({ dailyRate: 100, daysPerWeek: 5, weeksOn: 50, weeksOff: 2 });
     it('should return 100*5*50', () => {
-      expect(simulation.yearlyIncome()).toBe(25000);
+      expect(simulation.yearlyRevenu()).toBe(25000);
     })
     it('should return 0 if dailyRate is 0', () => {
       simulation.dailyRate = 0;
-      expect(simulation.yearlyIncome()).toBe(0);
+      expect(simulation.yearlyRevenu()).toBe(0);
     })
     it('should return 0 if daysPerWeek is 0', () => {
       simulation.daysPerWeek = 0;
-      expect(simulation.yearlyIncome()).toBe(0);
+      expect(simulation.yearlyRevenu()).toBe(0);
     })
     it('should return 0 if weeksOn is 0', () => {
       simulation.weeksOn = 0;
-      expect(simulation.yearlyIncome()).toBe(0);
+      expect(simulation.yearlyRevenu()).toBe(0);
     })
   })
-  describe('monthlyIncome', () => {
+  describe('montlyRevenu', () => {
     const simulation = new Simulation({ dailyRate: 100, daysPerWeek: 5, weeksOn: 50, weeksOff: 2 });
     it('should return 100*5*50/12', () => {
-      expect(round2(simulation.monthlyIncome())).toBe(2083.33);
+      expect(round2(simulation.montlyRevenu())).toBe(2083.33);
     })
     it('should return 0 if dailyRate is 0', () => {
       simulation.dailyRate = 0;
-      expect(simulation.monthlyIncome()).toBe(0);
+      expect(simulation.montlyRevenu()).toBe(0);
     })
     it('should return 0 if daysPerWeek is 0', () => {
       simulation.daysPerWeek = 0;
-      expect(simulation.monthlyIncome()).toBe(0);
+      expect(simulation.montlyRevenu()).toBe(0);
     })
     it('should return 0 if weeksOn is 0', () => {
       simulation.weeksOn = 0;
-      expect(simulation.monthlyIncome()).toBe(0);
+      expect(simulation.montlyRevenu()).toBe(0);
     })
   })
   describe('rawEarnings', () => {
     const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, yearlyExpenses: 10000 });
-    expect(simulation.yearlyIncome()).toBe(117500);
+    expect(simulation.yearlyRevenu()).toBe(117500);
     it('should return 107500', () => {
       expect(round2(simulation.rawEarnings())).toBe(107500);
     })
@@ -144,7 +144,7 @@ describe('Simulation', () => {
   describe('earningsTax', () => {
     describe('with big earnings', () => {
       const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, yearlyExpenses: 10000 });
-      expect(simulation.yearlyIncome()).toBe(117500);
+      expect(simulation.yearlyRevenu()).toBe(117500);
       expect(round2(simulation.rawEarnings())).toBe(107500);
 
       it('should compute', () => {
@@ -178,7 +178,7 @@ describe('Simulation', () => {
   })
   describe('netEarnings', () => {
     const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, yearlyExpenses: 10000 });
-    expect(simulation.yearlyIncome()).toBe(117500);
+    expect(simulation.yearlyRevenu()).toBe(117500);
     expect(round2(simulation.rawEarnings())).toBe(107500);
     expect(round2(simulation.earningsTax())).toBe(22625);
 

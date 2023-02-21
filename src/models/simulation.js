@@ -4,6 +4,7 @@ export const TAX_THRESHOLD = 42500;
 export class Simulation {
   constructor(initialValues = {}) {
     this.name = initialValues.name || 'Simulation';
+    this._companyType = initialValues.companyType || 'SASU';
     this._dailyRate = this.getDefaultValue(initialValues.dailyRate, 500);
     this._weeksOff = this.getDefaultValue(initialValues.weeksOff, 10);
     this._weeksOn = this.getDefaultValue(initialValues.weeksOn, 42);
@@ -19,6 +20,16 @@ export class Simulation {
       return 0;
     }
     return value || defaultValue;
+  }
+  get companyType() {
+    return this._companyType;
+  }
+  set companyType(value) {
+    if (['SASU', 'EURL'].includes(value)) {
+      this._companyType = value;
+    } else {
+      this._companyType = 'SASU';
+    }
   }
 
   get incomeTaxRate() {
@@ -89,26 +100,32 @@ export class Simulation {
     this._daysPerWeek = value;
   }
 
-  yearlyIncome() {
+  yearlyRevenu() {
     return this.dailyRate * this.daysPerWeek * this.weeksOn;
   }
 
-  monthlyIncome() {
-    return this.yearlyIncome() / 12;
+  montlyRevenu() {
+    return this.yearlyRevenu() / 12;
   }
 
+  yearlyNetSalary() {
+    return 12 * this.monthlyNetSalary;
+  }
+
+  yearlySalaryCotisations() {
+    if (this._companyType === 'SASU') {
+      return 0.75 * this.yearlyNetSalary();
+    } else if (this._companyType === 'EURL') {
+      return 0.45 * this.yearlyNetSalary();
+    }
+  }
 
   yearlyTotalCost() {
-    return this.yearlyExpenses + this.yearlyRawSalary();
+    return this.yearlyExpenses + this.yearlyNetSalary() + this.yearlySalaryCotisations();
   }
-
-  monthlyExpenses() {
-    return this.yearlyExpenses / 12.0;
-  }
-
 
   rawEarnings() {
-    return this.yearlyIncome() - this.yearlyExpenses - this.yearlyRawSalary();
+    return this.yearlyRevenu() - this.yearlyTotalCost();
   }
 
   earningsTax() {
@@ -132,32 +149,36 @@ export class Simulation {
     return netEarnings * this.percentDividend / 100;
   }
 
+  dividendCotisations() {
+    if (this._companyType === 'SASU') {
+      return 0.172 * this.dividend();
+    } else if (this._companyType === 'EURL') {
+      return 0.45 * this.dividend();
+    }
+  }
+
   netDividend() {
-    return this.dividend() * 0.7;
+    return this.dividend() - this.dividendCotisations();
   }
 
-  managerMonthlyIncome() {
-    return this.managerYearlyIncome() / 12;
+  managermontlyRevenu() {
+    return this.manageryearlyRevenu() / 12;
   }
 
-  managerYearlyIncome() {
-    return this.netDividend() + this.yearlyNetSalary() - this.incomeTax();
+  manageryearlyRevenu() {
+    return this.netDividend() + this.yearlyNetSalary() - this.incomeTax() - this.incomeTaxOnDividend();
   }
 
   manageIncomeRevenuRatio() {
-    return this.managerMonthlyIncome() / this.monthlyIncome();
+    return this.managermontlyRevenu() / this.montlyRevenu();
   }
 
   netResult() {
     return this.netEarnings() - this.dividend();
   }
 
-  yearlyNetSalary() {
-    return 12 * this.monthlyNetSalary;
-  }
-
-  yearlyRawSalary() {
-    return 1.65 * this.yearlyNetSalary();
+  incomeTaxOnDividend() {
+    return this.dividend() * 0.128;
   }
 
   incomeTax() {
@@ -179,32 +200,33 @@ export class Simulation {
   serialize() {
     return {
       name: this.name,
+      companyType: this.companyType,
       dailyRate: this.dailyRate,
       weeksOff: this.weeksOff,
       weeksOn: this.weeksOn,
       daysPerWeek: this.daysPerWeek,
-      yearlyIncome: this.yearlyIncome(),
-      monthlyIncome: this.monthlyIncome(),
+      yearlyRevenu: this.yearlyRevenu(),
+      montlyRevenu: this.montlyRevenu(),
       yearlyExpenses: this.yearlyExpenses,
       yearlyTotalCost: this.yearlyTotalCost(),
-      monthlyExpenses: this.monthlyExpenses(),
       rawEarnings: this.rawEarnings(),
       earningsTax: this.earningsTax(),
       netEarnings: this.netEarnings(),
       dividend: this.dividend(),
       netDividend: this.netDividend(),
-      managerMonthlyIncome: this.managerMonthlyIncome(),
-      managerYearlyIncome: this.managerYearlyIncome(),
+      managermontlyRevenu: this.managermontlyRevenu(),
+      manageryearlyRevenu: this.manageryearlyRevenu(),
       manageIncomeRevenuRatio: this.manageIncomeRevenuRatio(),
       yearlyPowerCostRepayed: this.yearlyPowerCostRepayed,
       percentDividend: this.percentDividend,
       netResult: this.netResult(),
       monthlyNetSalary: this.monthlyNetSalary,
       yearlyNetSalary: this.yearlyNetSalary(),
-      yearlyRawSalary: this.yearlyRawSalary(),
       incomeTaxRate: this.incomeTaxRate,
       incomeTax: this.incomeTax(),
-
+      yearlySalaryCotisations: this.yearlySalaryCotisations(),
+      dividendCotisations: this.dividendCotisations(),
+      incomeTaxOnDividend: this.incomeTaxOnDividend(),
     }
   }
 }
