@@ -10,7 +10,7 @@ export default function SelectRow({ title, simulations, updateSimulation, label,
         <div key={index} style={simulationStyles.col}>
           <select onChange={(e)=>{updateSimulation(index, label, e.target.value)}} value={simulation.companyType}>
             {options.map(option => (
-              <option value={option} >{option}</option>
+              <option value={option} key={option} >{option}</option>
             ))}
           </select>
         </div>
