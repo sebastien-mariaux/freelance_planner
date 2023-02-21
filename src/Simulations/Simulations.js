@@ -136,7 +136,7 @@ export default function Simulations() {
         <h3>Revenus</h3>
         <DisplayRow label='dailyRate' title='TJM' type='input' />
         <DisplayRow label='daysPerWeek' title='Jours par semaine' type='input' />
-        <DisplayRow label='weeksOff' titl6e='Semaines off' type='input' />
+        <DisplayRow label='weeksOff' title='Semaines off' type='input' />
         <DisplayRow label='weeksOn' title='Semaines travaillées' type='input' />
 
         <DisplayRow label='yearlyRevenu' title='CA annuel' style={styles.mainIndicator} type='text' />
