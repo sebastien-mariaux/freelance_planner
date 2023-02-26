@@ -1,7 +1,15 @@
+import React from "react";
 import { displayAmount } from "../simulationsHelper";
 import { simulationStyles } from "../simulationStyles";
 
-export default function TextRow({ title, simulations, label, style }) {
+interface TextRowProps {
+  title: string,
+  simulations: { [key: string]: any }[],
+  label: string,
+  style?: React.CSSProperties
+}
+
+export default function TextRow({ title, simulations, label, style }: TextRowProps) {
   return (
     <section style={simulationStyles.row}>
       <div style={{ ...style, ...simulationStyles.leftCol }} >

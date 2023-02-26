@@ -1,6 +1,17 @@
+import React from "react";
 import { simulationStyles } from "../simulationStyles";
 
-export default function SelectRow({ title, simulations, updateSimulation, label, style, options }) {
+
+interface SelectRowProps {
+  title: string,
+  simulations: { [key: string]: any }[],
+  updateSimulation: (index: number, label: string, value: string) => void,
+  options: string[],
+  label: string,
+  style?: React.CSSProperties
+}
+
+export default function SelectRow({ title, simulations, updateSimulation, label, style, options }: SelectRowProps) {
   return (
     <section style={simulationStyles.row} >
       <div style={{ ...simulationStyles.leftCol, ...style }} >

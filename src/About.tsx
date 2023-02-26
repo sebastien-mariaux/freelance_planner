@@ -1,3 +1,5 @@
+import React from "react";
+
 export default function About() {
   return (
     <>
@@ -8,9 +10,9 @@ export default function About() {
       <p>Moi c'est Sébastien, je suis développeur freelance depuis peu. J'ai créé ce site car j'ai eu beaucoup de mal à trouver des informations
         précises sur les revenus d'un freelance par rapport à son chiffre d'affaires. Je me suis dis que ça pourrait être utile à d'autres.</p>
       <p> Pour en savoir plus, ou pour travailler avec moi, vous pouvez jeter un oeil à&nbsp;
-        <a target='blank' href='https://sebastien-mariaux.com/' alt='site du créateur'>mon site</a>
+        <a target='blank' href='https://sebastien-mariaux.com/' >mon site</a>
         , ou&nbsp;
-        <a target='blank' href='https://www.linkedin.com/in/sebastienmariaux/' alt='page Linkedin du créateur'>mon Linkedin</a>
+        <a target='blank' href='https://www.linkedin.com/in/sebastienmariaux/' >mon Linkedin</a>
         .</p>
 
       <h3>A quel point c'est fiable ?</h3>
@@ -35,7 +37,7 @@ export default function About() {
 
       <h3>Côté technique, c'est fait comment ?</h3>
       <p>C'est du React tout simple, pas de backend pour le moment.
-        Le code est disponible sur <a target='blank' href='https://github.com/sebastien-mariaux/freelance_planner' alt='code source du site'>Github</a>.
+        Le code est disponible sur <a target='blank' href='https://github.com/sebastien-mariaux/freelance_planner' >Github</a>.
       </p>
     </>
   )

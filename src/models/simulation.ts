@@ -1,30 +1,55 @@
 const WEEKS_IN_YEAR = 52;
 export const TAX_THRESHOLD = 42500;
 
+type InitialValues = {
+  name?: string;
+  companyType?: string;
+  dailyRate?: number;
+  weeksOff?: number;
+  weeksOn?: number;
+  daysPerWeek?: number;
+  yearlyExpenses?: number;
+  monthlyNetSalary?: number;
+  incomeTaxRate?: number;
+  percentDividend?: number;
+}
+
 export class Simulation {
-  constructor(initialValues = {}) {
+  name: string;
+  _companyType: string;
+  _dailyRate: number;
+  _weeksOff: number;
+  _weeksOn: number;
+  _daysPerWeek: number;
+  _yearlyExpenses: number;
+  _monthlyNetSalary: number;
+  _incomeTaxRate: number;
+  _percentDividend: number;
+
+  constructor(initialValues: InitialValues = {}) {
     this.name = initialValues.name || 'Simulation';
     this._companyType = initialValues.companyType || 'SASU';
-    this._dailyRate = this.getDefaultValue(initialValues.dailyRate, 500);
-    this._weeksOff = this.getDefaultValue(initialValues.weeksOff, 10);
-    this._weeksOn = this.getDefaultValue(initialValues.weeksOn, 42);
-    this._daysPerWeek = this.getDefaultValue(initialValues.daysPerWeek, 5);
-    this._yearlyExpenses = this.getDefaultValue(initialValues.yearlyExpenses, 10000);
-    this._monthlyNetSalary = this.getDefaultValue(initialValues.monthlyNetSalary, 0);
-    this._incomeTaxRate = this.getDefaultValue(initialValues.incomeTaxRate, 10);
-    this._percentDividend = this.getDefaultValue(initialValues.percentDividend, 100);
+    this._dailyRate = this._getDefaultNumber(initialValues.dailyRate, 500);
+    this._weeksOff = this._getDefaultNumber(initialValues.weeksOff, 10);
+    this._weeksOn = this._getDefaultNumber(initialValues.weeksOn, 42);
+    this._daysPerWeek = this._getDefaultNumber(initialValues.daysPerWeek, 5);
+    this._yearlyExpenses = this._getDefaultNumber(initialValues.yearlyExpenses, 10000);
+    this._monthlyNetSalary = this._getDefaultNumber(initialValues.monthlyNetSalary, 0);
+    this._incomeTaxRate = this._getDefaultNumber(initialValues.incomeTaxRate, 10);
+    this._percentDividend = this._getDefaultNumber(initialValues.percentDividend, 100);
   }
 
-  getDefaultValue(value, defaultValue) {
+  _getDefaultNumber(value?:number, defaultValue?:any) {
     if (value === 0) {
       return 0;
     }
     return value || defaultValue;
   }
+
   get companyType() {
     return this._companyType;
   }
-  set companyType(value) {
+  set companyType(value: string) {
     if (['SASU', 'EURL'].includes(value)) {
       this._companyType = value;
     } else {
@@ -36,14 +61,15 @@ export class Simulation {
     return this._incomeTaxRate;
   }
   set incomeTaxRate(value) {
-    value = this._checkInput(0, 100, value, 0)
+    value = this._checkInput(value, 0, 100, 0)
     this._incomeTaxRate = value;
   }
+
   get percentDividend() {
     return this._percentDividend;
   }
   set percentDividend(value) {
-    value = this._checkInput(0, 100, value, 0)
+    value = this._checkInput(value, 0, 100, 0)
     this._percentDividend = value;
   }
 
@@ -51,7 +77,7 @@ export class Simulation {
     return this._yearlyExpenses;
   }
   set yearlyExpenses(value) {
-    value = this._checkInput(0, null, value, 10000)
+    value = this._checkInput(value, 0, null, 10000)
     this._yearlyExpenses = value;
   }
 
@@ -59,14 +85,15 @@ export class Simulation {
     return this._monthlyNetSalary;
   }
   set monthlyNetSalary(value) {
-    value = this._checkInput(0, null, value, 0)
+    value = this._checkInput(value, 0, null, 0)
     this._monthlyNetSalary = value;
   }
+
   get dailyRate() {
     return this._dailyRate;
   }
   set dailyRate(value) {
-    value = this._checkInput(0, null, value, 0)
+    value = this._checkInput(value, 0, null, 0)
     this._dailyRate = value
   }
 
@@ -74,18 +101,20 @@ export class Simulation {
     return this._weeksOff;
   }
   set weeksOff(value) {
-    value = this._checkInput(0, WEEKS_IN_YEAR, value, 0)
+    value = this._checkInput(value, 0, WEEKS_IN_YEAR, 0)
     this._weeksOff = value;
     this._weeksOn = WEEKS_IN_YEAR - this._weeksOff;
   }
+
   get weeksOn() {
     return this._weeksOn;
   }
   set weeksOn(value) {
-    value = this._checkInput(0, WEEKS_IN_YEAR, value, 0)
+    value = this._checkInput(value, 0, WEEKS_IN_YEAR, 0)
     this._weeksOn = value;
     this._weeksOff = WEEKS_IN_YEAR - this._weeksOn;
   }
+
   get daysPerWeek() {
     return this._daysPerWeek;
   }
@@ -118,6 +147,7 @@ export class Simulation {
     } else if (this._companyType === 'EURL') {
       return 0.45 * this.yearlyNetSalary();
     }
+    throw new Error('Invalid company type');
   }
 
   yearlyTotalCost() {
@@ -155,6 +185,7 @@ export class Simulation {
     } else if (this._companyType === 'EURL') {
       return 0.45 * this.dividend();
     }
+    throw new Error('Invalid company type');
   }
 
   netDividend() {
@@ -185,7 +216,7 @@ export class Simulation {
     return this.yearlyNetSalary() * 1.1 * this._incomeTaxRate / 100;
   }
 
-  _checkInput(min, max, value, defaultValue) {
+  _checkInput(value:any, min?:number | null, max?:number | null, defaultValue?:number) {
     value = parseFloat(value || 0);
     if (!value && defaultValue) {
       return defaultValue;
@@ -217,7 +248,6 @@ export class Simulation {
       managermontlyRevenu: this.managermontlyRevenu(),
       manageryearlyRevenu: this.manageryearlyRevenu(),
       manageIncomeRevenuRatio: this.manageIncomeRevenuRatio(),
-      yearlyPowerCostRepayed: this.yearlyPowerCostRepayed,
       percentDividend: this.percentDividend,
       netResult: this.netResult(),
       monthlyNetSalary: this.monthlyNetSalary,

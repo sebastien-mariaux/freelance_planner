@@ -1,7 +1,17 @@
+import React from "react";
 import { useState } from "react";
 import { simulationStyles } from "../simulationStyles";
 
-export default function InputRow({ title, simulations, updateSimulation, label, style }) {
+
+interface InputRowProps {
+  title: string,
+  simulations: Object[],
+  updateSimulation: (index: number, label: string, value: string) => void,
+  label: string,
+  style?: React.CSSProperties
+}
+
+export default function InputRow({ title, simulations, updateSimulation, label, style }: InputRowProps) {
   return (
     <section style={simulationStyles.row} >
       <div style={{ ...simulationStyles.leftCol, ...style }} >
@@ -14,7 +24,15 @@ export default function InputRow({ title, simulations, updateSimulation, label, 
   )
 }
 
-function SingleInput({ simulation, index, label, style = {}, updateSimulation}) {
+interface SingleInputProps {
+  simulation: { [key: string]: any },
+  index: number,
+  label: string,
+  style?: React.CSSProperties,
+  updateSimulation: (index: number, label: string, value: string) => void
+}
+
+function SingleInput({ simulation, index, label, style = {}, updateSimulation}: SingleInputProps) {
   const [value, setValue] = useState(simulation[label]);
 
   return (
