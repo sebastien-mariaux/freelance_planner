@@ -1,7 +1,7 @@
 const WEEKS_IN_YEAR = 52;
 export const TAX_THRESHOLD = 42500;
 
-type InitialValues = {
+export type SimulationData = {
   name?: string;
   companyType?: string;
   dailyRate?: number;
@@ -26,7 +26,7 @@ export class Simulation {
   _incomeTaxRate: number;
   _percentDividend: number;
 
-  constructor(initialValues: InitialValues = {}) {
+  constructor(initialValues: SimulationData = {}) {
     this.name = initialValues.name || 'Simulation';
     this._companyType = initialValues.companyType || 'SASU';
     this._dailyRate = this._getDefaultNumber(initialValues.dailyRate, 500);
