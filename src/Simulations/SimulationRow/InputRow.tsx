@@ -39,8 +39,9 @@ function SingleInput({ simulation, index, label, style = {}, updateSimulation}: 
   }, [simulation, label])
 
   return (
-    <div key={index} style={simulationStyles.col}>
+    <div key={index} style={simulationStyles.col} >
       <input
+        data-testid={label}
         style={{ width: '100%', ...style }}
         type="text" inputMode="numeric"
         value={value}

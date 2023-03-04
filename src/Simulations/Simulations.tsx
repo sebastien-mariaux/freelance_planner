@@ -28,7 +28,7 @@ const styles = {
   }
 }
 
-const defaultSimulations = [
+export const defaultSimulations = [
   (new Simulation({
     companyType: 'SASU',
     name: 'SASU 100% dividendes',
@@ -58,7 +58,6 @@ const getStoredData = (): SimulationData[] => {
 
 export default function Simulations() {
   const [simulations, setSimulations] = useState(getStoredData);
-  console.log(simulations)
 
   const duplicateSimulation = (simulation: SimulationData) => {
     let newSimulation = new Simulation(simulation);
@@ -162,7 +161,7 @@ export default function Simulations() {
           simulations={simulations}
         />
         <TextRow
-          label='montlyRevenu'
+          label='monthlyRevenu'
           title='CA moyen mensuel'
           style={styles.endOfSection}
           simulations={simulations}
@@ -183,8 +182,8 @@ export default function Simulations() {
         />
 
         <TextRow
-          label='yearlyNetSalary'
-          title='Salaire net annuel'
+          label='yearlyChargedSalary'
+          title='Salaire annuel chargé'
           simulations={simulations}
         />
         <TextRow
@@ -227,8 +226,8 @@ export default function Simulations() {
         />
         <TextRow
           simulations={simulations}
-          label="netDividend"
-          title="Dividende versé"
+          label="dividend"
+          title="Dividende chargé"
         />
         <TextRow
           simulations={simulations}
@@ -271,18 +270,17 @@ export default function Simulations() {
           simulations={simulations}
         />
         <TextRow
-          label='manageryearlyRevenu'
+          label='managerYearlyRevenu'
           title='Revenu annuel '
           style={{ fontWeight: 'bold' }}
           simulations={simulations}
         />
         <TextRow
-          label='managerMontlyRevenu'
+          label='managerMonthlyRevenu'
           title='Revenu mensuel moyen'
           style={{ ...styles.endOfSection, ...styles.mainIndicator }}
           simulations={simulations}
         />
-
         <PercentTextRow
           label='manageIncomeRevenuRatio'
           title='Ratio revenu / CA'

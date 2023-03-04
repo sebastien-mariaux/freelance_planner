@@ -128,7 +128,7 @@ export class Simulation {
     return this.dailyRate * this.daysPerWeek * this.weeksOn;
   }
 
-  montlyRevenu() {
+  monthlyRevenu() {
     return this.yearlyRevenu() / 12;
   }
 
@@ -145,8 +145,12 @@ export class Simulation {
     throw new Error('Invalid company type');
   }
 
+  yearlyChargedSalary() {
+    return this.yearlyNetSalary() + this.yearlySalaryCotisations();
+  }
+
   yearlyTotalCost() {
-    return this.yearlyExpenses + this.yearlyNetSalary() + this.yearlySalaryCotisations();
+    return this.yearlyExpenses + this.yearlyChargedSalary();
   }
 
   rawEarnings() {
@@ -187,16 +191,16 @@ export class Simulation {
     return this.dividend() - this.dividendCotisations();
   }
 
-  managerMontlyRevenu() {
-    return this.manageryearlyRevenu() / 12;
+  managerMonthlyRevenu() {
+    return this.managerYearlyRevenu() / 12;
   }
 
-  manageryearlyRevenu() {
+  managerYearlyRevenu() {
     return this.netDividend() + this.yearlyNetSalary() - this.incomeTax() - this.incomeTaxOnDividend();
   }
 
   manageIncomeRevenuRatio() {
-    return this.managerMontlyRevenu() / this.montlyRevenu();
+    return this.managerMonthlyRevenu() / this.monthlyRevenu();
   }
 
   netResult() {
@@ -238,7 +242,7 @@ export class Simulation {
       weeksOn: this.weeksOn,
       daysPerWeek: this.daysPerWeek,
       yearlyRevenu: this.yearlyRevenu(),
-      montlyRevenu: this.montlyRevenu(),
+      monthlyRevenu: this.monthlyRevenu(),
       yearlyExpenses: this.yearlyExpenses,
       yearlyTotalCost: this.yearlyTotalCost(),
       rawEarnings: this.rawEarnings(),
@@ -246,13 +250,14 @@ export class Simulation {
       netEarnings: this.netEarnings(),
       dividend: this.dividend(),
       netDividend: this.netDividend(),
-      managerMontlyRevenu: this.managerMontlyRevenu(),
-      manageryearlyRevenu: this.manageryearlyRevenu(),
+      managerMonthlyRevenu: this.managerMonthlyRevenu(),
+      managerYearlyRevenu: this.managerYearlyRevenu(),
       manageIncomeRevenuRatio: this.manageIncomeRevenuRatio(),
       percentDividend: this.percentDividend,
       netResult: this.netResult(),
       monthlyNetSalary: this.monthlyNetSalary,
       yearlyNetSalary: this.yearlyNetSalary(),
+      yearlyChargedSalary: this.yearlyChargedSalary(),
       incomeTaxRate: this.incomeTaxRate,
       incomeTax: this.incomeTax(),
       yearlySalaryCotisations: this.yearlySalaryCotisations(),

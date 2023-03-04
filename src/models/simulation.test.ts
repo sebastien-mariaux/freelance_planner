@@ -1,3 +1,4 @@
+import { round2 } from "../helpers";
 import { Simulation, TAX_THRESHOLD } from "./simulation";
 
 
@@ -142,22 +143,22 @@ describe("with NaN inputs", () => {
   })
 })
 
-describe('montlyRevenu', () => {
+describe('monthlyRevenu', () => {
   const simulation = new Simulation({ dailyRate: 100, daysPerWeek: 5, weeksOn: 50, weeksOff: 2 });
   it('should return 100*5*50/12', () => {
-    expect(round2(simulation.montlyRevenu())).toBe(2083.33);
+    expect(round2(simulation.monthlyRevenu())).toBe(2083.33);
   })
   it('should return 0 if dailyRate is 0', () => {
     simulation.dailyRate = 0;
-    expect(simulation.montlyRevenu()).toBe(0);
+    expect(simulation.monthlyRevenu()).toBe(0);
   })
   it('should return 0 if daysPerWeek is 0', () => {
     simulation.daysPerWeek = 0;
-    expect(simulation.montlyRevenu()).toBe(0);
+    expect(simulation.monthlyRevenu()).toBe(0);
   })
   it('should return 0 if weeksOn is 0', () => {
     simulation.weeksOn = 0;
-    expect(simulation.montlyRevenu()).toBe(0);
+    expect(simulation.monthlyRevenu()).toBe(0);
   })
 })
 describe('rawEarnings', () => {
@@ -273,7 +274,3 @@ describe('dividendCotisations', () => {
 })
 
 
-// function to round number to 2 decimal places
-function round2(num: number): number {
-  return Math.round(num * 100) / 100;
-}

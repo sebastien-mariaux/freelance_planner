@@ -19,7 +19,7 @@ export default function TextRow({ title, simulations, label, style }: TextRowPro
         const value = simulation[label]
         return (
         <div style={simulationStyles.col} key={index}>
-          <div style={{...style, color: value < 0 ? 'red' : ''}}>
+          <div style={{...style, color: value < 0 ? 'red' : ''}} data-testid={label}>
             {displayAmount(value)}
           </div>
         </div>

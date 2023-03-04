@@ -17,7 +17,7 @@ export default function PercentTextRow({ title, simulations, label, style }: Per
       </div>
       {simulations.map((simulation, index) => (
         <div key={index} style={simulationStyles.col} >
-          <div style={style}>
+          <div style={style} data-testid={label} >
             {displayPercent(simulation[label])}
           </div>
         </div>
