@@ -14,6 +14,8 @@ export type SimulationData = {
   percentDividend?: number;
 }
 
+
+
 export class Simulation {
   name: string;
   _companyType: string;
@@ -29,21 +31,14 @@ export class Simulation {
   constructor(initialValues: SimulationData = {}) {
     this.name = initialValues.name || 'Simulation';
     this._companyType = initialValues.companyType || 'SASU';
-    this._dailyRate = this._getDefaultNumber(initialValues.dailyRate, 500);
-    this._weeksOff = this._getDefaultNumber(initialValues.weeksOff, 10);
-    this._weeksOn = this._getDefaultNumber(initialValues.weeksOn, 42);
-    this._daysPerWeek = this._getDefaultNumber(initialValues.daysPerWeek, 5);
-    this._yearlyExpenses = this._getDefaultNumber(initialValues.yearlyExpenses, 10000);
-    this._monthlyNetSalary = this._getDefaultNumber(initialValues.monthlyNetSalary, 0);
-    this._incomeTaxRate = this._getDefaultNumber(initialValues.incomeTaxRate, 10);
-    this._percentDividend = this._getDefaultNumber(initialValues.percentDividend, 100);
-  }
-
-  _getDefaultNumber(value?:number, defaultValue?:any) {
-    if (value === 0) {
-      return 0;
-    }
-    return value || defaultValue;
+    this._dailyRate = this._checkInput({ value: initialValues.dailyRate, min: 0, defaultValue: 500 });
+    this._weeksOff = this._checkInput({ value: initialValues.weeksOff, min: 0, max: WEEKS_IN_YEAR, defaultValue: 10 });
+    this._weeksOn = this._checkInput({ value: initialValues.weeksOn, min: 0, max: WEEKS_IN_YEAR, defaultValue: 42 });
+    this._daysPerWeek = this._checkInput({ value: initialValues.daysPerWeek, min: 0, max: 7, defaultValue: 5 });
+    this._yearlyExpenses = this._checkInput({ value: initialValues.yearlyExpenses, min: 0, defaultValue: 10000 });
+    this._monthlyNetSalary = this._checkInput({ value: initialValues.monthlyNetSalary, min: 0, defaultValue: 0 });
+    this._incomeTaxRate = this._checkInput({ value: initialValues.incomeTaxRate, min: 0, max: 100, defaultValue: 10 });
+    this._percentDividend = this._checkInput({ value: initialValues.percentDividend, min: 0, max: 100, defaultValue: 100 });
   }
 
   get companyType() {
@@ -61,7 +56,7 @@ export class Simulation {
     return this._incomeTaxRate;
   }
   set incomeTaxRate(value) {
-    value = this._checkInput(value, 0, 100, 0)
+    value = this._checkInput({ value: value, min: 0, max: 100, defaultValue: 0 })
     this._incomeTaxRate = value;
   }
 
@@ -69,7 +64,7 @@ export class Simulation {
     return this._percentDividend;
   }
   set percentDividend(value) {
-    value = this._checkInput(value, 0, 100, 0)
+    value = this._checkInput({ value: value, min: 0, max: 100, defaultValue: 100 })
     this._percentDividend = value;
   }
 
@@ -77,7 +72,7 @@ export class Simulation {
     return this._yearlyExpenses;
   }
   set yearlyExpenses(value) {
-    value = this._checkInput(value, 0, null, 10000)
+    value = this._checkInput({ value: value, min: 0, max: null, defaultValue: 10000 })
     this._yearlyExpenses = value;
   }
 
@@ -85,7 +80,7 @@ export class Simulation {
     return this._monthlyNetSalary;
   }
   set monthlyNetSalary(value) {
-    value = this._checkInput(value, 0, null, 0)
+    value = this._checkInput({ value: value, min: 0, max: null, defaultValue: 0 })
     this._monthlyNetSalary = value;
   }
 
@@ -93,7 +88,7 @@ export class Simulation {
     return this._dailyRate;
   }
   set dailyRate(value) {
-    value = this._checkInput(value, 0, null, 0)
+    value = this._checkInput({ value: value, min: 0, max: null, defaultValue: 0 })
     this._dailyRate = value
   }
 
@@ -101,7 +96,7 @@ export class Simulation {
     return this._weeksOff;
   }
   set weeksOff(value) {
-    value = this._checkInput(value, 0, WEEKS_IN_YEAR, 0)
+    value = this._checkInput({ value: value, min: 0, max: WEEKS_IN_YEAR, defaultValue: 0 })
     this._weeksOff = value;
     this._weeksOn = WEEKS_IN_YEAR - this._weeksOff;
   }
@@ -110,7 +105,7 @@ export class Simulation {
     return this._weeksOn;
   }
   set weeksOn(value) {
-    value = this._checkInput(value, 0, WEEKS_IN_YEAR, 0)
+    value = this._checkInput({ value: value, min: 0, max: WEEKS_IN_YEAR, defaultValue: 0 })
     this._weeksOn = value;
     this._weeksOff = WEEKS_IN_YEAR - this._weeksOn;
   }
@@ -192,7 +187,7 @@ export class Simulation {
     return this.dividend() - this.dividendCotisations();
   }
 
-  managermontlyRevenu() {
+  managerMontlyRevenu() {
     return this.manageryearlyRevenu() / 12;
   }
 
@@ -201,7 +196,7 @@ export class Simulation {
   }
 
   manageIncomeRevenuRatio() {
-    return this.managermontlyRevenu() / this.montlyRevenu();
+    return this.managerMontlyRevenu() / this.montlyRevenu();
   }
 
   netResult() {
@@ -216,11 +211,17 @@ export class Simulation {
     return this.yearlyNetSalary() * 1.1 * this._incomeTaxRate / 100;
   }
 
-  _checkInput(value:any, min?:number | null, max?:number | null, defaultValue?:number) {
-    value = parseFloat(value || 0);
-    if (!value && defaultValue) {
+
+
+  _checkInput({ value, min, max, defaultValue }:
+    { value: any, min?: number | null, max?: number | null, defaultValue?: number }) {
+    if (value === -10) { debugger }
+    if ((value === null || value === undefined) && defaultValue) {
       return defaultValue;
-    } else if ((min || min === 0) && value < min) {
+    }
+    value = parseFloat(value || 0);
+
+    if ((min || min === 0) && value < min) {
       return min;
     } else if ((max || max === 0) && value > max) {
       return max;
@@ -245,7 +246,7 @@ export class Simulation {
       netEarnings: this.netEarnings(),
       dividend: this.dividend(),
       netDividend: this.netDividend(),
-      managermontlyRevenu: this.managermontlyRevenu(),
+      managerMontlyRevenu: this.managerMontlyRevenu(),
       manageryearlyRevenu: this.manageryearlyRevenu(),
       manageIncomeRevenuRatio: this.manageIncomeRevenuRatio(),
       percentDividend: this.percentDividend,

@@ -18,6 +18,9 @@ const styles = {
     fontWeight: 'bold',
     fontSize: '1.2em'
   },
+  indicator: {
+    fontWeight: 'bold'
+  },
   titleButton: {
     marginTop: 'auto',
     marginBottom: 'auto',
@@ -55,6 +58,7 @@ const getStoredData = (): SimulationData[] => {
 
 export default function Simulations() {
   const [simulations, setSimulations] = useState(getStoredData);
+  console.log(simulations)
 
   const duplicateSimulation = (simulation: SimulationData) => {
     let newSimulation = new Simulation(simulation);
@@ -154,7 +158,7 @@ export default function Simulations() {
         <TextRow
           label='yearlyRevenu'
           title='CA annuel'
-          style={styles.mainIndicator}
+          style={styles.indicator}
           simulations={simulations}
         />
         <TextRow
@@ -273,7 +277,7 @@ export default function Simulations() {
           simulations={simulations}
         />
         <TextRow
-          label='managermontlyRevenu'
+          label='managerMontlyRevenu'
           title='Revenu mensuel moyen'
           style={{ ...styles.endOfSection, ...styles.mainIndicator }}
           simulations={simulations}

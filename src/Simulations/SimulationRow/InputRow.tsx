@@ -1,5 +1,5 @@
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
+// import { useState } from "react";
 import { simulationStyles } from "../simulationStyles";
 
 
@@ -34,6 +34,9 @@ interface SingleInputProps {
 
 function SingleInput({ simulation, index, label, style = {}, updateSimulation}: SingleInputProps) {
   const [value, setValue] = useState(simulation[label]);
+  useEffect(() => {
+    setValue(simulation[label]);
+  }, [simulation, label])
 
   return (
     <div key={index} style={simulationStyles.col}>
