@@ -15,6 +15,7 @@ describe('constructor', () => {
     expect(simulation.monthlyNetSalary).toBe(0);
     expect(simulation.incomeTaxRate).toBe(10);
     expect(simulation.percentDividend).toBe(100);
+    expect(simulation.monthlyRepayableExpenses).toBe(0);
   })
   it('should set values from initialValues', () => {
     const simulation = new Simulation({
@@ -27,7 +28,8 @@ describe('constructor', () => {
       yearlyExpenses: 20000,
       monthlyNetSalary: 1000,
       incomeTaxRate: 20,
-      percentDividend: 50
+      percentDividend: 50,
+      monthlyRepayableExpenses: 100,
     });
     expect(simulation.name).toBe('test');
     expect(simulation.companyType).toBe('EURL');
@@ -39,6 +41,7 @@ describe('constructor', () => {
     expect(simulation.monthlyNetSalary).toBe(1000);
     expect(simulation.incomeTaxRate).toBe(20);
     expect(simulation.percentDividend).toBe(50);
+    expect(simulation.monthlyRepayableExpenses).toBe(100);
   })
 })
 
@@ -110,6 +113,12 @@ describe('setters', () => {
     simulation.percentDividend = 150;
     expect(simulation.percentDividend).toBe(100);
   })
+  it('should set monthlyRepayableExpenses', () => {
+    simulation.monthlyRepayableExpenses = 100;
+    expect(simulation.monthlyRepayableExpenses).toBe(100);
+    simulation.monthlyRepayableExpenses = -100;
+    expect(simulation.monthlyRepayableExpenses).toBe(0);
+  })
 })
 describe("with NaN inputs", () => {
   const simulation = new Simulation();
@@ -120,6 +129,7 @@ describe("with NaN inputs", () => {
   simulation.monthlyNetSalary = NaN;
   simulation.incomeTaxRate = NaN;
   simulation.percentDividend = NaN;
+  simulation.monthlyRepayableExpenses = NaN;
   it('should set dailyRate to 0', () => {
     expect(simulation.dailyRate).toBe(0);
   })
@@ -140,6 +150,9 @@ describe("with NaN inputs", () => {
   })
   it('should set percentDividend to 0', () => {
     expect(simulation.percentDividend).toBe(0);
+  })
+  it('should set monthlyRepayableExpenses to 0', () => {
+    expect(simulation.monthlyRepayableExpenses).toBe(0);
   })
 })
 
@@ -162,16 +175,16 @@ describe('monthlyRevenu', () => {
   })
 })
 describe('rawEarnings', () => {
-  const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, yearlyExpenses: 10000 });
+  const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, yearlyExpenses: 10000, monthlyRepayableExpenses: 300 });
   expect(simulation.yearlyRevenu()).toBe(117500);
-  it('should return 107500', () => {
-    expect(simulation.yearlyTotalCost()).toBe(10000)
-    expect(round2(simulation.rawEarnings())).toBe(117500 - 10000);
+  it('should compute', () => {
+    expect(simulation.yearlyTotalCost()).toBe(10000 + 3600)
+    expect(round2(simulation.rawEarnings())).toBe(117500 - 10000 - 3600);
   })
-  it('should return 107500-19800 with deducted yearlyRawSalary', () => {
+  it('should compute with deducted yearlyRawSalary', () => {
     simulation.monthlyNetSalary = 1000;
-    expect(simulation.yearlyTotalCost()).toBe(31000)
-    expect(round2(simulation.rawEarnings())).toBe(117500 - 31000);
+    expect(simulation.yearlyTotalCost()).toBe(31000 + 3600)
+    expect(round2(simulation.rawEarnings())).toBe(117500 - 31000 - 3600);
   })
 })
 describe('yearlySalaryCotisations', () => {

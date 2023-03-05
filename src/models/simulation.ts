@@ -12,6 +12,7 @@ export type SimulationData = {
   monthlyNetSalary?: number;
   incomeTaxRate?: number;
   percentDividend?: number;
+  monthlyRepayableExpenses?: number;
 }
 
 
@@ -27,6 +28,7 @@ export class Simulation {
   _monthlyNetSalary: number;
   _incomeTaxRate: number;
   _percentDividend: number;
+  _monthlyRepayableExpenses: number;
 
   constructor(initialValues: SimulationData = {}) {
     this.name = initialValues.name || 'Simulation';
@@ -39,6 +41,7 @@ export class Simulation {
     this._monthlyNetSalary = this._checkInput({ value: initialValues.monthlyNetSalary, min: 0, defaultValue: 0 });
     this._incomeTaxRate = this._checkInput({ value: initialValues.incomeTaxRate, min: 0, max: 100, defaultValue: 10 });
     this._percentDividend = this._checkInput({ value: initialValues.percentDividend, min: 0, max: 100, defaultValue: 100 });
+    this._monthlyRepayableExpenses = this._checkInput({ value: initialValues.monthlyRepayableExpenses, min: 0, defaultValue: 0 });
   }
 
   get companyType() {
@@ -52,6 +55,13 @@ export class Simulation {
     }
   }
 
+  get monthlyRepayableExpenses() {
+    return this._monthlyRepayableExpenses;
+  }
+  set monthlyRepayableExpenses(value) {
+    value = this._checkInput({ value: value, min: 0, max: null, defaultValue: 0 })
+    this._monthlyRepayableExpenses = value;
+  }
   get incomeTaxRate() {
     return this._incomeTaxRate;
   }
@@ -149,8 +159,15 @@ export class Simulation {
     return this.yearlyNetSalary() + this.yearlySalaryCotisations();
   }
 
+  yearlyRepayableExpenses() {
+    return 12 * this.monthlyRepayableExpenses;
+  }
+  yearlyRepaidExpenses() {
+    return this.yearlyRepayableExpenses();
+  }
+
   yearlyTotalCost() {
-    return this.yearlyExpenses + this.yearlyChargedSalary();
+    return this.yearlyExpenses + this.yearlyChargedSalary() + this.yearlyRepayableExpenses();
   }
 
   rawEarnings() {
@@ -196,10 +213,14 @@ export class Simulation {
   }
 
   managerYearlyRevenu() {
-    return this.netDividend() + this.yearlyNetSalary() - this.incomeTax() - this.incomeTaxOnDividend();
+    return this.netDividend() + this.yearlyNetSalary() - this.incomeTax() - this.incomeTaxOnDividend() + this.yearlyRepaidExpenses();
   }
 
-  manageIncomeRevenuRatio() {
+  managerIncomeRevenuRatio() {
+    if (this.monthlyRevenu() === 0) {
+      return 0;
+    }
+
     return this.managerMonthlyRevenu() / this.monthlyRevenu();
   }
 
@@ -214,8 +235,6 @@ export class Simulation {
   incomeTax() {
     return this.yearlyNetSalary() * 1.1 * this._incomeTaxRate / 100;
   }
-
-
 
   _checkInput({ value, min, max, defaultValue }:
     { value: any, min?: number | null, max?: number | null, defaultValue?: number }) {
@@ -244,6 +263,8 @@ export class Simulation {
       yearlyRevenu: this.yearlyRevenu(),
       monthlyRevenu: this.monthlyRevenu(),
       yearlyExpenses: this.yearlyExpenses,
+      monthlyRepayableExpenses: this.monthlyRepayableExpenses,
+      yearlyRepayableExpenses: this.yearlyRepayableExpenses(),
       yearlyTotalCost: this.yearlyTotalCost(),
       rawEarnings: this.rawEarnings(),
       earningsTax: this.earningsTax(),
@@ -252,7 +273,7 @@ export class Simulation {
       netDividend: this.netDividend(),
       managerMonthlyRevenu: this.managerMonthlyRevenu(),
       managerYearlyRevenu: this.managerYearlyRevenu(),
-      manageIncomeRevenuRatio: this.manageIncomeRevenuRatio(),
+      managerIncomeRevenuRatio: this.managerIncomeRevenuRatio(),
       percentDividend: this.percentDividend,
       netResult: this.netResult(),
       monthlyNetSalary: this.monthlyNetSalary,
@@ -263,6 +284,7 @@ export class Simulation {
       yearlySalaryCotisations: this.yearlySalaryCotisations(),
       dividendCotisations: this.dividendCotisations(),
       incomeTaxOnDividend: this.incomeTaxOnDividend(),
+      yearlyRepaidExpenses: this.yearlyRepaidExpenses(),
     }
   }
 }

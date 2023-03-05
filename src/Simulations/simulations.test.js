@@ -1,6 +1,10 @@
-import { fireEvent, render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import Simulations, { defaultSimulations } from "./Simulations";
 import { displayAmount, displayPercent } from "./simulationsHelper";
+
+beforeEach(() => {
+  window.localStorage.clear();
+});
 
 describe('render Simulations inputs', () => {
   it('show dailyRate', () => {
@@ -164,10 +168,10 @@ describe('render simulations results', () => {
       defaultSimulations.map((el) => displayAmount(el.managerMonthlyRevenu))
     );
   })
-  it('show manageIncomeRevenuRatio', () => {
+  it('show managerIncomeRevenuRatio', () => {
     render(<Simulations />);
-    expect(screen.getAllByTestId('manageIncomeRevenuRatio').map((el) => el.textContent)).toEqual(
-      defaultSimulations.map((el) => displayPercent(el.manageIncomeRevenuRatio))
+    expect(screen.getAllByTestId('managerIncomeRevenuRatio').map((el) => el.textContent)).toEqual(
+      defaultSimulations.map((el) => displayPercent(el.managerIncomeRevenuRatio))
     );
   })
 });
@@ -259,6 +263,24 @@ describe('update dailyRate', () => {
     const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
     const inputElt = screen.getAllByTestId('yearlyExpenses')[0];
     fireEvent.change(inputElt, { target: { value: -8000 } });
+    fireEvent.blur(inputElt);
+    expect(inputElt.value).toBe('0');
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
+  })
+  it('update monthlyRepayableExpenses', async () => {
+    render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
+    const inputElt = screen.getAllByTestId('monthlyRepayableExpenses')[0];
+    fireEvent.change(inputElt, { target: { value: 800 } });
+    fireEvent.blur(inputElt);
+    expect(inputElt.value).toBe('800');
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
+  })
+  it('update monthlyRepayableExpenses with invalid value', async () => {
+    render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
+    const inputElt = screen.getAllByTestId('monthlyRepayableExpenses')[0];
+    fireEvent.change(inputElt, { target: { value: -800 } });
     fireEvent.blur(inputElt);
     expect(inputElt.value).toBe('0');
     expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)

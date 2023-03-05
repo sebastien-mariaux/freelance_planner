@@ -18,9 +18,9 @@ function App() {
         <Route element={<SiteLayout />}>
           <Route path="/a-propos" element={<About />} />
           <Route path="/" element={<Simulations />} />
+          <Route path="/simulations" element={<Simulations />} />
         </Route>
       </Routes>
-
     </Router>
   )
 }

@@ -28,6 +28,10 @@ const styles = {
   }
 }
 
+const saveSimulations = (simulations: any[]) => {
+  localStorage.setItem('simulations', JSON.stringify(simulations));
+}
+
 export const defaultSimulations = [
   (new Simulation({
     companyType: 'SASU',
@@ -35,7 +39,8 @@ export const defaultSimulations = [
     dailyRate: 500,
     daysPerWeek: 5,
     weeksOff: 10,
-    incomeTaxRate: 20
+    incomeTaxRate: 20,
+    monthlyRepayableExpenses: 300
   })).serialize(),
   (new Simulation({
     companyType: 'EURL',
@@ -44,6 +49,7 @@ export const defaultSimulations = [
     daysPerWeek: 5,
     weeksOff: 10,
     incomeTaxRate: 20,
+    monthlyRepayableExpenses: 300,
     monthlyNetSalary: 4500
   })).serialize(),
 ]
@@ -76,12 +82,10 @@ export default function Simulations() {
     newSimulations[index][label] = value;
     newSimulations = newSimulations.map((simulation: Simulation) => simulation.serialize());
     setSimulations([...newSimulations]);
+    saveSimulations(newSimulations)
   }
 
-  const saveSimulations = () => {
-    localStorage.setItem('simulations', JSON.stringify(simulations));
-    alert("Les données ont bien été enregistrées")
-  }
+
 
   const resetSimulations = () => {
     localStorage.removeItem('simulations');
@@ -98,12 +102,6 @@ export default function Simulations() {
           data-testid='add-simulation'
         >
           Ajouter une simulation
-        </button>
-        <button
-          style={styles.titleButton}
-          onClick={saveSimulations}
-        >
-          Enregistrer les données
         </button>
         <button
         data-testid='reset-data'
@@ -175,6 +173,17 @@ export default function Simulations() {
           title='Charges annuelles'
           simulations={simulations}
           updateSimulation={updateSimulation}
+        />
+        <InputRow
+          label='monthlyRepayableExpenses'
+          title='Frais remboursables (mensuels)'
+          simulations={simulations}
+          updateSimulation={updateSimulation}
+        />
+        <TextRow
+          label='yearlyRepayableExpenses'
+          title='Frais remboursables (annuels)'
+          simulations={simulations}
         />
         <InputRow
           label='monthlyNetSalary'
@@ -272,6 +281,11 @@ export default function Simulations() {
           simulations={simulations}
         />
         <TextRow
+        label='yearlyRepaidExpenses'
+        title='Frais remboursés'
+        simulations={simulations}
+        />
+        <TextRow
           label='managerYearlyRevenu'
           title='Revenu annuel '
           style={{ fontWeight: 'bold' }}
@@ -284,7 +298,7 @@ export default function Simulations() {
           simulations={simulations}
         />
         <PercentTextRow
-          label='manageIncomeRevenuRatio'
+          label='managerIncomeRevenuRatio'
           title='Ratio revenu / CA'
           style={{ fontWeight: 'bold' }}
           simulations={simulations}
