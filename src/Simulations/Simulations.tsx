@@ -2,6 +2,7 @@
 import React from 'react';
 import { useState } from 'react';
 import { Simulation, SimulationData } from '../models/simulation';
+import NavMenu from '../NavMenu/NavMenu';
 import InputRow from './SimulationRow/InputRow';
 import PercentTextRow from './SimulationRow/PercentTextRow';
 import SelectRow from './SimulationRow/SelectRow';
@@ -94,6 +95,7 @@ export default function Simulations() {
 
   return (
     <div className='simulations'>
+        <NavMenu activeItem='simulations' />
       <div style={{ display: 'flex' }}>
         <h2>Comparateur</h2>
         <button

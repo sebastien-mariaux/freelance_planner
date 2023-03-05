@@ -9,6 +9,7 @@ import {
 } from 'react-router-dom';
 import About from './About';
 import SiteLayout from './Simulations/SiteLayout';
+import Expenses from './Expenses/Expenses';
 
 function App() {
 
@@ -19,6 +20,7 @@ function App() {
           <Route path="/a-propos" element={<About />} />
           <Route path="/" element={<Simulations />} />
           <Route path="/simulations" element={<Simulations />} />
+          <Route path="/expenses" element={<Expenses />} />
         </Route>
       </Routes>
     </Router>
