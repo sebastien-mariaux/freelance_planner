@@ -95,6 +95,7 @@ export default function Simulations() {
         <button
           style={styles.titleButton}
           onClick={() => setSimulations([...simulations, (new Simulation()).serialize()])}
+          data-testid='add-simulation'
         >
           Ajouter une simulation
         </button>
@@ -105,6 +106,7 @@ export default function Simulations() {
           Enregistrer les données
         </button>
         <button
+        data-testid='reset-data'
           style={styles.titleButton}
           onClick={resetSimulations}
         >
@@ -292,10 +294,16 @@ export default function Simulations() {
           <div style={{ ...simulationStyles.leftCol }} ></div>
           {simulations.map((simulation: SimulationData, index: number) => (
             <div key={index} style={simulationStyles.col} >
-              <button onClick={() => duplicateSimulation(simulation)} >
+              <button
+                onClick={() => duplicateSimulation(simulation)}
+                data-testid='duplicate-simulation'
+              >
                 Dupliquer
               </button>
-              <button onClick={() => deleteSimulation(index)} >
+              <button
+                onClick={() => deleteSimulation(index)}
+                data-testid="remove-simulation"
+              >
                 Supprimer
               </button>
             </div>

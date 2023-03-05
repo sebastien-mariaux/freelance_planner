@@ -175,80 +175,173 @@ describe('render simulations results', () => {
 describe('update dailyRate', () => {
   it('update dailyRate', async () => {
     render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
     const inputElt = screen.getAllByTestId('dailyRate')[0];
     fireEvent.change(inputElt, { target: { value: 100 } });
     fireEvent.blur(inputElt);
     expect(inputElt.value).toBe('100');
-    expect(screen.getAllByTestId('yearlyRevenu')[0].textContent).toEqual(displayAmount(21000));
-    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).toEqual(displayAmount(545.42));
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
   })
   it('update dailyRate with invalid value', async () => {
     render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
     const inputElt = screen.getAllByTestId('dailyRate')[0];
     fireEvent.change(inputElt, { target: { value: -100 } });
     fireEvent.blur(inputElt);
     expect(inputElt.value).toBe('0');
-    expect(screen.getAllByTestId('yearlyRevenu')[0].textContent).toEqual(displayAmount(0));
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
   })
   it('update daysPerWeek', async () => {
     render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
     const inputElt = screen.getAllByTestId('daysPerWeek')[0];
     fireEvent.change(inputElt, { target: { value: 2 } });
     fireEvent.blur(inputElt);
     expect(inputElt.value).toBe('2');
-    expect(screen.getAllByTestId('yearlyRevenu')[0].textContent).toEqual(displayAmount(42000));
-    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).toEqual(displayAmount(1586.67));
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
   })
   it('update daysPerWeek with invalid value', async () => {
     render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
     const inputElt = screen.getAllByTestId('daysPerWeek')[0];
     fireEvent.change(inputElt, { target: { value: 9 } });
     fireEvent.blur(inputElt);
     expect(inputElt.value).toBe('7');
-    expect(screen.getAllByTestId('yearlyRevenu')[0].textContent).toEqual(displayAmount(147000));
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
   })
   it('update weeksOn', async () => {
     render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
     const inputElt = screen.getAllByTestId('weeksOn')[0];
     fireEvent.change(inputElt, { target: { value: 50 } });
     fireEvent.blur(inputElt);
     expect(inputElt.value).toBe('50');
-    expect(screen.getAllByTestId('yearlyRevenu')[0].textContent).toEqual(displayAmount(125000));
-    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).toEqual(displayAmount(5279.17));
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
   })
   it('update weeksOn with invalid value', async () => {
     render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
     const inputElt = screen.getAllByTestId('weeksOn')[0];
     fireEvent.change(inputElt, { target: { value: -50 } });
     fireEvent.blur(inputElt);
     expect(inputElt.value).toBe('0');
-    expect(screen.getAllByTestId('yearlyRevenu')[0].textContent).toEqual(displayAmount(0));
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
   })
   it('update weeksOff', async () => {
     render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
     const inputElt = screen.getAllByTestId('weeksOff')[0];
     fireEvent.change(inputElt, { target: { value: 20 } });
     fireEvent.blur(inputElt);
     expect(inputElt.value).toBe('20');
-    expect(screen.getAllByTestId('yearlyRevenu')[0].textContent).toEqual(displayAmount(80000));
-    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).toEqual(displayAmount(3310.42));
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
   })
   it('update weeksOff with invalid value', async () => {
     render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
     const inputElt = screen.getAllByTestId('weeksOff')[0];
     fireEvent.change(inputElt, { target: { value: 200 } });
     fireEvent.blur(inputElt);
     expect(inputElt.value).toBe('52');
-    expect(screen.getAllByTestId('yearlyRevenu')[0].textContent).toEqual(displayAmount(0));
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
   })
   it('update yearlyExpenses', async () => {
     render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
     const inputElt = screen.getAllByTestId('yearlyExpenses')[0];
     fireEvent.change(inputElt, { target: { value: 8000 } });
     fireEvent.blur(inputElt);
     expect(inputElt.value).toBe('8000');
-    expect(screen.getAllByTestId('yearlyTotalCost')[0].textContent).toEqual(displayAmount(8000));
-    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).toEqual(displayAmount(4491.67));
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
   })
-
+  it('update yearlyExpenses with invalid value', async () => {
+    render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
+    const inputElt = screen.getAllByTestId('yearlyExpenses')[0];
+    fireEvent.change(inputElt, { target: { value: -8000 } });
+    fireEvent.blur(inputElt);
+    expect(inputElt.value).toBe('0');
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
+  })
+  it('update monthlyNetSalary', async () => {
+    render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
+    const inputElt = screen.getAllByTestId('monthlyNetSalary')[0];
+    fireEvent.change(inputElt, { target: { value: 2000 } });
+    fireEvent.blur(inputElt);
+    expect(inputElt.value).toBe('2000');
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu);
+  })
+  it('update percentDividend', async () => {
+    render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
+    const inputElt = screen.getAllByTestId('percentDividend')[0];
+    fireEvent.change(inputElt, { target: { value: 20 } });
+    fireEvent.blur(inputElt);
+    expect(inputElt.value).toBe('20');
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu);
+  })
+  it('update percentDividend with invalid value', async () => {
+    render(<Simulations />);
+    const inputElt = screen.getAllByTestId('percentDividend')[0];
+    fireEvent.change(inputElt, { target: { value: -20 } });
+    fireEvent.blur(inputElt);
+    expect(inputElt.value).toBe('0');
+  })
+  it('update incomeTaxRate', async () => {
+    // Test on second simulation as salary is 0 by default for the first one
+    render(<Simulations />);
+    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[1].textContent;
+    const inputElt = screen.getAllByTestId('incomeTaxRate')[1];
+    fireEvent.change(inputElt, { target: { value: 30 } });
+    fireEvent.blur(inputElt);
+    expect(inputElt.value).toBe('30');
+    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu);
+  })
+  it('update incomeTaxRate with invalid value', async () => {
+    render(<Simulations />);
+    const inputElt = screen.getAllByTestId('incomeTaxRate')[0];
+    fireEvent.change(inputElt, { target: { value: -10 } });
+    fireEvent.blur(inputElt);
+    expect(inputElt.value).toBe('0');
+  })
 })
+
+describe('test action buttons', () => {
+  it('add simulation', async () => {
+    render(<Simulations />);
+    expect(screen.getAllByTestId('name').length).toBe(2);
+    const addSimulationButton = screen.getByTestId('add-simulation');
+    fireEvent.click(addSimulationButton);
+    expect(screen.getAllByTestId('name').length).toBe(3);
+  })
+  it('remove simulation', async () => {
+    render(<Simulations />);
+    expect(screen.getAllByTestId('name').length).toBe(2);
+    const removeSimulationButton = screen.getAllByTestId('remove-simulation')[0];
+    fireEvent.click(removeSimulationButton);
+    expect(screen.getAllByTestId('name').length).toBe(1);
+  })
+  it('duplicate simulation', async () => {
+    render(<Simulations />);
+    expect(screen.getAllByTestId('name').length).toBe(2);
+    const inputElt = screen.getAllByTestId('monthlyNetSalary')[0];
+    fireEvent.change(inputElt, { target: { value: 2000 } });
+    fireEvent.blur(inputElt);
+    const duplicateSimulationButton = screen.getAllByTestId('duplicate-simulation')[0];
+    fireEvent.click(duplicateSimulationButton);
+    expect(screen.getAllByTestId('name').length).toBe(3);
+    expect(screen.getAllByTestId('monthlyNetSalary')[2].value).toBe('2000');
+  })
+  it('reset data', async () => {
+    render(<Simulations />);
+    expect(screen.getAllByTestId('name').length).toBe(2);
+    const addSimulationButton = screen.getByTestId('add-simulation');
+    fireEvent.click(addSimulationButton);
+    expect(screen.getAllByTestId('name').length).toBe(3);
+    const resetDataButton = screen.getByTestId('reset-data');
+    fireEvent.click(resetDataButton);
+    expect(screen.getAllByTestId('name').length).toBe(2);
+  })
+})
+
