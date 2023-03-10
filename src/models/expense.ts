@@ -4,7 +4,7 @@
 // frequency: 'monthly' | 'yearly'
 // taxable: boolean
 
-interface ExpenseData {
+export interface ExpenseData {
   name: string;
   amount: number;
   repayable: boolean;
@@ -27,7 +27,7 @@ export class Expense {
     this.repayable = initialValues.repayable;
   }
 
-  get monthlyAmount() {
+  get monthlyAmount(): number {
     if (this.frequency === 'monthly') {
       return this.amount;
     } else {
@@ -35,7 +35,7 @@ export class Expense {
     }
   }
 
-  get yearlyAmount() {
+  get yearlyAmount(): number {
     if (this.frequency === 'yearly') {
       return this.amount;
     } else {
@@ -43,11 +43,27 @@ export class Expense {
     }
   }
 
-  get isYearly() {
+  get isYearly(): boolean {
     return this.frequency === 'yearly';
   }
-  get isMonthly() {
+  get isMonthly(): boolean {
     return this.frequency === 'monthly';
+  }
+
+  isValid(): boolean {
+    return this.isNameValid() && this.isAmountValid() && this.isFrequencyValid();
+  }
+
+  isNameValid(): boolean {
+    return this.name.length > 0
+  }
+
+  isAmountValid(): boolean {
+    return this.amount > 0;
+  }
+
+  isFrequencyValid(): boolean {
+    return this.frequency === 'monthly' || this.frequency === 'yearly';
   }
 
 }
