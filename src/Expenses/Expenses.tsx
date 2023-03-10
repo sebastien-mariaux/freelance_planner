@@ -3,6 +3,7 @@ import { Expense } from "../models/expense";
 import NavMenu from "../NavMenu/NavMenu";
 import ExpensesForm from "./ExpensesForm";
 import ExpensesTable from "./ExpensesTable";
+import ExpensesTotal from "./ExpensesTotal";
 
 
 export default function Expenses() {
@@ -30,6 +31,7 @@ export default function Expenses() {
       <h2>Expenses</h2>
       <ExpensesForm expenses={expenses} setExpenses={setExpenses} saveExpenses={saveExpenses}/>
       <ExpensesTable expenses={expenses} deleteExpense={deleteExpense} />
+      <ExpensesTotal expenses={expenses} />
     </div>
   )
 }

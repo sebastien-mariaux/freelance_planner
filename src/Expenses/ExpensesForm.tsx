@@ -12,8 +12,15 @@ export default function ExpensesForm({ expenses, setExpenses, saveExpenses }: Ex
   const { register, handleSubmit } = useForm({ shouldUseNativeValidation: true })
 
   const addExpense = (data: any) => {
-    console.log('addExpense', data)
-    const expense = new Expense(data)
+    const expenseData = {
+      name: data.name,
+      amount: parseFloat(data.amount),
+      frequency: data.frequency,
+      taxable: data.taxable,
+      repayable: data.repayable,
+    }
+    console.log('addExpense', expenseData)
+    const expense = new Expense(expenseData)
     if (expense.isValid()) {
       setExpenses([...expenses, expense])
       saveExpenses([...expenses, expense])
