@@ -1,5 +1,6 @@
 import React from "react";
 import { Expense } from "../models/expense";
+import { displayAmount } from "../Simulations/simulationsHelper";
 
 interface ExpensesTableProps {
   expenses: Expense[]
@@ -7,9 +8,20 @@ interface ExpensesTableProps {
 }
 
 export default function ExpensesTable({expenses, deleteExpense}: ExpensesTableProps) {
+  const frequencyLabel = (frequency: string) => {
+    // TODO: Maybe it's time to use I18n...
+    switch (frequency) {
+      case 'monthly':
+        return 'Mensuel'
+      case 'yearly':
+        return 'Annuel'
+      default:
+        return ''
+    }
+  }
 
   return (
-    <table style={styles.table}>
+    <table style={styles.table} className="bordered-table">
       <thead style={styles.thead}>
         <tr>
           <th>Description</th>
@@ -24,8 +36,8 @@ export default function ExpensesTable({expenses, deleteExpense}: ExpensesTablePr
       {expenses.map((expense, index) => (
         <tr key={index}>
           <td>{expense.name}</td>
-          <td>{expense.amount}</td>
-          <td>{expense.frequency}</td>
+          <td style={{textAlign: 'right', paddingRight: '0.5em'}}>{displayAmount(expense.amount)}</td>
+          <td>{frequencyLabel(expense.frequency)}</td>
           <td>{expense.taxable ? 'Oui' : 'Non'}</td>
           <td>{expense.repayable ? 'Oui' : 'Non'}</td>
           <td>
@@ -47,6 +59,8 @@ const styles = {
     width: '100%',
   },
   thead: {
-    textAlign: 'left' as 'left'
+    textAlign: 'left' as 'left',
+    backgroundColor: '#000',
+    color: '#fff',
   }
 }

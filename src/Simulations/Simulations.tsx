@@ -8,6 +8,7 @@ import PercentTextRow from './SimulationRow/PercentTextRow';
 import SelectRow from './SimulationRow/SelectRow';
 import TextRow from './SimulationRow/TextRow';
 import { simulationStyles } from './simulationStyles';
+import { mainStyles } from '../mainStyles';
 
 const styles = {
   endOfSection: {
@@ -21,11 +22,6 @@ const styles = {
   },
   indicator: {
     fontWeight: 'bold'
-  },
-  titleButton: {
-    marginTop: 'auto',
-    marginBottom: 'auto',
-    marginLeft: '25px'
   }
 }
 
@@ -86,8 +82,6 @@ export default function Simulations() {
     saveSimulations(newSimulations)
   }
 
-
-
   const resetSimulations = () => {
     localStorage.removeItem('simulations');
     setSimulations(defaultSimulations);
@@ -95,19 +89,19 @@ export default function Simulations() {
 
   return (
     <div className='simulations'>
-        <NavMenu activeItem='simulations' />
+      <NavMenu activeItem='simulations' />
       <div style={{ display: 'flex' }}>
         <h2>Comparateur</h2>
         <button
-          style={styles.titleButton}
+          style={mainStyles.titleButton}
           onClick={() => setSimulations([...simulations, (new Simulation()).serialize()])}
           data-testid='add-simulation'
         >
           Ajouter une simulation
         </button>
         <button
-        data-testid='reset-data'
-          style={styles.titleButton}
+          data-testid='reset-data'
+          style={mainStyles.titleButton}
           onClick={resetSimulations}
         >
           Réinitialiser les données
@@ -283,9 +277,9 @@ export default function Simulations() {
           simulations={simulations}
         />
         <TextRow
-        label='yearlyRepaidExpenses'
-        title='Frais remboursés'
-        simulations={simulations}
+          label='yearlyRepaidExpenses'
+          title='Frais remboursés'
+          simulations={simulations}
         />
         <TextRow
           label='managerYearlyRevenu'

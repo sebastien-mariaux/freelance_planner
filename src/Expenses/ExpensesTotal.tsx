@@ -1,5 +1,6 @@
 import React from "react";
 import { Expense } from "../models/expense";
+import { displayAmount } from "../Simulations/simulationsHelper";
 
 interface ExpensesTotalProps {
   expenses: Expense[]
@@ -17,13 +18,29 @@ export default function ExpensesTotal({ expenses }: ExpensesTotalProps) {
   }, 0)
 
   return (
-    <div>
+    <div style={styles.container}>
       <div>
-        Total mensuel: {totalMonthly}
+        <span style={styles.amountLabels}> Total mensuel :</span>
+        <span style={styles.amount}> {displayAmount(totalMonthly)}</span>
       </div>
       <div>
-        Total annuel: {totalAnnual}
+        <span style={styles.amountLabels}> Total annuel :</span>
+        <span style={styles.amount}> {displayAmount(totalAnnual)}</span>
       </div>
     </div>
   )
+}
+
+const styles = {
+  amountLabels: {
+    fontWeight: 'bold',
+    lineHeight: '1.8',
+  },
+  amount: {
+    display: 'inline-block',
+    minWidth: '150px',
+  },
+  container: {
+    textAlign: 'right' as 'right'
+  }
 }

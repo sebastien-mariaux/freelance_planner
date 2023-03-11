@@ -10,6 +10,7 @@ interface TextRowProps {
 }
 
 export default function TextRow({ title, simulations, label, style }: TextRowProps) {
+  console.log('textrow', simulations, label)
   return (
     <section style={simulationStyles.row}>
       <div style={{ ...style, ...simulationStyles.leftCol }} >
