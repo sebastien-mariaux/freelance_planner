@@ -20,13 +20,13 @@ const defaultExpenses = [
   new Expense({ name: 'Divers', amount: 150, frequency: 'monthly', taxable: false, repayable: false }),
 ]
 
-const monthlyRepayableExpenses = (expenses: Expense[]) => {
+export const monthlyRepayableExpenses = (expenses: Expense[]) => {
   return expenses
     .filter(expense => expense.repayable)
     .reduce((total, expense) => total + expense.monthlyAmount, 0)
 }
 
-const yearlyExpenses = (expenses: Expense[]) => {
+export const yearlyExpenses = (expenses: Expense[]) => {
   return expenses
     .filter(expense => !expense.repayable)
     .reduce((total, expense) => total + expense.yearlyAmount, 0)
