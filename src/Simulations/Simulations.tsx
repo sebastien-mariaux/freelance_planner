@@ -1,5 +1,5 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useState } from 'react';
 import { Simulation, SimulationData } from '../models/simulation';
 import NavMenu from '../NavMenu/NavMenu';
@@ -9,6 +9,7 @@ import SelectRow from './SimulationRow/SelectRow';
 import TextRow from './SimulationRow/TextRow';
 import { simulationStyles } from './simulationStyles';
 import { mainStyles } from '../mainStyles';
+import {useLocation} from 'react-router-dom';
 
 const styles = {
   endOfSection: {
@@ -61,6 +62,21 @@ const getStoredData = (): SimulationData[] => {
 
 export default function Simulations() {
   const [simulations, setSimulations] = useState(getStoredData);
+  const [highlight, setHighlight] = useState(false);
+  const location = useLocation();
+  const {importData} = location?.state || false
+
+  useEffect(() => {
+
+    if (importData) {
+      setHighlight(true);
+      setTimeout(() => {
+        setHighlight(false);
+      }
+      , 5000);
+    }
+
+  }, [importData])
 
   const duplicateSimulation = (simulation: SimulationData) => {
     let newSimulation = new Simulation(simulation);
@@ -169,11 +185,13 @@ export default function Simulations() {
           title='Charges annuelles'
           simulations={simulations}
           updateSimulation={updateSimulation}
+          highlight={highlight}
         />
         <InputRow
           label='monthlyRepayableExpenses'
           title='Frais remboursables (mensuels)'
           simulations={simulations}
+          highlight={highlight}
           updateSimulation={updateSimulation}
         />
         <TextRow

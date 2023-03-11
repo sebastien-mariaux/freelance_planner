@@ -39,7 +39,6 @@ export default function Expenses() {
   useEffect(() => {
     const expenses = localStorage.getItem('expenses');
     if (expenses) {
-      console.log(expenses)
       setExpenses(JSON.parse(expenses).map((expense: any) => new Expense(expense)))
     } else {
       setExpenses(defaultExpenses)
@@ -62,8 +61,6 @@ export default function Expenses() {
     saveExpenses(newExpenses)
   }
 
-  console.log('expenses', expenses)
-
   const getSimulations = (): SimulationData[] => {
     const simulationsData = localStorage.getItem('simulations');
     if (simulationsData) {
@@ -81,7 +78,7 @@ export default function Expenses() {
       return simulation
     })
     localStorage.setItem('simulations', JSON.stringify(newSimulations));
-    navigate('/simulations')
+    navigate('/simulations', {state: {importData: true}})
   }
 
   return (

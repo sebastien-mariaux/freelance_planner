@@ -5,7 +5,6 @@ interface NavMenuProps {
 }
 
 export default function NavMenu({ activeItem }: NavMenuProps) {
-  console.log(activeItem)
   return (
     <div style={styles.navMenu}>
       <div style={itemStyle(activeItem, 'simulations')} >
