@@ -1,7 +1,7 @@
 import React from 'react'
 
 interface NavMenuProps {
-  activeItem: 'simulations' | 'expenses'
+  activeItem: 'simulations' | 'expenses' | 'achieved'
 }
 
 export default function NavMenu({ activeItem }: NavMenuProps) {
@@ -21,6 +21,14 @@ export default function NavMenu({ activeItem }: NavMenuProps) {
           style={{ marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto' }}
         >
           Calculateur de charges
+        </a>
+      </div>
+      <div style={itemStyle(activeItem, 'achieved')}>
+        <a
+          href='/achieved'
+          style={{ marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto' }}
+        >
+          Réalisé
         </a>
       </div>
     </div>

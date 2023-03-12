@@ -22,10 +22,10 @@ export default function InputRow({ title, simulations, updateSimulation, label, 
       {simulations.map((simulation, index) => (
         <SingleInput
           key={index}
-          simulation={simulation}
+          data={simulation}
           index={index}
           label={label}
-          updateSimulation={updateSimulation}
+          updateData={updateSimulation}
           highlight={highlight}
            />
       ))}
@@ -34,19 +34,19 @@ export default function InputRow({ title, simulations, updateSimulation, label, 
 }
 
 interface SingleInputProps {
-  simulation: { [key: string]: any },
+  data: { [key: string]: any },
   index: number,
   label: string,
   style?: React.CSSProperties,
-  updateSimulation: (index: number, label: string, value: string) => void,
+  updateData: (index: number, label: string, value: string) => void,
   highlight?: boolean
 }
 
-function SingleInput({ simulation, index, label, style = {}, updateSimulation, highlight }: SingleInputProps) {
-  const [value, setValue] = useState(simulation[label]);
+export function SingleInput({ data, index, label, style = {}, updateData, highlight }: SingleInputProps) {
+  const [value, setValue] = useState(data[label]);
   useEffect(() => {
-    setValue(simulation[label]);
-  }, [simulation, label])
+    setValue(data[label]);
+  }, [data, label])
 
 
   const extraStyle = highlight ? { backgroundColor: 'antiquewhite'} : {};
@@ -58,7 +58,7 @@ function SingleInput({ simulation, index, label, style = {}, updateSimulation, h
         type="text" inputMode="numeric"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        onBlur={(e) => updateSimulation(index, label, e.target.value)}
+        onBlur={(e) => updateData(index, label, e.target.value)}
       />
     </div>
   )

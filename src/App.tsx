@@ -10,6 +10,7 @@ import {
 import About from './About';
 import SiteLayout from './Simulations/SiteLayout';
 import Expenses from './Expenses/Expenses';
+import Achieved from './Achieved/Achieved';
 
 function App() {
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/" element={<Simulations />} />
           <Route path="/simulations" element={<Simulations />} />
           <Route path="/expenses" element={<Expenses />} />
+          <Route path="/achieved" element={<Achieved />} />
         </Route>
       </Routes>
     </Router>
