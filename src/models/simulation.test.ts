@@ -175,7 +175,7 @@ describe('monthlyRevenu', () => {
   })
 })
 describe('rawEarnings', () => {
-  const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000/12, monthlyRepayableExpenses: 300 });
+  const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000 / 12, monthlyRepayableExpenses: 300 });
   expect(simulation.yearlyRevenu()).toBe(117500);
   it('should compute', () => {
     expect(simulation.yearlyTotalCost()).toBe(10000 + 3600)
@@ -188,7 +188,7 @@ describe('rawEarnings', () => {
   })
 })
 describe('yearlySalaryCotisations', () => {
-  const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000/12, monthlyNetSalary: 1000 });
+  const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000 / 12, monthlyNetSalary: 1000 });
   it('should return 750 if companyType is SASU', () => {
     simulation.companyType = 'SASU';
     expect(simulation.yearlySalaryCotisations()).toBe(750 * 12);
@@ -201,7 +201,7 @@ describe('yearlySalaryCotisations', () => {
 describe('earningsTax', () => {
   describe('with big earnings', () => {
     it('should compute', () => {
-      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000/12 });
+      const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000 / 12 });
       expect(simulation.yearlyRevenu()).toBe(117500);
       expect(simulation.yearlyTotalCost()).toBe(10000)
       expect(round2(simulation.rawEarnings())).toBe(107500);
@@ -210,7 +210,7 @@ describe('earningsTax', () => {
     })
   })
   describe('with no earnings', () => {
-    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 0, weeksOff: 52, monthlyExpenses: 10000/12 });
+    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 0, weeksOff: 52, monthlyExpenses: 10000 / 12 });
     it('should compute 0', () => {
       expect(simulation.weeksOn).toBe(0);
       expect(round2(simulation.rawEarnings())).toBeLessThan(0);
@@ -218,14 +218,14 @@ describe('earningsTax', () => {
     })
   })
   describe('with negative earnings', () => {
-    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 1, weeksOff: 51, monthlyExpenses: 10000/12 });
+    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 1, weeksOff: 51, monthlyExpenses: 10000 / 12 });
     it('should compute 0', () => {
       expect(round2(simulation.rawEarnings())).toBeLessThan(0);
       expect(round2(simulation.earningsTax())).toBe(0);
     })
   })
   describe('with small earnings', () => {
-    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 10, weeksOff: 42, monthlyExpenses: 10000/12 });
+    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 10, weeksOff: 42, monthlyExpenses: 10000 / 12 });
     it('should compute 0', () => {
       expect(simulation.rawEarnings()).toBeLessThan(TAX_THRESHOLD)
       expect(simulation.rawEarnings()).toBeGreaterThan(0)
@@ -235,7 +235,7 @@ describe('earningsTax', () => {
   })
 })
 describe('netEarnings', () => {
-  const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000/12 });
+  const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000 / 12 });
   expect(simulation.yearlyRevenu()).toBe(117500);
   expect(simulation.rawEarnings()).toBe(107500);
   expect(simulation.earningsTax()).toBe(22625);
@@ -246,17 +246,17 @@ describe('netEarnings', () => {
 })
 describe('dividend', () => {
   it('should return 0 if netEarnings is negative', () => {
-    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 1, weeksOff: 51, monthlyExpenses: 10000/12 });
+    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 1, weeksOff: 51, monthlyExpenses: 10000 / 12 });
     expect(simulation.netEarnings()).toBeLessThan(0);
     expect(simulation.dividend()).toBe(0);
   })
   it('should return netEarnings if netEarnings is positive', () => {
-    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000/12 });
+    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000 / 12 });
     expect(simulation.netEarnings()).toBeGreaterThan(0);
     expect(simulation.dividend()).toBe(107500 - 22625);
   })
   describe("with 50% dividend", () => {
-    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000/12, percentDividend: 50 });
+    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000 / 12, percentDividend: 50 });
     it('should return 50% of netEarnings', () => {
       expect(round2(simulation.dividend())).toBe((107500 - 22625) * 0.5);
     })
@@ -264,12 +264,12 @@ describe('dividend', () => {
 })
 describe('dividendCotisations', () => {
   it('should return 0 if netEarnings is negative', () => {
-    const simulation = new Simulation({ monthlyExpenses: 10000/12, weeksOn: 1, weeksOff: 51 });
+    const simulation = new Simulation({ monthlyExpenses: 10000 / 12, weeksOn: 1, weeksOff: 51 });
     expect(simulation.netEarnings()).toBeLessThan(0);
     expect(round2(simulation.dividendCotisations())).toBe(0);
   })
   it('should compute for SASU', () => {
-    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000/12 });
+    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000 / 12 });
     expect(simulation.netEarnings()).toBe(107500 - 22625);
     expect(simulation.dividend()).toBe(107500 - 22625);
     simulation.companyType = 'SASU';
@@ -277,7 +277,7 @@ describe('dividendCotisations', () => {
     expect(round2(simulation.netDividend())).toBe(107500 - 22625 - 14598.5);
   })
   it('should compute for EURL', () => {
-    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000/12 });
+    const simulation = new Simulation({ dailyRate: 500, daysPerWeek: 5, weeksOn: 47, weeksOff: 15, monthlyExpenses: 10000 / 12 });
     expect(simulation.netEarnings()).toBe(107500 - 22625);
     expect(simulation.dividend()).toBe(107500 - 22625);
     simulation.companyType = 'EURL';

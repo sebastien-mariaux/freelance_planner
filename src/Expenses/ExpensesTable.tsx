@@ -7,7 +7,7 @@ interface ExpensesTableProps {
   deleteExpense: (index: number) => () => void
 }
 
-export default function ExpensesTable({expenses, deleteExpense}: ExpensesTableProps) {
+export default function ExpensesTable({ expenses, deleteExpense }: ExpensesTableProps) {
   const frequencyLabel = (frequency: string) => {
     // TODO: Maybe it's time to use I18n...
     switch (frequency) {
@@ -33,22 +33,22 @@ export default function ExpensesTable({expenses, deleteExpense}: ExpensesTablePr
         </tr>
       </thead>
       <tbody>
-      {expenses.map((expense, index) => (
-        <tr key={index}>
-          <td>{expense.name}</td>
-          <td style={{textAlign: 'right', paddingRight: '0.5em'}}>{displayAmount(expense.amount)}</td>
-          <td>{frequencyLabel(expense.frequency)}</td>
-          <td>{expense.repayable ? 'Oui' : 'Non'}</td>
-          <td>{expense.taxable ? 'Oui' : 'Non'}</td>
-          <td>
-            <button
-              onClick={deleteExpense(index)}
-            >
-              Supprimer
+        {expenses.map((expense, index) => (
+          <tr key={index}>
+            <td>{expense.name}</td>
+            <td style={{ textAlign: 'right', paddingRight: '0.5em' }}>{displayAmount(expense.amount)}</td>
+            <td>{frequencyLabel(expense.frequency)}</td>
+            <td>{expense.repayable ? 'Oui' : 'Non'}</td>
+            <td>{expense.taxable ? 'Oui' : 'Non'}</td>
+            <td>
+              <button
+                onClick={deleteExpense(index)}
+              >
+                Supprimer
               </button>
             </td>
-        </tr>
-      ))}
+          </tr>
+        ))}
       </tbody>
     </table>
   )

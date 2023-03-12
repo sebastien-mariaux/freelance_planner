@@ -2,7 +2,7 @@ import { fireEvent, render, screen } from "@testing-library/react";
 import { Route, Routes } from "react-router-dom";
 import Simulations, { defaultSimulations } from "./Simulations";
 import { displayAmount, displayPercent } from "./simulationsHelper";
-import {BrowserRouter as Router} from 'react-router-dom';
+import { BrowserRouter as Router } from 'react-router-dom';
 
 beforeEach(() => {
   window.localStorage.clear();

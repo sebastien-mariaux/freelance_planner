@@ -1,6 +1,8 @@
-.simulations, .achieved {
+.simulations,
+.achieved {
 
-  input, select {
+  input,
+  select {
     border: none;
     text-align: right;
     color: blue;
@@ -8,7 +10,7 @@
   }
 }
 
-h1:hover{
+h1:hover {
   color: blue;
   cursor: pointer;
 }
@@ -22,7 +24,8 @@ h3 {
   border: 1px solid black;
   border-collapse: collapse;
 
-  th, td {
+  th,
+  td {
     border-top: 1px solid black;
     border-bottom: 1px solid black;
     padding: 0.2em 0.5em;

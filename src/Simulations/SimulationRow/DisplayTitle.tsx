@@ -5,7 +5,7 @@ interface DisplayTitleProps {
   title: JSX.Element | string
 }
 
-export default function DisplayTitle({title}: DisplayTitleProps): JSX.Element {
+export default function DisplayTitle({ title }: DisplayTitleProps): JSX.Element {
   if (typeof title === 'string') {
     return <>{title}</>
   } else {

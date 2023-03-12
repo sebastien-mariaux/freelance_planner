@@ -26,6 +26,6 @@ describe('monthlyExpenses', () => {
     expect(monthlyExpenses([rentExpense, powerExpense])).toEqual(0)
   })
   it('should return yearly non repayable expenses', () => {
-    expect(monthlyExpenses([accountantExpense, insuranceExpense, rentExpense, powerExpense])).toEqual(600 /12 + 100)
+    expect(monthlyExpenses([accountantExpense, insuranceExpense, rentExpense, powerExpense])).toEqual(600 / 12 + 100)
   })
 })

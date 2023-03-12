@@ -7,7 +7,7 @@ interface AchievedTableProps {
   setCompletedMonths: (completedMonths: CompletedMonth[]) => void
 }
 
-export default function AchievedTable({completedMonths, setCompletedMonths}: AchievedTableProps) {
+export default function AchievedTable({ completedMonths, setCompletedMonths }: AchievedTableProps) {
 
   const updateData = (index: number, label: string, value: string) => {
     const newCompletedMonths = [...completedMonths];
@@ -27,59 +27,59 @@ export default function AchievedTable({completedMonths, setCompletedMonths}: Ach
 
   return (
     <table >
-        <thead style={styles.thead}>
-          <tr >
-            <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Mois</th>
-            <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Chiffre d'affaires</th>
-            <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Salaire net</th>
-            <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Charges remboursables</th>
-            <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Autres charges</th>
-            <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>clôturé</th>
+      <thead style={styles.thead}>
+        <tr >
+          <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Mois</th>
+          <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Chiffre d'affaires</th>
+          <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Salaire net</th>
+          <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Charges remboursables</th>
+          <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Autres charges</th>
+          <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>clôturé</th>
+        </tr>
+      </thead>
+      <tbody>
+        {completedMonths.map((month, index) => (
+          <tr key={index} >
+            <td style={{ textAlign: 'left' }}>{month.month}</td>
+            <td style={{ textAlign: 'right' }}>
+              <SingleInput
+                data={month}
+                index={index}
+                label='revenu'
+                updateData={updateData}
+              />
+            </td>
+            <td style={{ textAlign: 'right' }}>
+              <SingleInput
+                data={month}
+                index={index}
+                label='netSalary'
+                updateData={updateData}
+              />
+            </td>
+            <td style={{ textAlign: 'right' }}>
+              <SingleInput
+                data={month}
+                index={index}
+                label='repayableExpenses'
+                updateData={updateData}
+              />
+            </td>
+            <td style={{ textAlign: 'right' }}>
+              <SingleInput
+                data={month}
+                index={index}
+                label='otherExpenses'
+                updateData={updateData}
+              />
+            </td>
+            <td style={{ textAlign: 'right' }}>
+              <input type="checkbox" checked={month.completed} onChange={() => checkCompleted(index)} />
+            </td>
           </tr>
-        </thead>
-        <tbody>
-          {completedMonths.map((month, index) => (
-            <tr key={index} >
-              <td style={{ textAlign: 'left' }}>{month.month}</td>
-              <td style={{ textAlign: 'right' }}>
-                <SingleInput
-                  data={month}
-                  index={index}
-                  label='revenu'
-                  updateData={updateData}
-                />
-              </td>
-              <td style={{ textAlign: 'right' }}>
-                <SingleInput
-                  data={month}
-                  index={index}
-                  label='netSalary'
-                  updateData={updateData}
-                />
-              </td>
-              <td style={{ textAlign: 'right' }}>
-                <SingleInput
-                  data={month}
-                  index={index}
-                  label='repayableExpenses'
-                  updateData={updateData}
-                />
-              </td>
-              <td style={{ textAlign: 'right' }}>
-                <SingleInput
-                  data={month}
-                  index={index}
-                  label='otherExpenses'
-                  updateData={updateData}
-                />
-              </td>
-              <td style={{ textAlign: 'right' }}>
-                <input type="checkbox" checked={month.completed} onChange={()=>checkCompleted(index)} />
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+        ))}
+      </tbody>
+    </table>
   )
 }
 

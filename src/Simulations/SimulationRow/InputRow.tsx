@@ -13,7 +13,7 @@ interface InputRowProps {
   highlight?: boolean
 }
 
-export default function InputRow({ title, simulations, updateSimulation, label, style, highlight=false }: InputRowProps) {
+export default function InputRow({ title, simulations, updateSimulation, label, style, highlight = false }: InputRowProps) {
   return (
     <section style={simulationStyles.row} >
       <div style={{ ...simulationStyles.leftCol, ...style }} >
@@ -27,7 +27,7 @@ export default function InputRow({ title, simulations, updateSimulation, label, 
           label={label}
           updateData={updateSimulation}
           highlight={highlight}
-           />
+        />
       ))}
     </section>
   )
@@ -49,7 +49,7 @@ export function SingleInput({ data, index, label, style = {}, updateData, highli
   }, [data, label])
 
 
-  const extraStyle = highlight ? { backgroundColor: 'antiquewhite'} : {};
+  const extraStyle = highlight ? { backgroundColor: 'antiquewhite' } : {};
   return (
     <div key={index} style={simulationStyles.col} >
       <input
