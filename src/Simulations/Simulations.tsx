@@ -9,13 +9,14 @@ import SelectRow from './SimulationRow/SelectRow';
 import TextRow from './SimulationRow/TextRow';
 import { simulationStyles } from './simulationStyles';
 import { mainStyles } from '../mainStyles';
-import {useLocation} from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const styles = {
   endOfSection: {
     fontWeight: 'bold',
     borderBottom: '2px solid black',
-    paddingBottom: '5px'
+    paddingBottom: '5px',
+
   },
   mainIndicator: {
     fontWeight: 'bold',
@@ -64,7 +65,8 @@ export default function Simulations() {
   const [simulations, setSimulations] = useState(getStoredData);
   const [highlight, setHighlight] = useState(false);
   const location = useLocation();
-  const {importData} = location?.state || false
+  const { importData } = location?.state || false
+  const [fullView, setFullView] = useState(true);
 
   useEffect(() => {
 
@@ -73,7 +75,7 @@ export default function Simulations() {
       setTimeout(() => {
         setHighlight(false);
       }
-      , 5000);
+        , 5000);
     }
 
   }, [importData])
@@ -103,6 +105,10 @@ export default function Simulations() {
     setSimulations(defaultSimulations);
   }
 
+  const toggleFullView = () => {
+    setFullView(!fullView);
+  }
+
   return (
     <div className='simulations'>
       <NavMenu activeItem='simulations' />
@@ -122,9 +128,15 @@ export default function Simulations() {
         >
           Réinitialiser les données
         </button>
+        <button
+          style={mainStyles.titleButton}
+          onClick={toggleFullView}
+        >
+          {fullView ? 'Vue simplifiée' : 'Vue détaillée'}
+        </button>
       </div>
 
-      <div >
+      <div style={{ width: 'fit-content' }}>
         <InputRow
           label='name'
           title='Titre'
@@ -153,12 +165,12 @@ export default function Simulations() {
           label='daysPerWeek'
           title='Jours par semaine'
         />
-        <InputRow
+        {fullView && <InputRow
           simulations={simulations}
           updateSimulation={updateSimulation}
           label='weeksOff'
           title='Semaines off'
-        />
+        />}
         <InputRow
           simulations={simulations}
           updateSimulation={updateSimulation}
@@ -172,12 +184,14 @@ export default function Simulations() {
           style={styles.indicator}
           simulations={simulations}
         />
-        <TextRow
+        {fullView && <TextRow
           label='monthlyRevenu'
           title='CA moyen mensuel'
-          style={styles.endOfSection}
+          style={styles.indicator}
           simulations={simulations}
-        />
+        />}
+
+        <div style={styles.endOfSection} />
 
         <h3>Charges</h3>
         <InputRow
@@ -194,11 +208,11 @@ export default function Simulations() {
           highlight={highlight}
           updateSimulation={updateSimulation}
         />
-        <TextRow
+        {fullView && <TextRow
           label='yearlyRepayableExpenses'
           title='Frais remboursables (annuels)'
           simulations={simulations}
-        />
+        />}
         <InputRow
           label='monthlyNetSalary'
           title='Salaire net mensuel (avant IR)'
@@ -206,23 +220,27 @@ export default function Simulations() {
           updateSimulation={updateSimulation}
         />
 
-        <TextRow
+        {fullView && <><TextRow
           label='yearlyChargedSalary'
           title='Salaire annuel chargé'
           simulations={simulations}
         />
-        <TextRow
-          label='yearlySalaryCotisations'
-          title='Cotisations sur salaire'
-          simulations={simulations}
-        />
+          <TextRow
+            label='yearlySalaryCotisations'
+            title='Cotisations sur salaire'
+            simulations={simulations}
+          /></>}
 
         <TextRow
           label='yearlyTotalCost'
-          title='Total des charges'
-          style={styles.endOfSection}
+          title='Charges annuelles'
+          style={styles.indicator}
           simulations={simulations}
         />
+
+
+        <div style={styles.endOfSection} />
+
 
         <h3>Soldes</h3>
         <TextRow
@@ -230,17 +248,19 @@ export default function Simulations() {
           title='Bénéfice brut'
           simulations={simulations}
         />
-        <TextRow
+        {fullView && <TextRow
           label='earningsTax'
           title="Impôts sur les sociétés"
           simulations={simulations}
-        />
+        />}
         <TextRow
           label='netEarnings'
-          title='Bénéfice net'
-          style={styles.endOfSection}
+          title='Bénéfice après IS'
+          style={styles.indicator}
           simulations={simulations}
         />
+        <div style={styles.endOfSection} />
+
 
         <h3>Affectation du résultat</h3>
         <InputRow
@@ -249,22 +269,24 @@ export default function Simulations() {
           simulations={simulations}
           updateSimulation={updateSimulation}
         />
-        <TextRow
+        {fullView && <><TextRow
           simulations={simulations}
           label="dividend"
           title="Dividende chargé"
         />
-        <TextRow
-          simulations={simulations}
-          label="dividendCotisations"
-          title="Cotisations sur dividende"
-        />
+          <TextRow
+            simulations={simulations}
+            label="dividendCotisations"
+            title="Cotisations sur dividende"
+          /></>}
         <TextRow
           simulations={simulations}
           label="netResult"
           title="Résultat mis en réserve"
-          style={styles.endOfSection}
+          style={styles.indicator}
         />
+        <div style={styles.endOfSection} />
+
 
         <h3>Revenus dirigeant·e</h3>
         <InputRow
@@ -274,31 +296,31 @@ export default function Simulations() {
           updateSimulation={updateSimulation}
         />
 
-        <TextRow
+        {fullView && <><TextRow
           label='yearlyNetSalary'
           title='Salaire annuel net'
           simulations={simulations}
         />
-        <TextRow
-          label='incomeTax'
-          title="IR sur salaire (estimation)"
-          simulations={simulations}
-        />
-        <TextRow
-          label='netDividend'
-          title='Dividende reçu'
-          simulations={simulations}
-        />
-        <TextRow
-          label='incomeTaxOnDividend'
-          title='IR sur dividendes (taux fixe 12.8)'
-          simulations={simulations}
-        />
-        <TextRow
-          label='yearlyRepaidExpenses'
-          title='Frais remboursés'
-          simulations={simulations}
-        />
+          <TextRow
+            label='incomeTax'
+            title="IR sur salaire (estimation)"
+            simulations={simulations}
+          />
+          <TextRow
+            label='netDividend'
+            title='Dividende reçu'
+            simulations={simulations}
+          />
+          <TextRow
+            label='incomeTaxOnDividend'
+            title='IR sur dividendes (taux fixe 12.8)'
+            simulations={simulations}
+          />
+          <TextRow
+            label='yearlyRepaidExpenses'
+            title='Frais remboursés'
+            simulations={simulations}
+          /></>}
         <TextRow
           label='managerYearlyRevenu'
           title='Revenu annuel '
@@ -308,9 +330,11 @@ export default function Simulations() {
         <TextRow
           label='managerMonthlyRevenu'
           title='Revenu mensuel moyen'
-          style={{ ...styles.endOfSection, ...styles.mainIndicator }}
+          style={styles.mainIndicator}
           simulations={simulations}
         />
+        <div style={styles.endOfSection} />
+
         <PercentTextRow
           label='managerIncomeRevenuRatio'
           title='Ratio revenu / CA'
