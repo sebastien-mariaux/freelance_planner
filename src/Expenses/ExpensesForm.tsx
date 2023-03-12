@@ -50,7 +50,7 @@ export default function ExpensesForm({ expenses, setExpenses, saveExpenses }: Ex
             </select>
           </label>
           <label style={styles.label}>
-            Remboursement de frais
+            Remboursable
             <input type="checkbox" {...register("repayable")} onChange={displayOrHideTaxable} />
           </label>
           {displayTaxable && <label style={styles.label}>

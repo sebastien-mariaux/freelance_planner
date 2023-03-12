@@ -11,7 +11,7 @@ import { SimulationData } from "../models/simulation";
 
 
 const defaultExpenses = [
-  new Expense({ name: 'Loyer', amount: 300, frequency: 'monthly', taxable: true, repayable: false }),
+  new Expense({ name: 'Loyer', amount: 300, frequency: 'monthly', taxable: true, repayable: true }),
   new Expense({ name: 'Comptable', amount: 100, frequency: 'monthly', taxable: false, repayable: false }),
   new Expense({ name: 'Repas', amount: 2000, frequency: 'yearly', taxable: false, repayable: false }),
   new Expense({ name: 'Electricité', amount: 90, frequency: 'monthly', taxable: false, repayable: true }),
@@ -78,7 +78,7 @@ export default function Expenses() {
       return simulation
     })
     localStorage.setItem('simulations', JSON.stringify(newSimulations));
-    navigate('/simulations', {state: {importData: true}})
+    navigate('/simulations', { state: { importData: true } })
   }
 
   return (
@@ -100,10 +100,18 @@ export default function Expenses() {
         >
           Utiliser pour mes simulations
         </button>
-
       </div>
       <div style={styles.addForm}>
         <ExpensesForm expenses={expenses} setExpenses={setExpenses} saveExpenses={saveExpenses} />
+      </div>
+      <div style={styles.info}>
+        <div >
+          (?) Les charges remboursables sont les charges payées par l'entreprise au dirigeant·e (remboursement de frais, loyer...).
+          Elles peuvent être imposables à l'IR (cas du loyer par exemple).
+        </div>
+        <div >
+          /!\ Les simulations ne prennent pas encore en compte l'IR sur les charges remboursables.
+        </div>
       </div>
       {expenses.length > 0 && <>
         <ExpensesTable expenses={expenses} deleteExpense={deleteExpense} />
@@ -119,12 +127,16 @@ const styles = {
   addForm: {
     padding: '0.5em',
     backgroundColor: '#eee',
-    marginBottom: '1em',
     borderRadius: '5px'
   },
   totals: {
     padding: '0.5em',
     marginTop: '1em',
   },
+  info: {
+    fontSize: '0.8em',
+    fontStyle: 'italic',
+    marginBottom: '1em'
+  }
 }
 

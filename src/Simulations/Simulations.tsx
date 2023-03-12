@@ -266,7 +266,7 @@ export default function Simulations() {
           style={styles.endOfSection}
         />
 
-        <h3>Revenus dirigeant.e</h3>
+        <h3>Revenus dirigeant·e</h3>
         <InputRow
           label='incomeTaxRate'
           title="Taux d'IR"

@@ -27,8 +27,8 @@ export default function ExpensesTable({expenses, deleteExpense}: ExpensesTablePr
           <th>Description</th>
           <th>Montant</th>
           <th>Fréquence</th>
+          <th>Remboursable</th>
           <th>Imposable à l'IR</th>
-          <th>Remboursement de frais</th>
           <th></th>
         </tr>
       </thead>
@@ -38,8 +38,8 @@ export default function ExpensesTable({expenses, deleteExpense}: ExpensesTablePr
           <td>{expense.name}</td>
           <td style={{textAlign: 'right', paddingRight: '0.5em'}}>{displayAmount(expense.amount)}</td>
           <td>{frequencyLabel(expense.frequency)}</td>
-          <td>{expense.taxable ? 'Oui' : 'Non'}</td>
           <td>{expense.repayable ? 'Oui' : 'Non'}</td>
+          <td>{expense.taxable ? 'Oui' : 'Non'}</td>
           <td>
             <button
               onClick={deleteExpense(index)}
