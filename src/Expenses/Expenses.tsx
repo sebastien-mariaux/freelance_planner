@@ -21,15 +21,15 @@ const defaultExpenses = [
 ]
 
 export const monthlyRepayableExpenses = (expenses: Expense[]) => {
-  return expenses
+  return Math.round(expenses
     .filter(expense => expense.repayable)
-    .reduce((total, expense) => total + expense.monthlyAmount, 0)
+    .reduce((total, expense) => total + expense.monthlyAmount, 0))
 }
 
-export const yearlyExpenses = (expenses: Expense[]) => {
-  return expenses
+export const monthlyExpenses = (expenses: Expense[]) => {
+  return Math.round(expenses
     .filter(expense => !expense.repayable)
-    .reduce((total, expense) => total + expense.yearlyAmount, 0)
+    .reduce((total, expense) => total + expense.monthlyAmount, 0))
 }
 
 export default function Expenses() {
@@ -73,7 +73,7 @@ export default function Expenses() {
     const simulations: SimulationData[] = getSimulations()
 
     const newSimulations = simulations.map((simulation: SimulationData) => {
-      simulation.yearlyExpenses = yearlyExpenses(expenses)
+      simulation.monthlyExpenses = monthlyExpenses(expenses)
       simulation.monthlyRepayableExpenses = monthlyRepayableExpenses(expenses)
       return simulation
     })

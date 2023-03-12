@@ -8,7 +8,7 @@ export type SimulationData = {
   weeksOff?: number;
   weeksOn?: number;
   daysPerWeek?: number;
-  yearlyExpenses?: number;
+  monthlyExpenses?: number;
   monthlyNetSalary?: number;
   incomeTaxRate?: number;
   percentDividend?: number;
@@ -24,7 +24,7 @@ export class Simulation {
   _weeksOff: number;
   _weeksOn: number;
   _daysPerWeek: number;
-  _yearlyExpenses: number;
+  _monthlyExpenses: number;
   _monthlyNetSalary: number;
   _incomeTaxRate: number;
   _percentDividend: number;
@@ -37,7 +37,7 @@ export class Simulation {
     this._weeksOff = this._checkInput({ value: initialValues.weeksOff, min: 0, max: WEEKS_IN_YEAR, defaultValue: 10 });
     this._weeksOn = this._checkInput({ value: initialValues.weeksOn, min: 0, max: WEEKS_IN_YEAR, defaultValue: 42 });
     this._daysPerWeek = this._checkInput({ value: initialValues.daysPerWeek, min: 0, max: 7, defaultValue: 5 });
-    this._yearlyExpenses = this._checkInput({ value: initialValues.yearlyExpenses, min: 0, defaultValue: 10000 });
+    this._monthlyExpenses = this._checkInput({ value: initialValues.monthlyExpenses, min: 0, defaultValue: 1000 });
     this._monthlyNetSalary = this._checkInput({ value: initialValues.monthlyNetSalary, min: 0, defaultValue: 0 });
     this._incomeTaxRate = this._checkInput({ value: initialValues.incomeTaxRate, min: 0, max: 100, defaultValue: 10 });
     this._percentDividend = this._checkInput({ value: initialValues.percentDividend, min: 0, max: 100, defaultValue: 100 });
@@ -78,12 +78,12 @@ export class Simulation {
     this._percentDividend = value;
   }
 
-  get yearlyExpenses() {
-    return this._yearlyExpenses;
+  get monthlyExpenses() {
+    return this._monthlyExpenses;
   }
-  set yearlyExpenses(value) {
-    value = this._checkInput({ value: value, min: 0, max: null, defaultValue: 10000 })
-    this._yearlyExpenses = value;
+  set monthlyExpenses(value) {
+    value = this._checkInput({ value: value, min: 0, max: null, defaultValue: 1000 })
+    this._monthlyExpenses = value;
   }
 
   get monthlyNetSalary() {
@@ -166,8 +166,12 @@ export class Simulation {
     return this.yearlyRepayableExpenses();
   }
 
+  yearlyExpenses() {
+    return this.monthlyExpenses * 12;
+  }
+
   yearlyTotalCost() {
-    return this.yearlyExpenses + this.yearlyChargedSalary() + this.yearlyRepayableExpenses();
+    return this.yearlyExpenses() + this.yearlyChargedSalary() + this.yearlyRepayableExpenses();
   }
 
   rawEarnings() {
@@ -262,7 +266,7 @@ export class Simulation {
       daysPerWeek: this.daysPerWeek,
       yearlyRevenu: this.yearlyRevenu(),
       monthlyRevenu: this.monthlyRevenu(),
-      yearlyExpenses: this.yearlyExpenses,
+      monthlyExpenses: this.monthlyExpenses,
       monthlyRepayableExpenses: this.monthlyRepayableExpenses,
       yearlyRepayableExpenses: this.yearlyRepayableExpenses(),
       yearlyTotalCost: this.yearlyTotalCost(),
@@ -285,6 +289,7 @@ export class Simulation {
       dividendCotisations: this.dividendCotisations(),
       incomeTaxOnDividend: this.incomeTaxOnDividend(),
       yearlyRepaidExpenses: this.yearlyRepaidExpenses(),
+      yearlyExpenses: this.yearlyExpenses(),
     }
   }
 }

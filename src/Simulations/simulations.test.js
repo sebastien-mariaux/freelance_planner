@@ -42,10 +42,10 @@ describe('render Simulations inputs', () => {
       defaultSimulations.map((el) => el.weeksOn)
     );
   })
-  it('show yearlyExpenses', () => {
+  it('show monthlyExpenses', () => {
     renderSimulations()
-    expect(screen.getAllByTestId('yearlyExpenses').map((el) => parseFloat(el.value))).toEqual(
-      defaultSimulations.map((el) => el.yearlyExpenses)
+    expect(screen.getAllByTestId('monthlyExpenses').map((el) => parseFloat(el.value))).toEqual(
+      defaultSimulations.map((el) => el.monthlyExpenses)
     );
   })
   it('show monthlyNetSalary', () => {
@@ -260,19 +260,19 @@ describe('update dailyRate', () => {
     expect(inputElt.value).toBe('52');
     expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
   })
-  it('update yearlyExpenses', async () => {
+  it('update monthlyExpenses', async () => {
     renderSimulations()
     const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
-    const inputElt = screen.getAllByTestId('yearlyExpenses')[0];
+    const inputElt = screen.getAllByTestId('monthlyExpenses')[0];
     fireEvent.change(inputElt, { target: { value: 8000 } });
     fireEvent.blur(inputElt);
     expect(inputElt.value).toBe('8000');
     expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu)
   })
-  it('update yearlyExpenses with invalid value', async () => {
+  it('update monthlyExpenses with invalid value', async () => {
     renderSimulations()
     const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[0].textContent;
-    const inputElt = screen.getAllByTestId('yearlyExpenses')[0];
+    const inputElt = screen.getAllByTestId('monthlyExpenses')[0];
     fireEvent.change(inputElt, { target: { value: -8000 } });
     fireEvent.blur(inputElt);
     expect(inputElt.value).toBe('0');

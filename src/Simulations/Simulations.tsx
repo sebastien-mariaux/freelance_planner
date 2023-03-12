@@ -34,7 +34,7 @@ const saveSimulations = (simulations: any[]) => {
 export const defaultSimulations = [
   (new Simulation({
     companyType: 'SASU',
-    name: 'SASU 100% dividendes',
+    name: 'SASU',
     dailyRate: 500,
     daysPerWeek: 5,
     weeksOff: 10,
@@ -195,12 +195,17 @@ export default function Simulations() {
 
         <h3>Charges</h3>
         <InputRow
-          label='yearlyExpenses'
-          title='Charges annuelles'
+          label='monthlyExpenses'
+          title='Charges mensuelles'
           simulations={simulations}
           updateSimulation={updateSimulation}
           highlight={highlight}
         />
+        {fullView && <TextRow
+          label='yearlyExpenses'
+          title='Charges annuelles'
+          simulations={simulations}
+        />}
         <InputRow
           label='monthlyRepayableExpenses'
           title='Frais remboursables (mensuels)'
