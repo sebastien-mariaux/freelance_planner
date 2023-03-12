@@ -47,10 +47,8 @@ function SingleInput({ simulation, index, label, style = {}, updateSimulation, h
     setValue(simulation[label]);
   }, [simulation, label])
 
-  console.log('highlight', highlight)
 
   const extraStyle = highlight ? { backgroundColor: 'antiquewhite'} : {};
-  console.log(extraStyle)
   return (
     <div key={index} style={simulationStyles.col} >
       <input
