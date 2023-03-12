@@ -24,6 +24,10 @@ const styles = {
   },
   indicator: {
     fontWeight: 'bold'
+  },
+  indication: {
+    fontStyle: 'italic',
+    fontSize: '0.8em'
   }
 }
 
@@ -157,7 +161,7 @@ export default function Simulations() {
           simulations={simulations}
           updateSimulation={updateSimulation}
           label='dailyRate'
-          title='TJM'
+          title={<>TJM <span style={styles.indication}>(Hors taxes)</span></>}
         />
         <InputRow
           simulations={simulations}
@@ -208,19 +212,19 @@ export default function Simulations() {
         />}
         <InputRow
           label='monthlyRepayableExpenses'
-          title='Frais remboursables (mensuels)'
+          title={<>Frais remboursables <span style={styles.indication}>(mensuels)</span></>}
           simulations={simulations}
           highlight={highlight}
           updateSimulation={updateSimulation}
         />
         {fullView && <TextRow
           label='yearlyRepayableExpenses'
-          title='Frais remboursables (annuels)'
+          title={<>Frais remboursables <span style={styles.indication}>(annuels)</span></>}
           simulations={simulations}
         />}
         <InputRow
           label='monthlyNetSalary'
-          title='Salaire net mensuel (avant IR)'
+          title={<>Salaire net mensuel  <span style={styles.indication}>(avant IR)</span></>}
           simulations={simulations}
           updateSimulation={updateSimulation}
         />
@@ -308,7 +312,7 @@ export default function Simulations() {
         />
           <TextRow
             label='incomeTax'
-            title="IR sur salaire (estimation)"
+            title={<>IR sur salaire <span style={styles.indication}>(estimation)</span></>}
             simulations={simulations}
           />
           <TextRow
@@ -318,7 +322,7 @@ export default function Simulations() {
           />
           <TextRow
             label='incomeTaxOnDividend'
-            title='IR sur dividendes (taux fixe 12.8)'
+            title={<>IR sur dividendes <span style={styles.indication}>(taux fixe 12.8)</span></>}
             simulations={simulations}
           />
           <TextRow

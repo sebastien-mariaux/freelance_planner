@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
 // import { useState } from "react";
 import { simulationStyles } from "../simulationStyles";
+import DisplayTitle from "./DisplayTitle";
 
 
 interface InputRowProps {
-  title: string,
+  title: JSX.Element | string,
   simulations: Object[],
   updateSimulation: (index: number, label: string, value: string) => void,
   label: string,
@@ -16,7 +17,7 @@ export default function InputRow({ title, simulations, updateSimulation, label, 
   return (
     <section style={simulationStyles.row} >
       <div style={{ ...simulationStyles.leftCol, ...style }} >
-        {title}
+        <DisplayTitle title={title} />
       </div>
       {simulations.map((simulation, index) => (
         <SingleInput
