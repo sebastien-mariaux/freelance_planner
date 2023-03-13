@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { mainStyles } from "../mainStyles";
 import NavMenu from "../NavMenu/NavMenu";
 import AchievedSummary from "./AchievedSummary";
@@ -37,13 +37,23 @@ export interface TotalsData {
 }
 
 export default function Achieved() {
-  const [completedMonths, setCompletedMonths] = useState<CompletedMonth[]>(defaultCompletedMonths)
+  const [completedMonths, setCompletedMonths] = useState<CompletedMonth[]>([])
+
+  useEffect(() => {
+    const savedCompletedMonths = localStorage.getItem('completedMonths')
+    if (savedCompletedMonths) {
+      setCompletedMonths(JSON.parse(savedCompletedMonths))
+    } else {
+      setCompletedMonths(defaultCompletedMonths)
+    }
+  }, [])
 
   const completedRevenu = completedMonths.filter((e) => e.completed).reduce((acc, month) => acc + month.revenu, 0)
   const completedSalaries = completedMonths.filter((e) => e.completed).reduce((acc, month) => acc + month.netSalary, 0)
   const repayedExpenses = completedMonths.filter((e) => e.completed).reduce((acc, month) => acc + month.repayableExpenses, 0)
   const otherCompletedExpenses = completedMonths.filter((e) => e.completed).reduce((acc, month) => acc + month.otherExpenses, 0)
   const completedMonthCount = completedMonths.filter((e) => e.completed).length
+
 
 
   const totals: TotalsData = {

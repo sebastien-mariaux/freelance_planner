@@ -11,11 +11,16 @@ interface AchievedTableProps {
 
 export default function AchievedTable({ completedMonths, setCompletedMonths, totals }: AchievedTableProps) {
 
+  const saveData = (data: CompletedMonth[]) => {
+    localStorage.setItem('completedMonths', JSON.stringify(data))
+  }
+
   const updateData = (index: number, label: string, value: string) => {
     const newCompletedMonths = [...completedMonths];
     const currentMonth = newCompletedMonths[index];
     currentMonth[label] = parseFloat(value);
     setCompletedMonths(newCompletedMonths);
+    saveData(newCompletedMonths);
   }
 
   const checkCompleted = (index: number) => {
