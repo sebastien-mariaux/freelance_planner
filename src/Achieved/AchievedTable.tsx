@@ -1,13 +1,15 @@
 import React from "react";
 import { SingleInput } from "../Simulations/SimulationRow/InputRow";
-import { CompletedMonth } from "./Achieved";
+import { displayAmount } from "../Simulations/simulationsHelper";
+import { CompletedMonth, TotalsData } from "./Achieved";
 
 interface AchievedTableProps {
   completedMonths: CompletedMonth[],
-  setCompletedMonths: (completedMonths: CompletedMonth[]) => void
+  setCompletedMonths: (completedMonths: CompletedMonth[]) => void,
+  totals: TotalsData
 }
 
-export default function AchievedTable({ completedMonths, setCompletedMonths }: AchievedTableProps) {
+export default function AchievedTable({ completedMonths, setCompletedMonths, totals }: AchievedTableProps) {
 
   const updateData = (index: number, label: string, value: string) => {
     const newCompletedMonths = [...completedMonths];
@@ -76,6 +78,15 @@ export default function AchievedTable({ completedMonths, setCompletedMonths }: A
             </td>
           </tr>
         ))}
+        <tr style={styles.totalRow}>
+          <td style={{ textAlign: 'left' }}>Total</td>
+          <td style={{ textAlign: 'right' }}>{displayAmount(totals.completedRevenu)}</td>
+          <td style={{ textAlign: 'right' }}>{displayAmount(totals.completedSalaries)}</td>
+          <td style={{ textAlign: 'right' }}>{displayAmount(totals.repayedExpenses)}</td>
+          <td style={{ textAlign: 'right' }}>{displayAmount(totals.otherCompletedExpenses)}</td>
+          <td style={{ textAlign: 'right' }}>{totals.completedMonthCount}</td>
+
+        </tr>
       </tbody>
     </table>
   )
@@ -86,5 +97,10 @@ const styles = {
     textAlign: 'left' as 'left',
     backgroundColor: '#000',
     color: '#fff',
+  },
+  totalRow: {
+    backgroundColor: '#000',
+    color: '#fff',
+    fontWeight: 'bold'
   }
 }

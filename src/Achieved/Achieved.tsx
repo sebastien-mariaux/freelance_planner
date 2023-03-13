@@ -28,8 +28,31 @@ const defaultCompletedMonths = [
   { month: 'Décembre', revenu: 0, netSalary: 0, repayableExpenses: 0, otherExpenses: 0, completed: false },
 ]
 
+export interface TotalsData {
+  completedRevenu: number,
+  completedSalaries: number,
+  repayedExpenses: number,
+  otherCompletedExpenses: number,
+  completedMonthCount: number
+}
+
 export default function Achieved() {
   const [completedMonths, setCompletedMonths] = useState<CompletedMonth[]>(defaultCompletedMonths)
+
+  const completedRevenu = completedMonths.filter((e) => e.completed).reduce((acc, month) => acc + month.revenu, 0)
+  const completedSalaries = completedMonths.filter((e) => e.completed).reduce((acc, month) => acc + month.netSalary, 0)
+  const repayedExpenses = completedMonths.filter((e) => e.completed).reduce((acc, month) => acc + month.repayableExpenses, 0)
+  const otherCompletedExpenses = completedMonths.filter((e) => e.completed).reduce((acc, month) => acc + month.otherExpenses, 0)
+  const completedMonthCount = completedMonths.filter((e) => e.completed).length
+
+
+  const totals: TotalsData = {
+    completedRevenu,
+    completedSalaries,
+    repayedExpenses,
+    otherCompletedExpenses,
+    completedMonthCount
+  }
 
   return (
     <div className="achieved">
@@ -52,10 +75,10 @@ export default function Achieved() {
       <AchievedTable
         completedMonths={completedMonths}
         setCompletedMonths={setCompletedMonths}
+        totals={totals}
       />
-      <hr />
       <AchievedSummary
-        completedMonths={completedMonths}
+        totals={totals}
       />
 
     </div>
