@@ -16,8 +16,6 @@ export default function AchievedTable({ completedMonths, setCompletedMonths }: A
     setCompletedMonths(newCompletedMonths);
   }
 
-  console.log(completedMonths.map((month) => month.completed))
-
   const checkCompleted = (index: number) => {
     const newCompletedMonths = [...completedMonths];
     const currentMonth = newCompletedMonths[index];

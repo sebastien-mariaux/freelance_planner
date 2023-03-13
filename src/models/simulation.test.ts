@@ -1,5 +1,6 @@
 import { round2 } from "../helpers";
-import { Simulation, TAX_THRESHOLD } from "./simulation";
+import { TAX_THRESHOLD } from "./abstractComputer";
+import { Simulation } from "./simulation";
 
 
 describe('constructor', () => {

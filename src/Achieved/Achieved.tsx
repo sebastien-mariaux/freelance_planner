@@ -30,8 +30,6 @@ const defaultCompletedMonths = [
 export default function Achieved() {
   const [completedMonths, setCompletedMonths] = useState<CompletedMonth[]>(defaultCompletedMonths)
 
-
-
   return (
     <div className="achieved">
       <NavMenu activeItem='achieved' />
