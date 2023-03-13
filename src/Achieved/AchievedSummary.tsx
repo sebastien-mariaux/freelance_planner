@@ -26,23 +26,32 @@ export default function AchievedSummary({ totals }: AchievedSummaryProps) {
   console.log(computer)
 
   return (
-    <div>
+    <div style={styles.container}>
       <table>
         <tbody>
           <tr>
-            <td style={{ textAlign: 'left', fontWeight: 'bold', paddingRight: '2em' }}>Bénéfice après IS</td>
-            <td style={{ textAlign: 'right' }}>{displayAmount(computer.netEarnings)}</td>
+            <td style={{ textAlign: 'left', paddingRight: '2em' }}>Bénéfice après IS</td>
+            <td style={{ textAlign: 'right', fontWeight: 'bold' }}>{displayAmount(computer.netEarnings)}</td>
           </tr>
           <tr>
-            <td style={{ textAlign: 'left', fontWeight: 'bold', paddingRight: '2em' }}>Dividende à verser</td>
-            <td style={{ textAlign: 'right' }}>{displayAmount(computer.netDividend)}</td>
+            <td style={{ textAlign: 'left', paddingRight: '2em' }}>Dividende à verser</td>
+            <td style={{ textAlign: 'right', fontWeight: 'bold' }}>{displayAmount(computer.netDividend)}</td>
           </tr>
           <tr>
-            <td style={{ textAlign: 'left', fontWeight: 'bold', paddingRight: '2em' }}>Revenu mensuel net moyen </td>
-            <td style={{ textAlign: 'right' }}>{displayAmount(computer.managerMonthlyRevenu)}</td>
+            <td style={{ textAlign: 'left', paddingRight: '2em' }}>Revenu mensuel net moyen </td>
+            <td style={{ textAlign: 'right', fontWeight: 'bold' }}>{displayAmount(computer.managerMonthlyRevenu)}</td>
           </tr>
         </tbody>
       </table>
     </div>)
 }
 
+const styles = {
+  container: {
+    marginTop: '2em',
+    border: '1px solid #000',
+    backgroundColor: '#ebebeb',
+    width: 'fit-content',
+    padding: '0.5em',
+  }
+}
