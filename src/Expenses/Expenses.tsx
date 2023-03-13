@@ -104,13 +104,15 @@ export default function Expenses() {
       <div style={styles.addForm}>
         <ExpensesForm expenses={expenses} setExpenses={setExpenses} saveExpenses={saveExpenses} />
       </div>
-      <div style={styles.info}>
-        <div >
-          (?) Les charges remboursables sont les charges payées par l'entreprise au dirigeant·e (remboursement de frais, loyer...).
-          Elles peuvent être imposables à l'IR (cas du loyer par exemple).
-        </div>
-        <div >
-          /!\ Les simulations ne prennent pas encore en compte l'IR sur les charges remboursables.
+      <div style={mainStyles.info}>
+        <div style={mainStyles.infoSection}>
+          <div >
+            (?) Les charges remboursables sont les charges payées par l'entreprise au dirigeant·e (remboursement de frais, loyer...).
+            Elles peuvent être imposables à l'IR (cas du loyer par exemple).
+          </div>
+          <div >
+            /!\ Les simulations ne prennent pas encore en compte l'IR sur les charges remboursables.
+          </div>
         </div>
       </div>
       {expenses.length > 0 && <>
@@ -132,11 +134,6 @@ const styles = {
   totals: {
     padding: '0.5em',
     marginTop: '1em',
-  },
-  info: {
-    fontSize: '0.8em',
-    fontStyle: 'italic',
-    marginBottom: '1em'
   }
 }
 

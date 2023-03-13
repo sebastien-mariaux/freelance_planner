@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { mainStyles } from "../mainStyles";
 import NavMenu from "../NavMenu/NavMenu";
 import AchievedSummary from "./AchievedSummary";
 import AchievedTable from "./AchievedTable";
@@ -34,7 +35,19 @@ export default function Achieved() {
     <div className="achieved">
       <NavMenu activeItem='achieved' />
       <div style={{ display: 'flex' }}>
-        <h2>Réalisé</h2>
+        <h2 style={{ marginBottom: 0 }}>Réalisé</h2>
+      </div>
+      <div style={mainStyles.infoSection}>
+        <div style={mainStyles.info}>
+          (?) Complétez vos revenus et charges des mois terminés pour faire un point d'avancement en cours d'annéé
+          et estimer ce que vous avez gagné à ce stade.
+        </div>
+        <div style={mainStyles.info}>
+          /!\ Les calculs prennent en compte l'IR sur les dividendes (forfait) mais pas sur les salaires
+        </div>
+        <div style={mainStyles.info}>
+          /!\ Les salaires versées sont donc à considérer avant impôt
+        </div>
       </div>
       <AchievedTable
         completedMonths={completedMonths}

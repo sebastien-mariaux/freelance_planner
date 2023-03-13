@@ -60,6 +60,10 @@ export default function AchievedSummary({ completedMonths }: AchievedSummaryProp
             <td style={{ textAlign: 'right' }}>{displayAmount(computer.netEarnings)}</td>
           </tr>
           <tr>
+            <td style={{ textAlign: 'left', fontWeight: 'bold', paddingRight: '2em' }}>Dividende à verser</td>
+            <td style={{ textAlign: 'right' }}>{displayAmount(computer.netDividend)}</td>
+          </tr>
+          <tr>
             <td style={{ textAlign: 'left', fontWeight: 'bold', paddingRight: '2em' }}>Revenu mensuel net moyen </td>
             <td style={{ textAlign: 'right' }}>{displayAmount(computer.managerMonthlyRevenu)}</td>
           </tr>

@@ -66,6 +66,7 @@ export class Achieved extends AbstractComputer {
     return {
       netEarnings: this.netEarnings(),
       managerMonthlyRevenu: this.managerMonthlyRevenu(),
+      netDividend: this.netDividend(),
     }
   }
 }
