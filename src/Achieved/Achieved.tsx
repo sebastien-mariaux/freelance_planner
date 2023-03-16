@@ -38,6 +38,7 @@ export interface TotalsData {
 
 export default function Achieved() {
   const [completedMonths, setCompletedMonths] = useState<CompletedMonth[]>([])
+  const [companyType, setCompanyType] = useState('SASU')
 
   useEffect(() => {
     const savedCompletedMonths = localStorage.getItem('completedMonths')
@@ -76,12 +77,22 @@ export default function Achieved() {
           et estimer ce que vous avez gagné à ce stade.
         </div>
         <div style={mainStyles.info}>
+          (?) Les charges remboursables sont réintégrées dans le revenu moyen mensuel
+        </div>
+        <div style={mainStyles.info}>
           /!\ Les calculs prennent en compte l'IR sur les dividendes (forfait) mais pas sur les salaires
         </div>
         <div style={mainStyles.info}>
           /!\ Les salaires versées sont donc à considérer avant impôt
         </div>
       </div>
+      <label>
+        <span style={{fontWeight:  'bold', marginRight: '1em'}}> Type de société</span>
+        <select name='companyType' onChange={(e) => setCompanyType(e.target.value)}>
+          <option value='SASU' selected>SASU</option>
+          <option value='EURL'>EURL</option>
+        </select>
+      </label>
       <AchievedTable
         completedMonths={completedMonths}
         setCompletedMonths={setCompletedMonths}
@@ -89,8 +100,8 @@ export default function Achieved() {
       />
       <AchievedSummary
         totals={totals}
+        companyType={companyType}
       />
-
     </div>
   )
 }

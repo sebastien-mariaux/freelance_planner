@@ -4,14 +4,15 @@ import { displayAmount } from '../Simulations/simulationsHelper';
 import {  TotalsData } from './Achieved';
 
 interface AchievedSummaryProps {
-  totals: TotalsData
+  totals: TotalsData;
+  companyType: string;
 }
 
-export default function AchievedSummary({ totals }: AchievedSummaryProps) {
+export default function AchievedSummary({ totals, companyType }: AchievedSummaryProps) {
 
   const getComputer = () => {
     return new Achieved({
-      companyType: 'SASU',
+      companyType: companyType,
       expenses: totals.otherCompletedExpenses,
       completedSalaries: totals.completedSalaries,
       incomeTaxRate: 0,

@@ -48,6 +48,7 @@ export default function AchievedTable({ completedMonths, setCompletedMonths, tot
             <td style={{ textAlign: 'left' }}>{month.month}</td>
             <td style={{ textAlign: 'right' }}>
               <SingleInput
+                // style={{ width: 'auto' }}
                 data={month}
                 index={index}
                 label='revenu'
@@ -56,6 +57,7 @@ export default function AchievedTable({ completedMonths, setCompletedMonths, tot
             </td>
             <td style={{ textAlign: 'right' }}>
               <SingleInput
+                // style={{ width: 'auto' }}
                 data={month}
                 index={index}
                 label='netSalary'
@@ -64,6 +66,7 @@ export default function AchievedTable({ completedMonths, setCompletedMonths, tot
             </td>
             <td style={{ textAlign: 'right' }}>
               <SingleInput
+                // style={{ width: 'auto' }}
                 data={month}
                 index={index}
                 label='repayableExpenses'
@@ -72,6 +75,7 @@ export default function AchievedTable({ completedMonths, setCompletedMonths, tot
             </td>
             <td style={{ textAlign: 'right' }}>
               <SingleInput
+                // style={{ width: 'auto' }}
                 data={month}
                 index={index}
                 label='otherExpenses'
