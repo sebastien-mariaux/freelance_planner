@@ -7,7 +7,7 @@ import ExpensesForm from "./ExpensesForm";
 import ExpensesTable from "./ExpensesTable";
 import ExpensesTotal from "./ExpensesTotal";
 import { defaultSimulations } from "../Simulations/Simulations";
-import { SimulationData } from "../models/simulation";
+import { Simulation, SimulationData } from "../models/simulation";
 
 
 const defaultExpenses = [
@@ -22,7 +22,13 @@ const defaultExpenses = [
 
 export const monthlyRepayableExpenses = (expenses: Expense[]) => {
   return Math.round(expenses
-    .filter(expense => expense.repayable)
+    .filter(expense => expense.repayable && !expense.taxable)
+    .reduce((total, expense) => total + expense.monthlyAmount, 0))
+}
+
+export const monthlyTaxableRepayableExpenses = (expenses: Expense[]) => {
+  return Math.round(expenses
+    .filter(expense => expense.repayable && expense.taxable)
     .reduce((total, expense) => total + expense.monthlyAmount, 0))
 }
 
@@ -73,12 +79,16 @@ export default function Expenses() {
     const simulations: SimulationData[] = getSimulations()
 
     const newSimulations = simulations.map((simulation: SimulationData) => {
-      simulation.monthlyExpenses = monthlyExpenses(expenses)
-      simulation.monthlyRepayableExpenses = monthlyRepayableExpenses(expenses)
-      return simulation
+      let newSimulation = new Simulation({
+        ...simulation,
+        monthlyExpenses: monthlyExpenses(expenses),
+        monthlyRepayableExpenses: monthlyRepayableExpenses(expenses),
+        monthlyTaxableRepayableExpenses: monthlyTaxableRepayableExpenses(expenses)
+      })
+      return newSimulation.serialize()
     })
     localStorage.setItem('simulations', JSON.stringify(newSimulations));
-    navigate('/simulations', { state: { importData: true } })
+    navigate(`/simulations?timestamp=${Date.now()}`, { state: { importData: true } })
   }
 
   return (
@@ -109,9 +119,6 @@ export default function Expenses() {
           <div >
             (?) Les charges remboursables sont les charges payées par l'entreprise au dirigeant·e (remboursement de frais, loyer...).
             Elles peuvent être imposables à l'IR (cas du loyer par exemple).
-          </div>
-          <div >
-            /!\ Les simulations ne prennent pas encore en compte l'IR sur les charges remboursables.
           </div>
         </div>
       </div>

@@ -28,6 +28,11 @@ const styles = {
   indication: {
     fontStyle: 'italic',
     fontSize: '0.8em'
+  },
+  infoSection: {
+    marginTop: '20px',
+    fontStyle: 'italic',
+    fontSize: '0.8em'
   }
 }
 
@@ -42,8 +47,8 @@ export const defaultSimulations = [
     dailyRate: 500,
     daysPerWeek: 5,
     weeksOff: 10,
-    incomeTaxRate: 20,
-    monthlyRepayableExpenses: 300
+    monthlyRepayableExpenses: 50,
+    monthlyTaxableRepayableExpenses: 300,
   })).serialize(),
   (new Simulation({
     companyType: 'EURL',
@@ -51,8 +56,8 @@ export const defaultSimulations = [
     dailyRate: 500,
     daysPerWeek: 5,
     weeksOff: 10,
-    incomeTaxRate: 20,
-    monthlyRepayableExpenses: 300,
+    monthlyRepayableExpenses: 50,
+    monthlyTaxableRepayableExpenses: 300,
     monthlyNetSalary: 4500
   })).serialize(),
 ]
@@ -72,17 +77,19 @@ export default function Simulations() {
   const { importData } = location?.state || false
   const [fullView, setFullView] = useState(true);
 
-  useEffect(() => {
 
+  useEffect(() => {
     if (importData) {
       setHighlight(true);
       setTimeout(() => {
         setHighlight(false);
-      }
-        , 5000);
+      }, 5000);
     }
-
   }, [importData])
+
+  useEffect(() => {
+    saveSimulations(simulations);
+  }, [simulations])
 
   const duplicateSimulation = (simulation: SimulationData) => {
     let newSimulation = new Simulation(simulation);
@@ -212,14 +219,26 @@ export default function Simulations() {
         />}
         <InputRow
           label='monthlyRepayableExpenses'
-          title={<>Frais remboursables <span style={styles.indication}>(mensuels)</span></>}
+          title={<>Rbt Frais* <span style={styles.indication}>(mensuels)</span></>}
           simulations={simulations}
           highlight={highlight}
           updateSimulation={updateSimulation}
         />
         {fullView && <TextRow
           label='yearlyRepayableExpenses'
-          title={<>Frais remboursables <span style={styles.indication}>(annuels)</span></>}
+          title={<>Rbt Frais <span style={styles.indication}>(annuels)</span></>}
+          simulations={simulations}
+        />}
+        <InputRow
+          label='monthlyTaxableRepayableExpenses'
+          title={<>Rbt Frais imposables** <span style={styles.indication}>(mensuels)</span></>}
+          simulations={simulations}
+          highlight={highlight}
+          updateSimulation={updateSimulation}
+        />
+        {fullView && <TextRow
+          label='yearlyTaxableRepayableExpenses'
+          title={<>Rbt Frais imposables <span style={styles.indication}>(annuels)</span></>}
           simulations={simulations}
         />}
         <InputRow
@@ -298,23 +317,12 @@ export default function Simulations() {
 
 
         <h3>Revenus dirigeant·e</h3>
-        <InputRow
-          label='incomeTaxRate'
-          title="Taux d'IR"
-          simulations={simulations}
-          updateSimulation={updateSimulation}
-        />
 
         {fullView && <><TextRow
           label='yearlyNetSalary'
           title='Salaire annuel net'
           simulations={simulations}
         />
-          <TextRow
-            label='incomeTax'
-            title={<>IR sur salaire <span style={styles.indication}>(estimation)</span></>}
-            simulations={simulations}
-          />
           <TextRow
             label='netDividend'
             title='Dividende reçu'
@@ -350,6 +358,11 @@ export default function Simulations() {
           style={{ fontWeight: 'bold' }}
           simulations={simulations}
         />
+        <TextRow
+          label='managerYearlyTaxableRevenu'
+          title="Revenu imposable à l'IR"
+          simulations={simulations}
+        />
 
         <section style={simulationStyles.row}>
           <div style={{ ...simulationStyles.leftCol }} ></div>
@@ -371,6 +384,11 @@ export default function Simulations() {
           ))}
         </section>
       </div>
+
+      <section style={styles.infoSection}>
+        <div>* Frais remboursés par l'entreprise et non soumis à l'impôt sur le revenu (électricité, box internet...)</div>
+        <div>** Frais remboursés par l'entreprise et soumis à l'impôt sur le revenu (principalement les loyers versés au dirigeant·e)</div>
+      </section>
 
     </div>
   )

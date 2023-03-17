@@ -11,38 +11,28 @@ export type SimulationData = {
   daysPerWeek?: number;
   monthlyExpenses?: number;
   monthlyNetSalary?: number;
-  incomeTaxRate?: number;
   percentDividend?: number;
   monthlyRepayableExpenses?: number;
+  monthlyTaxableRepayableExpenses?: number;
 }
 
 
 export class Simulation extends AbstractComputer {
   name: string;
-  // _companyType: string;
   _dailyRate: number;
   _weeksOff: number;
   _weeksOn: number;
   _daysPerWeek: number;
-  // _monthlyExpenses: number;
   _monthlyNetSalary: number;
-  // _incomeTaxRate: number;
-  // _percentDividend: number;
-  // _monthlyRepayableExpenses: number;
 
   constructor(initialValues: SimulationData = {}) {
     super(initialValues);
     this.name = initialValues.name || 'Simulation';
-    // this._companyType = initialValues.companyType || 'SASU';
     this._dailyRate = this._checkInput({ value: initialValues.dailyRate, min: 0, defaultValue: 500 });
     this._weeksOff = this._checkInput({ value: initialValues.weeksOff, min: 0, max: WEEKS_IN_YEAR, defaultValue: 10 });
     this._weeksOn = this._checkInput({ value: initialValues.weeksOn, min: 0, max: WEEKS_IN_YEAR, defaultValue: 42 });
     this._daysPerWeek = this._checkInput({ value: initialValues.daysPerWeek, min: 0, max: 7, defaultValue: 5 });
-    // this._monthlyExpenses = this._checkInput({ value: initialValues.monthlyExpenses, min: 0, defaultValue: 1000 });
     this._monthlyNetSalary = this._checkInput({ value: initialValues.monthlyNetSalary, min: 0, defaultValue: 0 });
-    // this._incomeTaxRate = this._checkInput({ value: initialValues.incomeTaxRate, min: 0, max: 100, defaultValue: 10 });
-    // this._percentDividend = this._checkInput({ value: initialValues.percentDividend, min: 0, max: 100, defaultValue: 100 });
-    // this._monthlyRepayableExpenses = this._checkInput({ value: initialValues.monthlyRepayableExpenses, min: 0, defaultValue: 0 });
   }
 
   get dailyRate() {
@@ -109,6 +99,10 @@ export class Simulation extends AbstractComputer {
     return 12 * this.monthlyRepayableExpenses;
   }
 
+  yearlyTaxableRepayableExpenses(): number {
+    return 12 * this.monthlyTaxableRepayableExpenses;
+  }
+
   yearlyExpenses() {
     return this.monthlyExpenses * 12;
   }
@@ -140,13 +134,14 @@ export class Simulation extends AbstractComputer {
       monthlyNetSalary: this.monthlyNetSalary,
       yearlyNetSalary: this.yearlyNetSalary(),
       yearlyChargedSalary: this.yearlyChargedSalary(),
-      incomeTaxRate: this.incomeTaxRate,
-      incomeTax: this.incomeTax(),
       yearlySalaryCotisations: this.yearlySalaryCotisations(),
       dividendCotisations: this.dividendCotisations(),
       incomeTaxOnDividend: this.incomeTaxOnDividend(),
       yearlyRepaidExpenses: this.yearlyRepaidExpenses(),
       yearlyExpenses: this.yearlyExpenses(),
+      managerYearlyTaxableRevenu: this.managerYearlyTaxableRevenu(),
+      yearlyTaxableRepayableExpenses: this.yearlyTaxableRepayableExpenses(),
+      monthlyTaxableRepayableExpenses: this.monthlyTaxableRepayableExpenses,
     }
   }
 }

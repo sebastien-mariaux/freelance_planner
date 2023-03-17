@@ -15,16 +15,15 @@ export default function AchievedSummary({ totals, companyType }: AchievedSummary
       companyType: companyType,
       expenses: totals.otherCompletedExpenses,
       completedSalaries: totals.completedSalaries,
-      incomeTaxRate: 0,
       percentDividend: 100,
       repayableExpenses: totals.repayedExpenses,
       revenu: totals.completedRevenu,
       monthesCount: totals.completedMonthCount,
+      taxableRepayableExpenses: totals.taxableRepayedExpenses,
     })
   }
 
   const computer = getComputer().run()
-  console.log(computer)
 
   return (
     <div style={styles.container}>
@@ -41,6 +40,10 @@ export default function AchievedSummary({ totals, companyType }: AchievedSummary
           <tr>
             <td style={{ textAlign: 'left', paddingRight: '2em' }}>Revenu mensuel net moyen </td>
             <td style={{ textAlign: 'right', fontWeight: 'bold' }}>{displayAmount(computer.managerMonthlyRevenu)}</td>
+          </tr>
+          <tr>
+            <td style={{ textAlign: 'left', paddingRight: '2em' }}>Revenu soumis à l'IR (annuel)</td>
+            <td style={{ textAlign: 'right', fontWeight: 'bold' }}>{displayAmount(computer.managerYearlyTaxableRevenu)}</td>
           </tr>
         </tbody>
       </table>

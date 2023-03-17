@@ -34,12 +34,13 @@ export default function AchievedTable({ completedMonths, setCompletedMonths, tot
     <table >
       <thead style={styles.thead}>
         <tr >
-          <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Mois</th>
-          <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Chiffre d'affaires</th>
-          <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Salaire net</th>
-          <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Charges remboursables</th>
-          <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>Autres charges</th>
-          <th style={{ textAlign: 'center', padding: '0.2em 1em' }}>clôturé</th>
+          <th style={styles.th}>Mois</th>
+          <th style={styles.th}>Chiffre d'affaires</th>
+          <th style={styles.th}>Salaire net</th>
+          <th style={styles.th}>Remboursement de frais</th>
+          <th style={styles.th}>Remboursement de frais soumis à l'IR</th>
+          <th style={styles.th}>Autres charges</th>
+          <th style={styles.th}>clôturé</th>
         </tr>
       </thead>
       <tbody>
@@ -78,6 +79,15 @@ export default function AchievedTable({ completedMonths, setCompletedMonths, tot
                 // style={{ width: 'auto' }}
                 data={month}
                 index={index}
+                label='taxableRepayableExpenses'
+                updateData={updateData}
+              />
+            </td>
+            <td style={{ textAlign: 'right' }}>
+              <SingleInput
+                // style={{ width: 'auto' }}
+                data={month}
+                index={index}
                 label='otherExpenses'
                 updateData={updateData}
               />
@@ -92,6 +102,7 @@ export default function AchievedTable({ completedMonths, setCompletedMonths, tot
           <td style={{ textAlign: 'right' }}>{displayAmount(totals.completedRevenu)}</td>
           <td style={{ textAlign: 'right' }}>{displayAmount(totals.completedSalaries)}</td>
           <td style={{ textAlign: 'right' }}>{displayAmount(totals.repayedExpenses)}</td>
+          <td style={{ textAlign: 'right' }}>{displayAmount(totals.taxableRepayedExpenses)}</td>
           <td style={{ textAlign: 'right' }}>{displayAmount(totals.otherCompletedExpenses)}</td>
           <td style={{ textAlign: 'right' }}>{totals.completedMonthCount}</td>
 
@@ -111,5 +122,10 @@ const styles = {
     backgroundColor: '#000',
     color: '#fff',
     fontWeight: 'bold'
+  },
+  th: {
+    textAlign: 'center' as 'center',
+    padding: '0.2em 1em',
+    maxWidth: '100px'
   }
 }

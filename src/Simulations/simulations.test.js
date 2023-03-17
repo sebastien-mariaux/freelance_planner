@@ -60,12 +60,6 @@ describe('render Simulations inputs', () => {
       defaultSimulations.map((el) => el.percentDividend)
     );
   })
-  it('show incomeTaxRate', () => {
-    renderSimulations()
-    expect(screen.getAllByTestId('incomeTaxRate').map((el) => parseFloat(el.value))).toEqual(
-      defaultSimulations.map((el) => el.incomeTaxRate)
-    );
-  })
   it('show name', () => {
     renderSimulations()
     expect(screen.getAllByTestId('name').map((el) => el.value)).toEqual(
@@ -147,12 +141,6 @@ describe('render simulations results', () => {
     renderSimulations()
     expect(screen.getAllByTestId('yearlyNetSalary').map((el) => el.textContent)).toEqual(
       defaultSimulations.map((el) => displayAmount(el.yearlyNetSalary))
-    );
-  })
-  it('show incomeTax', () => {
-    renderSimulations()
-    expect(screen.getAllByTestId('incomeTax').map((el) => el.textContent)).toEqual(
-      defaultSimulations.map((el) => displayAmount(el.incomeTax))
     );
   })
   it('show netDividend', () => {
@@ -318,23 +306,6 @@ describe('update dailyRate', () => {
     renderSimulations()
     const inputElt = screen.getAllByTestId('percentDividend')[0];
     fireEvent.change(inputElt, { target: { value: -20 } });
-    fireEvent.blur(inputElt);
-    expect(inputElt.value).toBe('0');
-  })
-  it('update incomeTaxRate', async () => {
-    // Test on second simulation as salary is 0 by default for the first one
-    renderSimulations()
-    const currentManagerMonthlyRevenu = screen.getAllByTestId('managerMonthlyRevenu')[1].textContent;
-    const inputElt = screen.getAllByTestId('incomeTaxRate')[1];
-    fireEvent.change(inputElt, { target: { value: 30 } });
-    fireEvent.blur(inputElt);
-    expect(inputElt.value).toBe('30');
-    expect(screen.getAllByTestId('managerMonthlyRevenu')[0].textContent).not.toEqual(currentManagerMonthlyRevenu);
-  })
-  it('update incomeTaxRate with invalid value', async () => {
-    renderSimulations()
-    const inputElt = screen.getAllByTestId('incomeTaxRate')[0];
-    fireEvent.change(inputElt, { target: { value: -10 } });
     fireEvent.blur(inputElt);
     expect(inputElt.value).toBe('0');
   })

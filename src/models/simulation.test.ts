@@ -14,7 +14,6 @@ describe('constructor', () => {
     expect(simulation.daysPerWeek).toBe(5);
     expect(simulation.monthlyExpenses).toBe(1000);
     expect(simulation.monthlyNetSalary).toBe(0);
-    expect(simulation.incomeTaxRate).toBe(10);
     expect(simulation.percentDividend).toBe(100);
     expect(simulation.monthlyRepayableExpenses).toBe(0);
   })
@@ -28,7 +27,6 @@ describe('constructor', () => {
       daysPerWeek: 6,
       monthlyExpenses: 2000,
       monthlyNetSalary: 1000,
-      incomeTaxRate: 20,
       percentDividend: 50,
       monthlyRepayableExpenses: 100,
     });
@@ -40,7 +38,6 @@ describe('constructor', () => {
     expect(simulation.daysPerWeek).toBe(6);
     expect(simulation.monthlyExpenses).toBe(2000);
     expect(simulation.monthlyNetSalary).toBe(1000);
-    expect(simulation.incomeTaxRate).toBe(20);
     expect(simulation.percentDividend).toBe(50);
     expect(simulation.monthlyRepayableExpenses).toBe(100);
   })
@@ -98,14 +95,6 @@ describe('setters', () => {
     simulation.monthlyNetSalary = -1000;
     expect(simulation.monthlyNetSalary).toBe(0);
   })
-  it('should set incomeTaxRate', () => {
-    simulation.incomeTaxRate = 20;
-    expect(simulation.incomeTaxRate).toBe(20);
-    simulation.incomeTaxRate = -20;
-    expect(simulation.incomeTaxRate).toBe(0);
-    simulation.incomeTaxRate = 120;
-    expect(simulation.incomeTaxRate).toBe(100);
-  })
   it('should set percentDividend', () => {
     simulation.percentDividend = 50;
     expect(simulation.percentDividend).toBe(50);
@@ -128,7 +117,6 @@ describe("with NaN inputs", () => {
   simulation.daysPerWeek = NaN;
   simulation.monthlyExpenses = NaN;
   simulation.monthlyNetSalary = NaN;
-  simulation.incomeTaxRate = NaN;
   simulation.percentDividend = NaN;
   simulation.monthlyRepayableExpenses = NaN;
   it('should set dailyRate to 0', () => {
@@ -145,9 +133,6 @@ describe("with NaN inputs", () => {
   })
   it('should set monthlyNetSalary to 0', () => {
     expect(simulation.monthlyNetSalary).toBe(0);
-  })
-  it('should set incomeTaxRate to 0', () => {
-    expect(simulation.incomeTaxRate).toBe(0);
   })
   it('should set percentDividend to 0', () => {
     expect(simulation.percentDividend).toBe(0);

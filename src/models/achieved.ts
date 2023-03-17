@@ -4,9 +4,9 @@ interface AchievedData {
   companyType: string;
   expenses: number;
   completedSalaries: number;
-  incomeTaxRate: number;
   percentDividend: number;
   repayableExpenses: number;
+  taxableRepayableExpenses: number;
   revenu: number;
   monthesCount: number;
 }
@@ -16,6 +16,7 @@ export class Achieved extends AbstractComputer {
   _revenu: number;
   _completedSalaries: number;
   _repayableExpenses: number;
+  _taxableRepayableExpenses: number;
   _expenses: number;
 
   constructor(initialValues: AchievedData) {
@@ -24,6 +25,7 @@ export class Achieved extends AbstractComputer {
     this._completedSalaries = initialValues.completedSalaries;
     this._repayableExpenses = initialValues.repayableExpenses;
     this._expenses = initialValues.expenses;
+    this._taxableRepayableExpenses = initialValues.taxableRepayableExpenses;
   }
 
   set yearlyRevenue(value: number) {
@@ -58,6 +60,10 @@ export class Achieved extends AbstractComputer {
     return this._repayableExpenses;
   }
 
+  yearlyTaxableRepayableExpenses(): number {
+    return  this._taxableRepayableExpenses;
+  }
+
   yearlyExpenses() {
     return this._expenses;
   }
@@ -67,6 +73,7 @@ export class Achieved extends AbstractComputer {
       netEarnings: this.netEarnings(),
       managerMonthlyRevenu: this.managerMonthlyRevenu(),
       netDividend: this.netDividend(),
+      managerYearlyTaxableRevenu: this.managerYearlyTaxableRevenu(),
     }
   }
 }
