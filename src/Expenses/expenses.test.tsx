@@ -1,5 +1,5 @@
 import { Expense } from "../models/expense"
-import { monthlyRepayableExpenses, monthlyExpenses } from "./Expenses"
+import { monthlyRepayableExpenses, monthlyExpenses, monthlyTaxableRepayableExpenses } from "./Expenses"
 
 const rentExpense = new Expense({ name: 'rent', amount: 1200, repayable: true, taxable: true, frequency: 'yearly' })
 const powerExpense = new Expense({ name: 'power', amount: 100, repayable: true, taxable: false, frequency: 'monthly' })
@@ -14,7 +14,10 @@ describe('monthlyRepayableExpenses', () => {
     expect(monthlyRepayableExpenses([accountantExpense, insuranceExpense])).toEqual(0)
   })
   it('should return monthly repayable expenses', () => {
-    expect(monthlyRepayableExpenses([accountantExpense, insuranceExpense, rentExpense, powerExpense])).toEqual(200)
+    expect(monthlyRepayableExpenses([accountantExpense, insuranceExpense, rentExpense, powerExpense])).toEqual(100)
+  })
+  it('should return monthly repayable and taxable expenses', () => {
+    expect(monthlyTaxableRepayableExpenses([accountantExpense, insuranceExpense, rentExpense, powerExpense])).toEqual(100)
   })
 })
 
