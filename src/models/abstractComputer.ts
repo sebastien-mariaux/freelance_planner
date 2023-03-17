@@ -166,7 +166,7 @@ export class AbstractComputer {
   }
 
   managerYearlyRevenu() {
-    return this.netDividend() + this.yearlyNetSalary()  - this.incomeTaxOnDividend() + this.yearlyRepaidExpenses() + this.yearlyTaxableRepaidExpenses();
+    return this.netDividend() + this.yearlyNetSalary() - this.incomeTaxOnDividend() + this.yearlyRepaidExpenses()
   }
 
   managerYearlyTaxableRevenu(): number {
