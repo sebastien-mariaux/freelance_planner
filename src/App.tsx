@@ -13,6 +13,7 @@ import Expenses from './Expenses/Expenses';
 import Achieved from './Achieved/Achieved';
 import { ErrorBoundary } from 'react-error-boundary';
 import MainFallbackError from './errors/MainFallbackError';
+import Login from './Login/Login';
 
 function App() {
 
@@ -28,6 +29,7 @@ function App() {
         <Routes>
           <Route element={<SiteLayout />}>
             <Route path="/a-propos" element={<About />} />
+            <Route path="/login" element={<Login />} />
             <Route path="/" element={<Simulations />} />
             <Route path="/simulations" element={<Simulations />} />
             <Route path="/expenses" element={<Expenses />} />
