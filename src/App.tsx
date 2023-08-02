@@ -1,7 +1,6 @@
 import React from 'react';
 import './App.scss';
 import Simulations from './Simulations/Simulations';
-
 import {
   BrowserRouter as Router,
   Routes,
@@ -14,6 +13,7 @@ import Achieved from './Achieved/Achieved';
 import { ErrorBoundary } from 'react-error-boundary';
 import MainFallbackError from './errors/MainFallbackError';
 import Login from './Login/Login';
+import WithAuth from './Login/WithAuth';
 
 function App() {
 
@@ -28,12 +28,14 @@ function App() {
       <Router>
         <Routes>
           <Route element={<SiteLayout />}>
-            <Route path="/a-propos" element={<About />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/" element={<Simulations />} />
-            <Route path="/simulations" element={<Simulations />} />
-            <Route path="/expenses" element={<Expenses />} />
-            <Route path="/achieved" element={<Achieved />} />
+            <Route path="/a-propos" element={<About />} />
+            <Route element={<WithAuth />}>
+              <Route path="/" element={<Simulations />} />
+              <Route path="/simulations" element={<Simulations />} />
+              <Route path="/expenses" element={<Expenses />} />
+              <Route path="/achieved" element={<Achieved />} />
+            </Route>
           </Route>
         </Routes>
       </Router>

@@ -10,7 +10,6 @@ import TextRow from './SimulationRow/TextRow';
 import { simulationStyles } from './simulationStyles';
 import { mainStyles } from '../mainStyles';
 import { useLocation } from 'react-router-dom';
-import { urlGet } from '../api/base';
 
 const styles = {
   endOfSection: {
@@ -121,19 +120,8 @@ export default function Simulations() {
     setFullView(!fullView);
   }
 
-  const apiCall = async () => {
-    const res = await urlGet('/accounts/users/me/');
-    console.log(res);
-  }
-
   return (
     <div className='simulations'>
-      <button
-        style={mainStyles.titleButton}
-        onClick={apiCall}
-      >
-        TEST
-      </button>
       <NavMenu activeItem='simulations' />
       <div style={{ display: 'flex' }}>
         <h2>Comparateur</h2>

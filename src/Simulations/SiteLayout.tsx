@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import { Outlet, useNavigate } from "react-router-dom";
+import LoginMenuItem from "../NavMenu/LoginMenuItem";
 
 export default function SiteLayout() {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ export default function SiteLayout() {
         >
           À propos...
         </a>
+        <LoginMenuItem />
       </header>
       <Outlet />
       <footer style={{ marginTop: '50px' }} >

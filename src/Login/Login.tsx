@@ -1,16 +1,12 @@
 import React from "react";
-import { urlPost } from "../api/base";
+import { getToken } from "../api/authUser";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
+  const navigate = useNavigate();
 
-  const login = async () => {
-    urlPost("/accounts/login/", {
-      email: "jake.peralta@b99.com",
-      password: "ILoveAmy99"
-    }).then((data) => {
-      console.log(data);
-      localStorage.setItem("token", data.token);
-    });
+  const redirectToMainPage = () => {
+    navigate('/')
   }
 
   return(
@@ -18,7 +14,7 @@ export default function Login() {
     <h1>Login</h1>
     <p>TODO</p>
     <button
-      onClick={login}
+      onClick={()=>getToken(redirectToMainPage)}
     >
       GET LOGGED IN
     </button>
