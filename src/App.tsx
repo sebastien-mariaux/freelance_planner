@@ -14,6 +14,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import MainFallbackError from './errors/MainFallbackError';
 import Login from './Login/Login';
 import WithAuth from './Login/WithAuth';
+import Companies from './Companies/Companies';
 
 function App() {
 
@@ -31,7 +32,7 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/a-propos" element={<About />} />
             <Route element={<WithAuth />}>
-              <Route path="/" element={<Simulations />} />
+              <Route path="/" element={<Companies />} />
               <Route path="/simulations" element={<Simulations />} />
               <Route path="/expenses" element={<Expenses />} />
               <Route path="/achieved" element={<Achieved />} />

@@ -1,12 +1,20 @@
 import React from 'react'
 
 interface NavMenuProps {
-  activeItem: 'simulations' | 'expenses' | 'achieved'
+  activeItem: 'simulations' | 'expenses' | 'achieved' | 'companies'
 }
 
 export default function NavMenu({ activeItem }: NavMenuProps) {
   return (
     <div style={styles.navMenu}>
+      <div style={itemStyle(activeItem, 'companies')}>
+        <a
+          href='/companies'
+          style={{ marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto' }}
+        >
+          Entreprises
+        </a>
+      </div>
       <div style={itemStyle(activeItem, 'simulations')} >
         <a
           href='/simulations'

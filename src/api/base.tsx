@@ -14,7 +14,7 @@ function headers(): { [key: string]: string; } {
   return headers;
 }
 
-export async function urlGet(route: string) {
+export const urlGet = async(route: string) => {
   const res = await fetch(getFullUrl(route), {
     method: "GET",
     headers: headers(),
@@ -22,11 +22,21 @@ export async function urlGet(route: string) {
   return await res.json();
 }
 
-export async function urlPost(route: string, body: any) {
+export const urlPost = async (
+  route: string,
+  body: any,
+  onSuccess: (json: {}) => void=()=>{},
+  onError: (json: {}) => void=() => {}
+  ) => {
   const res = await fetch(getFullUrl(route), {
     method: "POST",
     headers: headers(),
     body: JSON.stringify(body),
   });
-  return await res.json();
+
+  if (res.ok) {
+    onSuccess(await res.json())
+  } else {
+    onError(await res.json())
+  }
 }

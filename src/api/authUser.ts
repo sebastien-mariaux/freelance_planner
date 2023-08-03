@@ -1,16 +1,17 @@
 import { urlGet, urlPost } from "./base";
 import { routes } from "./routes";
 
-export const getToken = async (callback: () => void=()=>{}) => {
-  urlPost(routes.login, {
-    email: "jake.peralta@b99.com",
-    password: "ILoveAmy99"
-  }).then((data) => {
-    console.log(data);
-    localStorage.setItem("token", data.token);
-    getUserData()
-    callback()
-  });
+export const getToken = async (
+  data: {},
+  onSuccess: (json: {}) => void=()=>{},
+  onError: (json: {}) => void=() => {}
+  ) => {
+    const onLoginSuccess = (data: any) => {
+      localStorage.setItem('token', data.token)
+      getUserData()
+      onSuccess(data)
+    }
+    urlPost(routes.login, data, onLoginSuccess, onError)
 }
 
 export const getUserData = async () => {
