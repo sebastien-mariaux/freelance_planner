@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { getToken } from "../api/authUser";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { formStyle } from "../mainStyles";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -32,59 +33,32 @@ export default function Login() {
     <h1>Login</h1>
     <form
       onSubmit={handleSubmit(onSubmit)}
-      style={styles.form}
+      style={formStyle.form}
     >
-      {displayErrors && <div style={styles.errorMessage}>
+      {displayErrors && <div style={formStyle.errorMessage}>
         {errorsList.map((error)=> {
           return <div>{error}</div>
         })}
       </div>}
-      <div style={styles.fieldWrapper}>
-        <label style={styles.label}>Email</label>
+      <div style={formStyle.fieldWrapper}>
+        <label style={formStyle.label}>Email</label>
         <input
-          style={styles.input}
+          style={formStyle.input}
           {...register("email", { required: true })}
         />
         {errors.email && <span>Ce champ est obligatoire</span>}
       </div>
-      <div style={styles.fieldWrapper}>
-        <label style={styles.label}>Mot de passe</label>
+      <div style={formStyle.fieldWrapper}>
+        <label style={formStyle.label}>Mot de passe</label>
         <input
           type='password'
-          style={styles.input}
+          style={formStyle.input}
           {...register("password", { required: true })}
         />
         {errors.password && <span>Ce champ est obligatoire</span>}
       </div>
-      <input type="submit" style={styles.input} />
+      <input type="submit" style={formStyle.input} />
     </form>
   </div>)
 }
 
-const styles = {
-  form: {
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    margin: 'auto',
-    maxWidth: '500px'
-  },
-  fieldWrapper: {
-    display: 'flex',
-    flexDirection: 'column' as 'column',
-    marginBottom: '1em'
-  },
-  label: {
-    fontWeight: 'bold'
-  },
-  input: {
-    height: '2em'
-  },
-  errorMessage: {
-    height: '20px',
-    border: '2px solid #915e00',
-    backgroundColor: 'orange',
-    borderRadius: '5px',
-    padding: '0.5em',
-    marginBottom: '2em'
-  }
-}

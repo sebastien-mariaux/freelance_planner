@@ -12,3 +12,61 @@ export const mainStyles = {
     marginBottom: '10px',
   },
 }
+
+export const formStyle = {
+  form: {
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    margin: 'auto',
+    maxWidth: '500px'
+  },
+  fieldWrapper: {
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    marginBottom: '1em'
+  },
+  label: {
+    fontWeight: 'bold'
+  },
+  input: {
+    height: '2em'
+  },
+  errorMessage: {
+    height: '20px',
+    border: '2px solid #915e00',
+    backgroundColor: 'orange',
+    borderRadius: '5px',
+    padding: '0.5em',
+    marginBottom: '2em'
+  }
+}
+
+export const inlineStyle = {
+  form: {
+    display: 'flex',
+    flexDirection: 'row' as 'row',
+    margin: 'auto',
+    marginBottom: '2em'
+  },
+  fieldWrapper: {
+    display: 'flex',
+    flexDirection: 'column' as 'column',
+    marginRight: '2em',
+  },
+  label: {
+  },
+  input: {
+    height: '2em'
+  },
+  errorMessage: {
+    height: '20px',
+    border: '2px solid #915e00',
+    backgroundColor: 'orange',
+    borderRadius: '5px',
+    padding: '0.5em',
+    marginBottom: '2em'
+  },
+  submit: {
+    alignSelf: 'flex-end'
+  }
+}
