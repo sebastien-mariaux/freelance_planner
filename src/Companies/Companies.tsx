@@ -14,6 +14,7 @@ export default function Companies() {
 
   const onGetCompaniesSuccess = (data: any) => {
     setCompanies(data)
+    localStorage.setItem('companies', JSON.stringify(data))
   }
 
   const getCompanies = () => {
@@ -39,9 +40,10 @@ export default function Companies() {
       </h2>
       {displayForm && <CompanyForm getCompanies={getCompanies} />}
       {
-        companies.map(company => {
-          return (<div>
-            {company.name}
+        companies.map((company) => {
+          const url = `/companies/${company.id}/simulations`
+          return (<div key={company.id}>
+            <a href={url}>{company.name}</a>
             {company.description && <span> - {company.description}</span>}
             </div>)
         })

@@ -3,7 +3,8 @@ import { routes } from "./routes"
 
 export interface Company {
   name: string,
-  description: string
+  description: string,
+  id: number
 }
 
 
