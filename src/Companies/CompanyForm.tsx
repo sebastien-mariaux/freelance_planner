@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+import { FieldValues, useForm } from "react-hook-form";
 import { inlineStyle } from "../mainStyles";
-import { createCompany } from "../api/companies";
+import { urlPost } from "../api/base";
+import { routes } from "../api/routes";
 
 interface CompanyFormProps {
   getCompanies: () => void
@@ -12,8 +13,12 @@ export default function CompanyForm({getCompanies}: CompanyFormProps) {
   const [displayErrors, setDisplayErrors] = useState(false)
   const [errorsList, setErrorsList] = useState<string[]>([])
 
-  const onSubmit = (data: {}) => {
-    createCompany(data, getCompanies, onFailure)
+  const onSubmit = (data: FieldValues) => {
+    urlPost(
+      routes.companiesList,
+      data,
+      getCompanies,
+      onFailure);
   }
 
   const onFailure = () => {

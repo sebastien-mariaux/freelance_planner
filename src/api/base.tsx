@@ -25,8 +25,8 @@ export const urlGet = async(route: string) => {
 export const urlPost = async (
   route: string,
   body: any,
-  onSuccess: (json: {}) => void=()=>{},
-  onError: (json: {}) => void=() => {}
+  onSuccess: (json: any) => void=()=>{},
+  onError: (json: any) => void=() => {}
   ) => {
   const res = await fetch(getFullUrl(route), {
     method: "POST",
