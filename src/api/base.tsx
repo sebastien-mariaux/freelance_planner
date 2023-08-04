@@ -40,3 +40,22 @@ export const urlPost = async (
     onError(await res.json())
   }
 }
+
+export const urlDelete = async (
+  route: string,
+  body: any,
+  onSuccess: (json: any) => void=()=>{},
+  onError: (json: any) => void=() => {}
+  ) => {
+  const res = await fetch(getFullUrl(route), {
+    method: "DELETE",
+    headers: headers(),
+    body: JSON.stringify(body),
+  });
+
+  if (res.ok) {
+    onSuccess(await res.json())
+  } else {
+    onError(await res.json())
+  }
+}
