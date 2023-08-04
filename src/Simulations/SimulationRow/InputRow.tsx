@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 // import { useState } from "react";
 import { simulationStyles } from "../simulationStyles";
 import DisplayTitle from "./DisplayTitle";
+import { getDeepValue } from "../../helpers";
 
 
 interface InputRowProps {
@@ -45,7 +46,7 @@ interface SingleInputProps {
 export function SingleInput({ data, index, label, style = {}, updateData, highlight }: SingleInputProps) {
   const [value, setValue] = useState(data[label]);
   useEffect(() => {
-    setValue(data[label]);
+    setValue(getDeepValue(data, label));
   }, [data, label])
 
 

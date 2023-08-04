@@ -34,7 +34,7 @@ function App() {
             <Route element={<WithAuth />}>
               <Route path="/" element={<Companies />} />
               <Route path="/companies" element={<Companies />} />
-              <Route path="/companies/:id/simulations" element={<Simulations />} />
+              <Route path="/companies/:companyId/simulations" element={<Simulations />} />
               <Route path="/expenses" element={<Expenses />} />
               <Route path="/achieved" element={<Achieved />} />
             </Route>

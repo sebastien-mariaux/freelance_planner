@@ -2,6 +2,7 @@ import React from "react";
 import { displayAmount } from "../simulationsHelper";
 import { simulationStyles } from "../simulationStyles";
 import DisplayTitle from "./DisplayTitle";
+import { getDeepValue } from "../../helpers";
 
 interface TextRowProps {
   title: string | JSX.Element,
@@ -10,6 +11,8 @@ interface TextRowProps {
   style?: React.CSSProperties
 }
 
+
+
 export default function TextRow({ title, simulations, label, style }: TextRowProps) {
   return (
     <section style={simulationStyles.row}>
@@ -17,7 +20,7 @@ export default function TextRow({ title, simulations, label, style }: TextRowPro
         <DisplayTitle title={title} />
       </div>
       {simulations.map((simulation, index) => {
-        const value = simulation[label]
+        const value = getDeepValue(simulation, label)
         return (
           <div style={simulationStyles.col} key={index}>
             <div style={{ ...style, color: value < 0 ? 'red' : '' }} data-testid={label}>

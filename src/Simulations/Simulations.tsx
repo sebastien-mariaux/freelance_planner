@@ -1,15 +1,16 @@
 
 import React, { useEffect } from 'react';
 import { useState } from 'react';
-import { Simulation, SimulationData } from '../models/simulation';
+import { Simulation } from '../models/simulation';
 import NavMenu from '../NavMenu/NavMenu';
 import InputRow from './SimulationRow/InputRow';
 import PercentTextRow from './SimulationRow/PercentTextRow';
 import SelectRow from './SimulationRow/SelectRow';
 import TextRow from './SimulationRow/TextRow';
-import { simulationStyles } from './simulationStyles';
 import { mainStyles } from '../mainStyles';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
+import { urlGet } from '../api/base';
+import { routes } from '../api/routes';
 
 const styles = {
   endOfSection: {
@@ -36,9 +37,7 @@ const styles = {
   }
 }
 
-const saveSimulations = (simulations: any[]) => {
-  localStorage.setItem('simulations', JSON.stringify(simulations));
-}
+
 
 export const defaultSimulations = [
   (new Simulation({
@@ -62,21 +61,15 @@ export const defaultSimulations = [
   })).serialize(),
 ]
 
-const getStoredData = (): SimulationData[] => {
-  const jsonString = localStorage.getItem('simulations')
-  if (jsonString) {
-    return JSON.parse(jsonString);
-  }
-  return defaultSimulations;
-}
-
 export default function Simulations() {
-  const [simulations, setSimulations] = useState(getStoredData);
+  const [simulations, setSimulations] = useState(defaultSimulations);
   const [highlight, setHighlight] = useState(false);
   const location = useLocation();
   const { importData } = location?.state || false
   const [fullView, setFullView] = useState(true);
-
+  const [apiSimulations, setApiSimulations] = useState([]);
+  const { companyId } = useParams();
+  console.log(companyId)
 
   useEffect(() => {
     if (importData) {
@@ -87,34 +80,44 @@ export default function Simulations() {
     }
   }, [importData])
 
+
+  const getSimulations = async () => {
+    urlGet(routes.companyDetailedSimulations(companyId)).then((data: any) => {
+
+      setApiSimulations(data);
+    })
+  }
+
   useEffect(() => {
-    saveSimulations(simulations);
-  }, [simulations])
+    getSimulations()
+  }, [])
 
-  const duplicateSimulation = (simulation: SimulationData) => {
-    let newSimulation = new Simulation(simulation);
-    newSimulation.name = newSimulation.name + ' (copie)';
-    setSimulations([...simulations, newSimulation.serialize()]);
-  }
+  console.log(apiSimulations)
 
-  const deleteSimulation = (index: number) => {
-    let newSimulations = [...simulations];
-    newSimulations.splice(index, 1);
-    setSimulations(newSimulations);
-  }
+  // const duplicateSimulation = (simulation: SimulationData) => {
+  //   let newSimulation = new Simulation(simulation);
+  //   newSimulation.name = newSimulation.name + ' (copie)';
+  //   setSimulations([...simulations, newSimulation.serialize()]);
+  // }
 
-  const updateSimulation = (index: number, label: string, value: any) => {
-    let newSimulations: any = simulations.map((simulation: SimulationData) => new Simulation(simulation));
-    newSimulations[index][label] = value;
-    newSimulations = newSimulations.map((simulation: Simulation) => simulation.serialize());
-    setSimulations([...newSimulations]);
-    saveSimulations(newSimulations)
-  }
+  // const deleteSimulation = (index: number) => {
+  //   let newSimulations = [...simulations];
+  //   newSimulations.splice(index, 1);
+  //   setSimulations(newSimulations);
+  // }
 
-  const resetSimulations = () => {
-    localStorage.removeItem('simulations');
-    setSimulations(defaultSimulations);
-  }
+  // const updateSimulation = (index: number, label: string, value: any) => {
+  //   let newSimulations: any = simulations.map((simulation: SimulationData) => new Simulation(simulation));
+  //   newSimulations[index][label] = value;
+  //   newSimulations = newSimulations.map((simulation: Simulation) => simulation.serialize());
+  //   setSimulations([...newSimulations]);
+  //   saveSimulations(newSimulations)
+  // }
+
+  // const resetSimulations = () => {
+  //   localStorage.removeItem('simulations');
+  //   setSimulations(defaultSimulations);
+  // }
 
   const toggleFullView = () => {
     setFullView(!fullView);
@@ -132,13 +135,13 @@ export default function Simulations() {
         >
           Ajouter une simulation
         </button>
-        <button
+        {/* <button
           data-testid='reset-data'
           style={mainStyles.titleButton}
           onClick={resetSimulations}
         >
           Réinitialiser les données
-        </button>
+        </button> */}
         <button
           style={mainStyles.titleButton}
           onClick={toggleFullView}
@@ -152,118 +155,118 @@ export default function Simulations() {
           label='name'
           title='Titre'
           style={styles.mainIndicator}
-          simulations={simulations}
-          updateSimulation={updateSimulation}
+          simulations={apiSimulations}
+          updateSimulation={()=>{}}
         />
         <SelectRow
-          label='companyType'
-          simulations={simulations}
-          updateSimulation={updateSimulation}
+          label='company_type'
+          simulations={apiSimulations}
+          updateSimulation={()=>{}}
           title='Type de société'
           options={['SASU', 'EURL']}
         />
 
         <h3>Revenus</h3>
         <InputRow
-          simulations={simulations}
-          updateSimulation={updateSimulation}
-          label='dailyRate'
+          simulations={apiSimulations}
+          updateSimulation={()=>{}}
+          label='daily_rate'
           title={<>TJM <span style={styles.indication}>(Hors taxes)</span></>}
         />
         <InputRow
-          simulations={simulations}
-          updateSimulation={updateSimulation}
-          label='daysPerWeek'
+          simulations={apiSimulations}
+          updateSimulation={()=>{}}
+          label='days_per_week'
           title='Jours par semaine'
         />
-        {fullView && <InputRow
-          simulations={simulations}
-          updateSimulation={updateSimulation}
-          label='weeksOff'
+        {/* {fullView && <InputRow
+          simulations={apiSimulations}
+          updateSimulation={()=>{}}
+          label='weeks'
           title='Semaines off'
-        />}
+        />} */}
         <InputRow
-          simulations={simulations}
-          updateSimulation={updateSimulation}
-          label='weeksOn'
+          simulations={apiSimulations}
+          updateSimulation={()=>{}}
+          label='weeks_on'
           title='Semaines travaillées'
         />
 
         <TextRow
-          label='yearlyRevenu'
+          label='sales.sales'
           title='CA annuel'
           style={styles.indicator}
-          simulations={simulations}
+          simulations={apiSimulations}
         />
         {fullView && <TextRow
-          label='monthlyRevenu'
+          label='sales.average_monthly_sales'
           title='CA moyen mensuel'
           style={styles.indicator}
-          simulations={simulations}
+          simulations={apiSimulations}
         />}
 
         <div style={styles.endOfSection} />
 
         <h3>Charges</h3>
         <InputRow
-          label='monthlyExpenses'
+          label='expenses.monthly_expenses'
           title='Charges mensuelles'
-          simulations={simulations}
-          updateSimulation={updateSimulation}
+          simulations={apiSimulations}
+          updateSimulation={()=>{}}
           highlight={highlight}
         />
         {fullView && <TextRow
-          label='yearlyExpenses'
+          label='expenses.yearly_expenses'
           title='Charges annuelles'
-          simulations={simulations}
+          simulations={apiSimulations}
         />}
         <InputRow
-          label='monthlyRepayableExpenses'
+          label='expenses.repayed_non_taxable_monthly_expenses'
           title={<>Rbt Frais* <span style={styles.indication}>(mensuels)</span></>}
-          simulations={simulations}
+          simulations={apiSimulations}
           highlight={highlight}
-          updateSimulation={updateSimulation}
+          updateSimulation={()=>{}}
         />
         {fullView && <TextRow
-          label='yearlyRepayableExpenses'
+          label='expenses.repayed_non_taxable_yearly_expenses'
           title={<>Rbt Frais <span style={styles.indication}>(annuels)</span></>}
-          simulations={simulations}
+          simulations={apiSimulations}
         />}
         <InputRow
-          label='monthlyTaxableRepayableExpenses'
+          label='expenses.repayed_taxable_monthly_expenses'
           title={<>Rbt Frais imposables** <span style={styles.indication}>(mensuels)</span></>}
-          simulations={simulations}
+          simulations={apiSimulations}
           highlight={highlight}
-          updateSimulation={updateSimulation}
+          updateSimulation={()=>{}}
         />
         {fullView && <TextRow
-          label='yearlyTaxableRepayableExpenses'
+          label='expenses.repayed_taxable_yearly_expenses'
           title={<>Rbt Frais imposables <span style={styles.indication}>(annuels)</span></>}
-          simulations={simulations}
+          simulations={apiSimulations}
         />}
         <InputRow
-          label='monthlyNetSalary'
+          label='salary.monthly_net_salary'
           title={<>Salaire net mensuel  <span style={styles.indication}>(avant IR)</span></>}
-          simulations={simulations}
-          updateSimulation={updateSimulation}
+          simulations={apiSimulations}
+          updateSimulation={()=>{}}
         />
 
         {fullView && <><TextRow
-          label='yearlyChargedSalary'
+          label='salary.yearly_charged_salary'
           title='Salaire annuel chargé'
-          simulations={simulations}
+          simulations={apiSimulations}
         />
           <TextRow
-            label='yearlySalaryCotisations'
+            label='salary.yearly_salary_taxes'
             title='Cotisations sur salaire'
-            simulations={simulations}
+            simulations={apiSimulations}
           /></>}
 
         <TextRow
-          label='yearlyTotalCost'
+          label='spendings.total_yearly_spendings'
           title='Charges annuelles'
           style={styles.indicator}
-          simulations={simulations}
+          simulations={apiSimulations}
         />
 
 
@@ -272,44 +275,44 @@ export default function Simulations() {
 
         <h3>Soldes</h3>
         <TextRow
-          label='rawEarnings'
+          label='earnings.raw_yearly_earnings'
           title='Bénéfice brut'
-          simulations={simulations}
+          simulations={apiSimulations}
         />
         {fullView && <TextRow
-          label='earningsTax'
+          label='earnings.earning_taxes'
           title="Impôts sur les sociétés"
-          simulations={simulations}
+          simulations={apiSimulations}
         />}
         <TextRow
-          label='netEarnings'
+          label='earnings.net_earnings'
           title='Bénéfice après IS'
           style={styles.indicator}
-          simulations={simulations}
+          simulations={apiSimulations}
         />
         <div style={styles.endOfSection} />
 
 
         <h3>Affectation du résultat</h3>
         <InputRow
-          label="percentDividend"
+          label="dividend_rate"
           title="Pourcentage de divende"
-          simulations={simulations}
-          updateSimulation={updateSimulation}
+          simulations={apiSimulations}
+          updateSimulation={()=>{}}
         />
         {fullView && <><TextRow
-          simulations={simulations}
-          label="dividend"
+          simulations={apiSimulations}
+          label="dividend.raw_dividend"
           title="Dividende chargé"
         />
           <TextRow
-            simulations={simulations}
-            label="dividendCotisations"
+            simulations={apiSimulations}
+            label="dividend.dividend_cotisations"
             title="Cotisations sur dividende"
           /></>}
         <TextRow
-          simulations={simulations}
-          label="netResult"
+          simulations={apiSimulations}
+          label="retained_earnings"
           title="Résultat mis en réserve"
           style={styles.indicator}
         />
@@ -319,52 +322,52 @@ export default function Simulations() {
         <h3>Revenus dirigeant·e</h3>
 
         {fullView && <><TextRow
-          label='yearlyNetSalary'
+          label='salary.yearly_net_salary'
           title='Salaire annuel net'
-          simulations={simulations}
+          simulations={apiSimulations}
         />
           <TextRow
-            label='netDividend'
+            label='dividend.net_dividend'
             title='Dividende reçu'
-            simulations={simulations}
+            simulations={apiSimulations}
           />
           <TextRow
-            label='incomeTaxOnDividend'
+            label='dividend.taxes_on_dividend'
             title={<>IR sur dividendes <span style={styles.indication}>(taux fixe 12.8)</span></>}
-            simulations={simulations}
+            simulations={apiSimulations}
           />
           <TextRow
-            label='yearlyRepaidExpenses'
+            label='expenses.repayed_yearly_expenses'
             title='Frais remboursés'
-            simulations={simulations}
+            simulations={apiSimulations}
           /></>}
         <TextRow
-          label='managerYearlyRevenu'
+          label='yearly_manager_income'
           title='Revenu annuel '
           style={{ fontWeight: 'bold' }}
-          simulations={simulations}
+          simulations={apiSimulations}
         />
         <TextRow
-          label='managerMonthlyRevenu'
+          label='monthly_manager_income'
           title='Revenu mensuel moyen'
           style={styles.mainIndicator}
-          simulations={simulations}
+          simulations={apiSimulations}
         />
         <div style={styles.endOfSection} />
 
         <PercentTextRow
-          label='managerIncomeRevenuRatio'
+          label='income_sales_ratio'
           title='Ratio revenu / CA'
           style={{ fontWeight: 'bold' }}
-          simulations={simulations}
+          simulations={apiSimulations}
         />
         <TextRow
-          label='managerYearlyTaxableRevenu'
+          label='taxable_yearly_manager_income'
           title="Revenu imposable à l'IR"
-          simulations={simulations}
+          simulations={apiSimulations}
         />
 
-        <section style={simulationStyles.row}>
+        {/* <section style={simulationStyles.row}>
           <div style={{ ...simulationStyles.leftCol }} ></div>
           {simulations.map((simulation: SimulationData, index: number) => (
             <div key={index} style={simulationStyles.col} >
@@ -382,7 +385,7 @@ export default function Simulations() {
               </button>
             </div>
           ))}
-        </section>
+        </section> */}
       </div>
 
       <section style={styles.infoSection}>

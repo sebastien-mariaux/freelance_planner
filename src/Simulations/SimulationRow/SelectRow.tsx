@@ -1,5 +1,6 @@
 import React from "react";
 import { simulationStyles } from "../simulationStyles";
+import { getDeepValue } from "../../helpers";
 
 
 interface SelectRowProps {
@@ -19,7 +20,7 @@ export default function SelectRow({ title, simulations, updateSimulation, label,
       </div>
       {simulations.map((simulation, index) => (
         <div key={index} style={simulationStyles.col}>
-          <select onChange={(e) => { updateSimulation(index, label, e.target.value) }} value={simulation.companyType}>
+          <select onChange={(e) => { updateSimulation(index, label, e.target.value) }} value={getDeepValue(simulation, label)}>
             {options.map(option => (
               <option value={option} key={option} >{option}</option>
             ))}

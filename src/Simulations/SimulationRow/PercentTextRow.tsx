@@ -1,6 +1,7 @@
 import React from "react";
 import { displayPercent } from "../simulationsHelper";
 import { simulationStyles } from "../simulationStyles";
+import { getDeepValue } from "../../helpers";
 
 
 interface PercentTextRowProps {
@@ -18,7 +19,7 @@ export default function PercentTextRow({ title, simulations, label, style }: Per
       {simulations.map((simulation, index) => (
         <div key={index} style={simulationStyles.col} >
           <div style={style} data-testid={label} >
-            {displayPercent(simulation[label])}
+            {displayPercent(getDeepValue(simulation, label))}
           </div>
         </div>
       ))}

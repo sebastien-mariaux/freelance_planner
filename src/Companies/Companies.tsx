@@ -16,6 +16,7 @@ export default function Companies() {
 
   const getCompanies = async () => {
     urlGet(routes.companiesList).then((data) => {
+      console.log(companies)
       setCompanies(data);
       localStorage.setItem("companies", JSON.stringify(data));
     });
