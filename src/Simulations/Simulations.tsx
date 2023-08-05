@@ -88,7 +88,7 @@ export default function Simulations() {
 
   useEffect(() => {
     getSimulations();
-  }, []);
+  }, [displayExpensesModal]);
 
   const openExpensesModal = (id: string) => {
     setSimulationId(id);
@@ -446,7 +446,11 @@ export default function Simulations() {
         </div>
       </section>
 
-      {(displayExpensesModal && companyId) &&  <ExpensesModal simulationId={simulationId} companyId={companyId}/>}
+      {(displayExpensesModal && companyId) &&  <ExpensesModal
+      simulationId={simulationId}
+      companyId={companyId}
+      setDisplayExpensesModal={setDisplayExpensesModal}
+      />}
     </div>
   );
 }

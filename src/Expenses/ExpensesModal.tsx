@@ -1,10 +1,11 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef } from "react";
 import { urlDelete, urlGet, urlPost } from "../api/base";
 import { routes } from "../api/routes";
 
 interface ExpensesModalProps {
   simulationId: string;
   companyId: string;
+  setDisplayExpensesModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 interface Expense {
@@ -20,27 +21,39 @@ interface Simulation {
   expenses: Expense[];
 }
 
-export default function ExpensesModal({simulationId, companyId}: ExpensesModalProps) {
-  console.log(simulationId)
-  const [expenses, setExpenses] = React.useState([])
-  const [simulation, setSimulation] = React.useState<Simulation>({expenses: []})
+export default function ExpensesModal({
+  simulationId,
+  companyId,
+  setDisplayExpensesModal,
+}: ExpensesModalProps) {
+  console.log(simulationId);
+  const [expenses, setExpenses] = React.useState([]);
+  const [simulation, setSimulation] = React.useState<Simulation>({
+    expenses: [],
+  });
+  const expenseNameRef = useRef<HTMLInputElement>(null);
+  const expenseAmountRef = useRef<HTMLInputElement>(null);
+  const expensePeriodicityRef = useRef<HTMLInputElement>(null);
+  const expenseIsRepayedRef = useRef<HTMLInputElement>(null);
+  const expenseIsTaxableRef = useRef<HTMLInputElement>(null);
+
 
   useEffect(() => {
-    loadExpenses()
-    loadSimulation()
-  }, [])
+    loadExpenses();
+    loadSimulation();
+  }, []);
 
   const loadExpenses = async () => {
     urlGet(routes.expenses).then((data) => {
-      setExpenses(data)
-    })
-  }
+      setExpenses(data);
+    });
+  };
 
   const loadSimulation = async () => {
     urlGet(routes.companySimulation(companyId, simulationId)).then((data) => {
-      setSimulation(data)
-    })
-  }
+      setSimulation(data);
+    });
+  };
 
   const displayPeriodicity = (expense: Expense) => {
     switch (expense.periodicity) {
@@ -51,43 +64,66 @@ export default function ExpensesModal({simulationId, companyId}: ExpensesModalPr
       default:
         return "Mensuelle";
     }
-  }
+  };
 
-  const toggleExpense = (event: React.ChangeEvent<HTMLInputElement>, expenseId: string) => {
+  const toggleExpense = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    expenseId: string
+  ) => {
     if (event.target.checked) {
-      linkExpense(expenseId)
+      linkExpense(expenseId);
     } else {
-      unlinkExpense(expenseId)
+      unlinkExpense(expenseId);
     }
-  }
+  };
 
   const linkExpense = (expenseId: string) => {
     urlPost(
       routes.linkExpense(companyId, simulationId),
-      {expense_id: expenseId},
+      { expense_id: expenseId },
       loadSimulation,
       () => {}
-    )
-  }
+    );
+  };
 
   const unlinkExpense = (expenseId: string) => {
     urlDelete(
       routes.unlinkExpense(companyId, simulationId),
-      {expense_id: expenseId},
+      { expense_id: expenseId },
       loadSimulation,
       () => {}
-    )
-  }
+    );
+  };
+
+  const createExpense = () => {
+    urlPost(
+      routes.expenses,
+      {
+        name: expenseNameRef.current?.value,
+        amount: expenseAmountRef.current?.value,
+        periodicity: expensePeriodicityRef.current?.value,
+        is_repayed: expenseIsRepayedRef.current?.value,
+        is_taxable: expenseIsTaxableRef.current?.value,
+      },
+      loadExpenses,
+      () => {}
+    );
+  };
 
   return (
     <div style={styles.modal}>
       <div style={styles.innerModal}>
-        <h2>Sélection des charges</h2>
+        <h2>
+          Sélection des charges
+          <button
+            onClick={() => setDisplayExpensesModal(false)}
+            style={{ float: "right" }}
+          >
+            X
+          </button>
+        </h2>
 
-        {expenses.length === 0 ? (
-          <div>Vous n'avez pas encore créé de charges </div>
-        ) : (
-          <table style={{width:'100%'}}>
+          <table style={{ width: "100%" }}>
             <thead>
               <tr>
                 <th></th>
@@ -96,6 +132,7 @@ export default function ExpensesModal({simulationId, companyId}: ExpensesModalPr
                 <th>Périodicité</th>
                 <th>Remboursable</th>
                 <th>Imposable</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -104,25 +141,64 @@ export default function ExpensesModal({simulationId, companyId}: ExpensesModalPr
                   <tr key={expense.id}>
                     <td>
                       <input
-                      type="checkbox"
-                      onChange={(event)=>toggleExpense(event, expense.id)}
-                      checked={simulation.expenses.map((s: Expense) => s.id).includes(expense.id)}
+                        type="checkbox"
+                        onChange={(event) => toggleExpense(event, expense.id)}
+                        checked={simulation.expenses
+                          .map((s: Expense) => s.id)
+                          .includes(expense.id)}
                       />
                     </td>
                     <td>{expense.name}</td>
                     <td>{expense.amount}</td>
-                    <td>{ displayPeriodicity(expense) }</td>
+                    <td>{displayPeriodicity(expense)}</td>
                     <td>{expense.is_repayed ? "Oui" : "Non"}</td>
                     <td>{expense.is_taxable ? "Oui" : "Non"}</td>
                   </tr>
-                )
-              }
-              )
-              }
+                );
+              })}
+              <tr>
+              <td></td>
+          <td>
+            <input
+              ref={expenseNameRef}
+              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+            />
+          </td>
+          <td>
+            <input
+              ref={expenseAmountRef}
+              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+            />
+          </td>
+          <td>
+            <select
+              ref={expensePeriodicityRef}
+              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+            >
+              <option value="M">Mensuelle</option>
+              <option value="Y">Annuelle</option>
+            </select>
+          </td>
+          <td>
+            <input
+              ref={expenseIsRepayedRef}
+              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+            />
+          </td>
+          <td>
+            <input
+              ref={expenseIsTaxableRef}
+              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+            />
+          </td>
+          <td>
+            <button
+              onClick={createExpense}
+            >Ajouter</button>
+          </td>
+        </tr>
             </tbody>
-
           </table>
-        )}
       </div>
     </div>
   );
@@ -149,4 +225,4 @@ const styles = {
     margin: "7.5% auto",
     borderRadius: "10px",
   },
-}
+};
