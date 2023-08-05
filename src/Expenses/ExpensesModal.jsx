@@ -1,7 +1,10 @@
 import React, { useEffect } from "react";
-import { urlDelete, urlGet, urlPost } from "../api/base";
+import { urlGet, urlPost } from "../api/base";
 import { routes } from "../api/routes";
-import { useForm } from "react-hook-form";
+import ExpensesTable from "./ExpensesTable";
+import ExpensesForm from "./ExpensesForm";
+import { mainStyles } from "../mainStyles";
+import ExpensesTotal from "./ExpensesTotal";
 
 export default function ExpensesModal({
   simulationId,
@@ -13,7 +16,6 @@ export default function ExpensesModal({
   const [simulation, setSimulation] = React.useState({
     expenses: [],
   });
-  const { register, getValues } = useForm({ shouldUseNativeValidation: true });
 
   useEffect(() => {
     loadExpenses();
@@ -32,25 +34,6 @@ export default function ExpensesModal({
     });
   };
 
-  const displayPeriodicity = (expense) => {
-    switch (expense.periodicity) {
-      case "M":
-        return "Mensuelle";
-      case "Y":
-        return "Annuelle";
-      default:
-        return "Mensuelle";
-    }
-  };
-
-  const toggleExpense = (event, expenseId) => {
-    if (event.target.checked) {
-      linkExpense(expenseId);
-    } else {
-      unlinkExpense(expenseId);
-    }
-  };
-
   const linkExpense = (expenseId) => {
     urlPost(
       routes.linkExpense(companyId, simulationId),
@@ -60,31 +43,14 @@ export default function ExpensesModal({
     );
   };
 
-  const unlinkExpense = (expenseId) => {
-    urlDelete(
-      routes.unlinkExpense(companyId, simulationId),
-      { expense_id: expenseId },
-      loadSimulation,
-      () => {}
-    );
+  const afterCreate = (id) => {
+    linkExpense(id);
+    loadExpenses();
   };
 
-  const createExpense = () => {
-    console.log(getValues());
-    urlPost(
-      routes.expenses,
-      getValues(),
-      (data) => {
-        linkExpense(data.id);
-        loadExpenses();
-      },
-      () => {}
-    );
+  const deleteExpense = (index) => () => {
+    console.log(index);
   };
-
-  // const deleteExpense = (index: number) => () => {
-  //   console.log(index)
-  // }
 
   return (
     <div style={styles.modal}>
@@ -99,84 +65,36 @@ export default function ExpensesModal({
           </button>
         </h2>
 
-        <table style={{ width: "100%" }}>
-          <thead>
-            <tr>
-              <th></th>
-              <th>Nom</th>
-              <th>Montant</th>
-              <th>Périodicité</th>
-              <th>Remboursable</th>
-              <th>Imposable</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td></td>
-              <td>
-                <input {...register("name")} style={{ width: "100%" }} />
-              </td>
-              <td>
-                <input {...register("amount")} style={{ width: "100%" }} />
-              </td>
-              <td>
-                <select {...register("periodicity")} style={{ width: "100%" }}>
-                  <option value="M">Mensuelle</option>
-                  <option value="Y">Annuelle</option>
-                </select>
-              </td>
-              <td>
-                <input
-                  {...register("is_repayed")}
-                  type="checkbox"
-                  style={{ width: "100%" }}
-                />
-              </td>
-              <td>
-                <input
-                  {...register("is_taxable")}
-                  type="checkbox"
-                  style={{ width: "100%" }}
-                />
-              </td>
-              <td>
-                <button onClick={createExpense}>Ajouter</button>
-              </td>
-            </tr>
-            {expenses.map((expense) => {
-              return (
-                <tr key={expense.id}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      onChange={(event) =>
-                        toggleExpense(event, expense.id || "")
-                      }
-                      checked={simulation.expenses
-                        .map((exp) => exp.id)
-                        .includes(expense.id)}
-                    />
-                  </td>
-                  <td>{expense.name}</td>
-                  <td>{expense.amount}</td>
-                  <td>{displayPeriodicity(expense)}</td>
-                  <td>{expense.is_repayed ? "Oui" : "Non"}</td>
-                  <td>{expense.is_taxable ? "Oui" : "Non"}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
+        <div style={styles.addForm}>
+          <ExpensesForm afterCreate={afterCreate} />
+        </div>
 
-        {/* <ExpensesTable
-            expenses={expenses}
-            simulation={simulation}
-            deleteExpense={deleteExpense}
-            simulationId={simulationId}
-            companyId={companyId}
-            loadSimulation={loadSimulation}
-            /> */}
+        <div style={mainStyles.info}>
+        <div style={mainStyles.infoSection}>
+          <div>
+            (?) Les charges remboursables sont les charges payées par
+            l'entreprise au dirigeant·e (remboursement de frais, loyer...).
+            Elles peuvent être imposables à l'IR (cas du loyer par exemple).
+          </div>
+        </div>
+      </div>
+
+        <ExpensesTable
+          expenses={expenses}
+          simulation={simulation}
+          deleteExpense={deleteExpense}
+          simulationId={simulationId}
+          companyId={companyId}
+          loadSimulation={loadSimulation}
+        />
+        {expenses.length > 0 && (
+        <>
+          {/* <ExpensesTable expenses={expenses} deleteExpense={deleteExpense} /> */}
+          <div style={styles.totals}>
+            <ExpensesTotal expenses={simulation.expenses} />
+          </div>
+        </>
+      )}
       </div>
     </div>
   );
@@ -202,5 +120,14 @@ const styles = {
     height: "70%",
     margin: "7.5% auto",
     borderRadius: "10px",
+  },
+  addForm: {
+    padding: "0.5em",
+    backgroundColor: "#eee",
+    borderRadius: "5px",
+  },
+  totals: {
+    padding: "0.5em",
+    marginTop: "1em",
   },
 };

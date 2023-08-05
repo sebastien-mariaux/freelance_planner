@@ -1,16 +1,23 @@
 import React from "react";
 import { displayAmount } from "../Simulations/simulationsHelper";
 
-
 export default function ExpensesTotal({ expenses }) {
-
   const totalMonthly = expenses.reduce((total, expense) => {
-    return total + expense.monthlyAmount
-  }, 0)
+    if (expense.periodicity === "M") {
+      return total + parseFloat(expense.amount);
+    } else {
+      return total + parseFloat(expense.amount) / 12;
+    }
+  }, 0);
 
   const totalAnnual = expenses.reduce((total, expense) => {
-    return total + expense.yearlyAmount
-  }, 0)
+    if (expense.periodicity === "Y") {
+      return total + parseFloat(expense.amount);
+    } else {
+      return total + parseFloat(expense.amount) * 12;
+    }
+
+  }, 0);
 
   return (
     <div style={styles.container}>
@@ -23,19 +30,19 @@ export default function ExpensesTotal({ expenses }) {
         <span style={styles.amount}> {displayAmount(totalAnnual)}</span>
       </div>
     </div>
-  )
+  );
 }
 
 const styles = {
   amountLabels: {
-    fontWeight: 'bold',
-    lineHeight: '1.8',
+    fontWeight: "bold",
+    lineHeight: "1.8",
   },
   amount: {
-    display: 'inline-block',
-    minWidth: '150px',
+    display: "inline-block",
+    minWidth: "150px",
   },
   container: {
-    textAlign: 'right'
-  }
-}
+    textAlign: "right",
+  },
+};

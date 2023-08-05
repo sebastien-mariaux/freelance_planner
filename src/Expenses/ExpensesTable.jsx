@@ -14,9 +14,9 @@ export default function ExpensesTable({
   const frequencyLabel = (frequency) => {
     // TODO: Maybe it's time to use I18n...
     switch (frequency) {
-      case "monthly":
+      case "M":
         return "Mensuel";
-      case "yearly":
+      case "Y":
         return "Annuel";
       default:
         return "";
@@ -49,11 +49,43 @@ export default function ExpensesTable({
     );
   };
 
+  const linkExpenses = () => {
+    urlPost(
+      routes.linkExpenses(companyId, simulationId),
+      { expense_ids: expenses.map((expense) => expense.id) },
+      loadSimulation,
+      () => {}
+    );
+  };
+
+  const toggleExpenses = (event) => {
+    if (event.target.checked) {
+      linkExpenses();
+    } else {
+      unlinkExpenses();
+    }
+  };
+
+  const unlinkExpenses = () => {
+    urlDelete(
+      routes.unlinkExpenses(companyId, simulationId),
+      { expense_ids: expenses.map((expense) => expense.id) },
+      loadSimulation,
+      () => {}
+    );
+  };
+
   return (
     <table style={styles.table} className="bordered-table">
       <thead style={styles.thead}>
         <tr>
-          <th></th>
+          <th>
+            <input
+            type="checkbox"
+            onChange={toggleExpenses}
+            checked={expenses.map((expense) => expense.id).sort().join() === simulation.expenses.map((expense) => expense.id).sort().join()}
+            />
+          </th>
           <th>Description</th>
           <th>Montant</th>
           <th>Fréquence</th>

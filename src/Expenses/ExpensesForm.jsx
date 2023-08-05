@@ -1,34 +1,33 @@
 import React from "react";
 import { useForm } from "react-hook-form";
-import { Expense } from "../models/expense";
+import { urlPost } from "../api/base";
+import { routes } from "../api/routes";
 
-export default function ExpensesForm({ expenses, setExpenses, saveExpenses }) {
-  const { register, handleSubmit } = useForm({
+export default function ExpensesForm({ afterCreate }) {
+  const { register, handleSubmit,  reset } = useForm({
     shouldUseNativeValidation: true,
   });
   const [displayTaxable, setDisplayTaxable] = React.useState(false);
-
-  const addExpense = (data) => {
-    const expenseData = {
-      name: data.name,
-      amount: parseFloat(data.amount),
-      frequency: data.frequency,
-      taxable: data.taxable,
-      repayable: data.repayable,
-    };
-    const expense = new Expense(expenseData);
-    if (expense.isValid()) {
-      setExpenses([...expenses, expense]);
-      saveExpenses([...expenses, expense]);
-    }
-  };
 
   const displayOrHideTaxable = (event) => {
     setDisplayTaxable(event.target.checked);
   };
 
+  const createExpense = (data) => {
+    console.log(data);
+    urlPost(
+      routes.expenses,
+      data,
+      (data) => {
+        afterCreate(data.id)
+        reset();
+      },
+      () => {}
+    );
+  };
+
   return (
-    <form onSubmit={handleSubmit(addExpense)}>
+    <form onSubmit={handleSubmit(createExpense)}>
       <div style={{ display: "flex", justifyContent: "space-between" }}>
         <div style={{ display: "flex" }}>
           <label style={styles.label}>
@@ -46,16 +45,16 @@ export default function ExpensesForm({ expenses, setExpenses, saveExpenses }) {
             />
           </label>
           <label style={styles.label}>
-            <select {...register("frequency")}>
-              <option value="monthly">Mensuel</option>
-              <option value="yearly">Annuel</option>
+            <select {...register("periodicity")}>
+              <option value="M">Mensuel</option>
+              <option value="Y">Annuel</option>
             </select>
           </label>
           <label style={styles.label}>
             Remboursable
             <input
               type="checkbox"
-              {...register("repayable")}
+              {...register("is_repayed")}
               onChange={displayOrHideTaxable}
             />
           </label>
