@@ -1,6 +1,7 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect } from "react";
 import { urlDelete, urlGet, urlPost } from "../api/base";
 import { routes } from "../api/routes";
+import { useForm } from "react-hook-form";
 
 interface ExpensesModalProps {
   simulationId: string;
@@ -31,12 +32,7 @@ export default function ExpensesModal({
   const [simulation, setSimulation] = React.useState<Simulation>({
     expenses: [],
   });
-  const expenseNameRef = useRef<HTMLInputElement>(null);
-  const expenseAmountRef = useRef<HTMLInputElement>(null);
-  const expensePeriodicityRef = useRef<HTMLInputElement>(null);
-  const expenseIsRepayedRef = useRef<HTMLInputElement>(null);
-  const expenseIsTaxableRef = useRef<HTMLInputElement>(null);
-
+  const { register, getValues } = useForm({ shouldUseNativeValidation: true })
 
   useEffect(() => {
     loadExpenses();
@@ -96,19 +92,17 @@ export default function ExpensesModal({
   };
 
   const createExpense = () => {
+    console.log(getValues())
     urlPost(
       routes.expenses,
-      {
-        name: expenseNameRef.current?.value,
-        amount: expenseAmountRef.current?.value,
-        periodicity: expensePeriodicityRef.current?.value,
-        is_repayed: expenseIsRepayedRef.current?.value,
-        is_taxable: expenseIsTaxableRef.current?.value,
+      getValues(),
+      (data) => {
+        linkExpense(data.id);
+        loadExpenses();
       },
-      loadExpenses,
       () => {}
     );
-  };
+  }
 
   return (
     <div style={styles.modal}>
@@ -136,6 +130,49 @@ export default function ExpensesModal({
               </tr>
             </thead>
             <tbody>
+            <tr>
+              <td></td>
+          <td>
+            <input
+              {...register('name')}
+              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+            />
+          </td>
+          <td>
+            <input
+              {...register('amount')}
+              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+            />
+          </td>
+          <td>
+            <select
+              {...register('periodicity')}
+              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+            >
+              <option value='M'>Mensuelle</option>
+              <option value='Y'>Annuelle</option>
+            </select>
+          </td>
+          <td>
+            <input
+              {...register('is_repayed')}
+              type='checkbox'
+              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+            />
+          </td>
+          <td>
+            <input
+              {...register('is_taxable')}
+              type='checkbox'
+              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+            />
+          </td>
+          <td>
+            <button
+              onClick={createExpense}
+            >Ajouter</button>
+          </td>
+        </tr>
               {expenses.map((expense: Expense) => {
                 return (
                   <tr key={expense.id}>
@@ -156,47 +193,7 @@ export default function ExpensesModal({
                   </tr>
                 );
               })}
-              <tr>
-              <td></td>
-          <td>
-            <input
-              ref={expenseNameRef}
-              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
-            />
-          </td>
-          <td>
-            <input
-              ref={expenseAmountRef}
-              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
-            />
-          </td>
-          <td>
-            <select
-              ref={expensePeriodicityRef}
-              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
-            >
-              <option value="M">Mensuelle</option>
-              <option value="Y">Annuelle</option>
-            </select>
-          </td>
-          <td>
-            <input
-              ref={expenseIsRepayedRef}
-              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
-            />
-          </td>
-          <td>
-            <input
-              ref={expenseIsTaxableRef}
-              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
-            />
-          </td>
-          <td>
-            <button
-              onClick={createExpense}
-            >Ajouter</button>
-          </td>
-        </tr>
+
             </tbody>
           </table>
       </div>

@@ -1,3 +1,5 @@
+import { clearData } from "./authUser";
+
 const BaseUrl: string = "http://localhost:8000/";
 
 function getFullUrl(route: string): URL {
@@ -19,7 +21,30 @@ export const urlGet = async(route: string) => {
     method: "GET",
     headers: headers(),
   });
+  if (!res.ok) {
+    clearData();
+  }
   return await res.json();
+}
+
+export const urlCallWithBody = async (
+  method: string,
+  route: string,
+  body: any,
+  onSuccess: (json: any) => void=()=>{},
+  onError: (json: any) => void=() => {}
+  ) => {
+  const res = await fetch(getFullUrl(route), {
+    method: method,
+    headers: headers(),
+    body: JSON.stringify(body),
+  });
+
+  if (res.ok) {
+    onSuccess(await res.json())
+  } else {
+    onError(await res.json())
+  }
 }
 
 export const urlPost = async (
@@ -28,17 +53,17 @@ export const urlPost = async (
   onSuccess: (json: any) => void=()=>{},
   onError: (json: any) => void=() => {}
   ) => {
-  const res = await fetch(getFullUrl(route), {
-    method: "POST",
-    headers: headers(),
-    body: JSON.stringify(body),
-  });
+  urlCallWithBody("POST", route, body, onSuccess, onError);
+}
 
-  if (res.ok) {
-    onSuccess(await res.json())
-  } else {
-    onError(await res.json())
-  }
+
+export const urlPatch = async (
+  route: string,
+  body: any,
+  onSuccess: (json: any) => void=()=>{},
+  onError: (json: any) => void=() => {}
+  ) => {
+  urlCallWithBody("PATCH", route, body, onSuccess, onError);
 }
 
 export const urlDelete = async (
@@ -47,15 +72,5 @@ export const urlDelete = async (
   onSuccess: (json: any) => void=()=>{},
   onError: (json: any) => void=() => {}
   ) => {
-  const res = await fetch(getFullUrl(route), {
-    method: "DELETE",
-    headers: headers(),
-    body: JSON.stringify(body),
-  });
-
-  if (res.ok) {
-    onSuccess(await res.json())
-  } else {
-    onError(await res.json())
-  }
+  urlCallWithBody("DELETE", route, body, onSuccess, onError);
 }

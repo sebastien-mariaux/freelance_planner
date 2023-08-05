@@ -8,7 +8,7 @@ import SelectRow from "./SimulationRow/SelectRow";
 import TextRow from "./SimulationRow/TextRow";
 import { mainStyles } from "../mainStyles";
 import { useParams } from "react-router-dom";
-import { urlGet } from "../api/base";
+import { urlGet, urlPatch } from "../api/base";
 import { routes } from "../api/routes";
 import { simulationStyles } from "./simulationStyles";
 import ExpensesModal from "../Expenses/ExpensesModal";
@@ -59,13 +59,59 @@ export const defaultSimulations = [
   }).serialize(),
 ];
 
+interface ApiSimulation {
+  id: string;
+  name: string;
+  company_type: string;
+  daily_rate: number;
+  days_per_week: number;
+  weeks_on: number;
+  sales: {
+    sales: number;
+    average_monthly_sales: number;
+  };
+  expenses: {
+    monthly_expenses: number;
+    yearly_expenses: number;
+    repayed_non_taxable_monthly_expenses: number;
+    repayed_non_taxable_yearly_expenses: number;
+    repayed_taxable_monthly_expenses: number;
+    repayed_taxable_yearly_expenses: number;
+  };
+  salary: {
+    monthly_net_salary: number;
+    yearly_charged_salary: number;
+    yearly_salary_taxes: number;
+    yearly_net_salary: number;
+  };
+  spendings: {
+    total_yearly_spendings: number;
+  };
+  earnings: {
+    raw_yearly_earnings: number;
+    earning_taxes: number;
+    net_earnings: number;
+  };
+  dividend: {
+    raw_dividend: number;
+    dividend_cotisations: number;
+    net_dividend: number;
+    taxes_on_dividend: number;
+  };
+  retained_earnings: number;
+  yearly_manager_income: number;
+  monthly_manager_income: number;
+  income_sales_ratio: number;
+  taxable_yearly_manager_income: number;
+}
+
 export default function Simulations() {
   const [simulations, setSimulations] = useState(defaultSimulations);
   // const [highlight, setHighlight] = useState(false);
   // const location = useLocation();
   // const { importData } = location?.state || false
   const [fullView, setFullView] = useState(true);
-  const [apiSimulations, setApiSimulations] = useState([]);
+  const [apiSimulations, setApiSimulations] = useState<ApiSimulation[]>([]);
   const { companyId } = useParams();
   console.log('companyId', companyId);
   const [simulationId, setSimulationId] = useState<string>('0');
@@ -126,6 +172,17 @@ export default function Simulations() {
     setFullView(!fullView);
   };
 
+  const updateSimulation = (index: number, label: string, value: any) => {
+    let data: any = {}
+    data[label] = value
+    urlPatch(
+      routes.companySimulation(companyId, apiSimulations[index].id),
+      data,
+      () => getSimulations(),
+      ()=>{}
+    )
+  }
+
   return (
     <div className="simulations">
       <NavMenu activeItem="simulations" />
@@ -158,12 +215,12 @@ export default function Simulations() {
           title="Titre"
           style={styles.mainIndicator}
           simulations={apiSimulations}
-          updateSimulation={() => {}}
+          updateSimulation={updateSimulation}
         />
         <SelectRow
           label="company_type"
           simulations={apiSimulations}
-          updateSimulation={() => {}}
+          updateSimulation={updateSimulation}
           title="Type de société"
           options={["SASU", "EURL"]}
         />
@@ -171,7 +228,7 @@ export default function Simulations() {
         <h3>Revenus</h3>
         <InputRow
           simulations={apiSimulations}
-          updateSimulation={() => {}}
+          updateSimulation={updateSimulation}
           label="daily_rate"
           title={
             <>
@@ -181,7 +238,7 @@ export default function Simulations() {
         />
         <InputRow
           simulations={apiSimulations}
-          updateSimulation={() => {}}
+          updateSimulation={updateSimulation}
           label="days_per_week"
           title="Jours par semaine"
         />
@@ -193,7 +250,7 @@ export default function Simulations() {
         />} */}
         <InputRow
           simulations={apiSimulations}
-          updateSimulation={() => {}}
+          updateSimulation={updateSimulation}
           label="weeks_on"
           title="Semaines travaillées"
         />
@@ -280,7 +337,7 @@ export default function Simulations() {
             </>
           }
           simulations={apiSimulations}
-          updateSimulation={() => {}}
+          updateSimulation={updateSimulation}
         />
 
         {fullView && (
@@ -333,7 +390,7 @@ export default function Simulations() {
           label="dividend_rate"
           title="Pourcentage de divende"
           simulations={apiSimulations}
-          updateSimulation={() => {}}
+          updateSimulation={updateSimulation}
         />
         {fullView && (
           <>

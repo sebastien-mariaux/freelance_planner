@@ -4,20 +4,26 @@ import { simulationStyles } from "../simulationStyles";
 import DisplayTitle from "./DisplayTitle";
 import { getDeepValue } from "../../helpers";
 
-
 interface InputRowProps {
-  title: JSX.Element | string,
-  simulations: Object[],
-  updateSimulation: (index: number, label: string, value: string) => void,
-  label: string,
-  style?: React.CSSProperties,
-  highlight?: boolean
+  title: JSX.Element | string;
+  simulations: Object[];
+  updateSimulation: (index: number, label: string, value: string) => void;
+  label: string;
+  style?: React.CSSProperties;
+  highlight?: boolean;
 }
 
-export default function InputRow({ title, simulations, updateSimulation, label, style, highlight = false }: InputRowProps) {
+export default function InputRow({
+  title,
+  simulations,
+  updateSimulation,
+  label,
+  style,
+  highlight = false,
+}: InputRowProps) {
   return (
-    <section style={simulationStyles.row} >
-      <div style={{ ...simulationStyles.leftCol, ...style }} >
+    <section style={simulationStyles.row}>
+      <div style={{ ...simulationStyles.leftCol, ...style }}>
         <DisplayTitle title={title} />
       </div>
       {simulations.map((simulation, index) => (
@@ -31,37 +37,45 @@ export default function InputRow({ title, simulations, updateSimulation, label, 
         />
       ))}
     </section>
-  )
+  );
 }
 
 interface SingleInputProps {
-  data: { [key: string]: any },
-  index: number,
-  label: string,
-  style?: React.CSSProperties,
-  updateData: (index: number, label: string, value: string) => void,
-  highlight?: boolean
+  data: { [key: string]: any };
+  index: number;
+  label: string;
+  style?: React.CSSProperties;
+  updateData: (index: number, label: string, value: string) => void;
+  highlight?: boolean;
 }
 
-export function SingleInput({ data, index, label, style = {}, updateData, highlight }: SingleInputProps) {
+export function SingleInput({
+  data,
+  index,
+  label,
+  style = {},
+  updateData,
+  highlight,
+}: SingleInputProps) {
   const [value, setValue] = useState(data[label]);
   useEffect(() => {
     setValue(getDeepValue(data, label));
-  }, [data, label])
+  }, [data, label]);
 
+  const extraStyle = highlight ? { backgroundColor: "antiquewhite" } : {};
 
-  const extraStyle = highlight ? { backgroundColor: 'antiquewhite' } : {};
+  const field = label.split(".").pop() || label;
   return (
-    <div key={index} style={simulationStyles.col} >
+    <div key={index} style={simulationStyles.col}>
       <input
         data-testid={label}
-        style={{ width: '100%', ...style, ...extraStyle }}
-        type="text" inputMode="numeric"
+        style={{ width: "100%", ...style, ...extraStyle }}
+        type="text"
+        inputMode="numeric"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        onBlur={(e) => updateData(index, label, e.target.value)}
+        onBlur={(e) => updateData(index, field, e.target.value)}
       />
     </div>
-  )
+  );
 }
-
