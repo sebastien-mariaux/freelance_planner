@@ -59,7 +59,7 @@ export const defaultSimulations = [
   }).serialize(),
 ];
 
-interface ApiSimulation {
+export interface ApiSimulation {
   id: string;
   name: string;
   company_type: string;
@@ -110,7 +110,7 @@ export default function Simulations() {
   // const [highlight, setHighlight] = useState(false);
   // const location = useLocation();
   // const { importData } = location?.state || false
-  const [fullView, setFullView] = useState(true);
+  const [fullView, setFullView] = useState(false);
   const [apiSimulations, setApiSimulations] = useState<ApiSimulation[]>([]);
   const { companyId } = useParams();
   console.log('companyId', companyId);
@@ -184,6 +184,7 @@ export default function Simulations() {
   }
 
   return (
+    <div>
     <div className="simulations">
       <NavMenu activeItem="simulations" />
       <div style={{ display: "flex" }}>
@@ -503,11 +504,12 @@ export default function Simulations() {
         </div>
       </section>
 
+    </div>
       {(displayExpensesModal && companyId) &&  <ExpensesModal
       simulationId={simulationId}
       companyId={companyId}
       setDisplayExpensesModal={setDisplayExpensesModal}
       />}
-    </div>
+      </div>
   );
 }

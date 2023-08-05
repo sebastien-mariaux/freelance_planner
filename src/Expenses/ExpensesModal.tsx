@@ -9,8 +9,8 @@ interface ExpensesModalProps {
   setDisplayExpensesModal: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-interface Expense {
-  id: string;
+export interface Expense {
+  id: string | null;
   name: string;
   amount: number;
   is_repayed: boolean;
@@ -18,8 +18,9 @@ interface Expense {
   is_taxable: boolean;
 }
 
-interface Simulation {
+export interface Simulation {
   expenses: Expense[];
+
 }
 
 export default function ExpensesModal({
@@ -104,6 +105,11 @@ export default function ExpensesModal({
     );
   }
 
+  // const deleteExpense = (index: number) => () => {
+  //   console.log(index)
+  // }
+
+
   return (
     <div style={styles.modal}>
       <div style={styles.innerModal}>
@@ -135,19 +141,19 @@ export default function ExpensesModal({
           <td>
             <input
               {...register('name')}
-              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+              style={{width: '100%'}}
             />
           </td>
           <td>
             <input
               {...register('amount')}
-              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+              style={{width: '100%'}}
             />
           </td>
           <td>
             <select
               {...register('periodicity')}
-              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+              style={{width: '100%'}}
             >
               <option value='M'>Mensuelle</option>
               <option value='Y'>Annuelle</option>
@@ -157,14 +163,14 @@ export default function ExpensesModal({
             <input
               {...register('is_repayed')}
               type='checkbox'
-              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+              style={{width: '100%'}}
             />
           </td>
           <td>
             <input
               {...register('is_taxable')}
               type='checkbox'
-              style={{width: '100%', outline: '-webkit-focus-ring-color auto 1px'}}
+              style={{width: '100%'}}
             />
           </td>
           <td>
@@ -179,7 +185,7 @@ export default function ExpensesModal({
                     <td>
                       <input
                         type="checkbox"
-                        onChange={(event) => toggleExpense(event, expense.id)}
+                        onChange={(event) => toggleExpense(event, expense.id || '')}
                         checked={simulation.expenses
                           .map((s: Expense) => s.id)
                           .includes(expense.id)}
@@ -196,6 +202,16 @@ export default function ExpensesModal({
 
             </tbody>
           </table>
+
+
+          {/* <ExpensesTable
+            expenses={expenses}
+            simulation={simulation}
+            deleteExpense={deleteExpense}
+            simulationId={simulationId}
+            companyId={companyId}
+            loadSimulation={loadSimulation}
+            /> */}
       </div>
     </div>
   );

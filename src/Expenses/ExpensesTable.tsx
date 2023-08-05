@@ -1,13 +1,20 @@
 import React from "react";
-import { Expense } from "../models/expense";
 import { displayAmount } from "../Simulations/simulationsHelper";
+import { Expense } from "./ExpensesModal";
+import { urlDelete, urlPost } from "../api/base";
+import { routes } from "../api/routes";
+import { Simulation } from "../models/simulation";
 
 interface ExpensesTableProps {
   expenses: Expense[]
   deleteExpense: (index: number) => () => void
+  companyId: string
+  simulationId: string
+  loadSimulation: () => void
+  simulation: Simulation
 }
 
-export default function ExpensesTable({ expenses, deleteExpense }: ExpensesTableProps) {
+export default function ExpensesTable({ expenses, deleteExpense, companyId, simulationId, loadSimulation, simulation }: ExpensesTableProps) {
   const frequencyLabel = (frequency: string) => {
     // TODO: Maybe it's time to use I18n...
     switch (frequency) {
@@ -20,10 +27,41 @@ export default function ExpensesTable({ expenses, deleteExpense }: ExpensesTable
     }
   }
 
+  const toggleExpense = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    expenseId: string
+  ) => {
+    if (event.target.checked) {
+      linkExpense(expenseId);
+    } else {
+      unlinkExpense(expenseId);
+    }
+  };
+
+  const linkExpense = (expenseId: string) => {
+    urlPost(
+      routes.linkExpense(companyId, simulationId),
+      { expense_id: expenseId },
+      loadSimulation,
+      () => {}
+    );
+  };
+
+  const unlinkExpense = (expenseId: string) => {
+    urlDelete(
+      routes.unlinkExpense(companyId, simulationId),
+      { expense_id: expenseId },
+      loadSimulation,
+      () => {}
+    );
+  };
+
+
   return (
     <table style={styles.table} className="bordered-table">
       <thead style={styles.thead}>
         <tr>
+          <th></th>
           <th>Description</th>
           <th>Montant</th>
           <th>Fréquence</th>
@@ -35,11 +73,20 @@ export default function ExpensesTable({ expenses, deleteExpense }: ExpensesTable
       <tbody>
         {expenses.map((expense, index) => (
           <tr key={index}>
+            <td>
+                      <input
+                        type="checkbox"
+                        onChange={(event) => toggleExpense(event, expense.id || '')}
+                        checked={simulation.expenses
+                          .map((s: Expense) => s.id)
+                          .includes(expense.id)}
+                      />
+                    </td>
             <td>{expense.name}</td>
             <td style={{ textAlign: 'right', paddingRight: '0.5em' }}>{displayAmount(expense.amount)}</td>
-            <td>{frequencyLabel(expense.frequency)}</td>
-            <td>{expense.repayable ? 'Oui' : 'Non'}</td>
-            <td>{expense.taxable ? 'Oui' : 'Non'}</td>
+            <td>{frequencyLabel(expense.periodicity)}</td>
+            <td>{expense.is_repayed ? 'Oui' : 'Non'}</td>
+            <td>{expense.is_taxable ? 'Oui' : 'Non'}</td>
             <td>
               <button
                 onClick={deleteExpense(index)}

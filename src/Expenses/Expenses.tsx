@@ -4,7 +4,6 @@ import { mainStyles } from "../mainStyles";
 import { Expense } from "../models/expense";
 import NavMenu from "../NavMenu/NavMenu";
 import ExpensesForm from "./ExpensesForm";
-import ExpensesTable from "./ExpensesTable";
 import ExpensesTotal from "./ExpensesTotal";
 import { defaultSimulations } from "../Simulations/Simulations";
 import { Simulation, SimulationData } from "../models/simulation";
@@ -60,12 +59,6 @@ export default function Expenses() {
     saveExpenses(defaultExpenses)
   }
 
-  const deleteExpense = (index: number) => () => {
-    let newExpenses = [...expenses];
-    newExpenses.splice(index, 1);
-    setExpenses(newExpenses);
-    saveExpenses(newExpenses)
-  }
 
   const getSimulations = (): SimulationData[] => {
     const simulationsData = localStorage.getItem('simulations');
@@ -123,7 +116,7 @@ export default function Expenses() {
         </div>
       </div>
       {expenses.length > 0 && <>
-        <ExpensesTable expenses={expenses} deleteExpense={deleteExpense} />
+        {/* <ExpensesTable expenses={expenses} deleteExpense={deleteExpense} /> */}
         <div style={styles.totals}>
           <ExpensesTotal expenses={expenses} />
         </div>
