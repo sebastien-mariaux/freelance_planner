@@ -65,7 +65,7 @@ export default function Simulations() {
   const addSimulation = async () => {
     urlPost(
       routes.companySimulations(companyId),
-      { name: getNewName('Ma simulation') },
+      { name: getNewName("Ma simulation") },
       () => getSimulations(),
       () => {}
     );
@@ -101,7 +101,7 @@ export default function Simulations() {
   };
 
   const duplicateSimulation = async (index) => {
-    const currentSimulation = apiSimulations[index]
+    const currentSimulation = apiSimulations[index];
     urlPost(
       routes.companySimulations(companyId),
       {
@@ -112,29 +112,29 @@ export default function Simulations() {
         days_per_week: currentSimulation.days_per_week,
         weeks_on: currentSimulation.weeks_on,
         dividend_rate: currentSimulation.dividend_rate,
-
+        monthly_net_salary: currentSimulation.monthly_net_salary,
       },
       (data) => onDuplicateSuccess(currentSimulation, data),
       () => {}
     );
   };
 
-  const onDuplicateSuccess = async (currentSimulation,  data) => {
+  const onDuplicateSuccess = async (currentSimulation, data) => {
     urlPost(
       routes.linkExpenses(companyId, data.id),
-      { expense_ids: currentSimulation.expenses.map(expense => expense.id) },
+      { expense_ids: currentSimulation.expenses.map((expense) => expense.id) },
       getSimulations,
       () => {}
     );
   };
 
   const runActions = (index, event) => {
-    const action = event.target.value
+    const action = event.target.value;
     switch (action) {
       case "delete":
         deleteSimulation(index);
         break;
-      case 'duplicate':
+      case "duplicate":
         duplicateSimulation(index);
         break;
       default:
@@ -258,7 +258,7 @@ export default function Simulations() {
         /> */}
           {fullView && (
             <TextRow
-              label="expenses.yearly_expenses"
+              label="expenses_data.yearly_expenses"
               title="Charges annuelles"
               simulations={apiSimulations}
             />
@@ -272,7 +272,7 @@ export default function Simulations() {
         /> */}
           {fullView && (
             <TextRow
-              label="expenses.repayed_non_taxable_yearly_expenses"
+              label="expenses_data.repayed_non_taxable_yearly_expenses"
               title={<>Rbt Frais </>}
               simulations={apiSimulations}
             />
@@ -286,7 +286,7 @@ export default function Simulations() {
         /> */}
           {fullView && (
             <TextRow
-              label="expenses.repayed_taxable_yearly_expenses"
+              label="expenses_data.repayed_taxable_yearly_expenses"
               title={<>Rbt Frais imposables </>}
               simulations={apiSimulations}
             />
@@ -434,7 +434,7 @@ export default function Simulations() {
             simulations={apiSimulations}
           />
 
-          <section style={{...simulationStyles.row, marginTop: '1em'}}>
+          <section style={{ ...simulationStyles.row, marginTop: "1em" }}>
             <div style={{ ...simulationStyles.leftCol }}></div>
             {apiSimulations.map((simulation, index) => (
               <div key={index} style={simulationStyles.col}>
@@ -444,11 +444,11 @@ export default function Simulations() {
               >
                 Dupliquer
               </button> */}
-              <select onChange={(event) => runActions(index, event)} value =''>
-                <option value=''>Actions</option>
-                <option value='delete'>Supprimer</option>
-                <option value='duplicate'>Dupliquer</option>
-              </select>
+                <select onChange={(event) => runActions(index, event)} value="">
+                  <option value="">Actions</option>
+                  <option value="delete">Supprimer</option>
+                  <option value="duplicate">Dupliquer</option>
+                </select>
                 {/* <button
                   className="small"
                   onClick={() => deleteSimulation(index)}
