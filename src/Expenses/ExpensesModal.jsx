@@ -3,7 +3,7 @@ import { urlGet, urlPost } from "../api/base";
 import { routes } from "../api/routes";
 import ExpensesTable from "./ExpensesTable";
 import ExpensesForm from "./ExpensesForm";
-import { mainStyles } from "../mainStyles";
+import { formStyle, mainStyles } from "../mainStyles";
 import ExpensesTotal from "./ExpensesTotal";
 
 export default function ExpensesModal({
@@ -65,7 +65,7 @@ export default function ExpensesModal({
           </button>
         </h2>
 
-        <div style={styles.addForm}>
+        <div style={formStyle.inlineForm}>
           <ExpensesForm afterCreate={afterCreate} />
         </div>
 
@@ -120,11 +120,6 @@ const styles = {
     height: "70%",
     margin: "7.5% auto",
     borderRadius: "10px",
-  },
-  addForm: {
-    padding: "0.5em",
-    backgroundColor: "#eee",
-    borderRadius: "5px",
   },
   totals: {
     padding: "0.5em",

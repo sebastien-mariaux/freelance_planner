@@ -27,18 +27,6 @@ export default function NavMenu({ activeItem }) {
           Simulations
         </a>
       </div>
-      <div style={itemStyle(activeItem, "expenses")}>
-        <a
-          href="/expenses"
-          style={{
-            marginLeft: "auto",
-            marginTop: "auto",
-            marginBottom: "auto",
-          }}
-        >
-          Calculateur de charges
-        </a>
-      </div>
       <div style={itemStyle(activeItem, "achieved")}>
         <a
           href="/achieved"

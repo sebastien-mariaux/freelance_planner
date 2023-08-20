@@ -1,5 +1,11 @@
 @import './Achieved/achievedStyles.scss';
 
+$primary: #19647e;
+$secondary: #f4d35e;
+$white: #ffffff;
+$font: #19647e;
+$links: #28AFB0;
+
 .simulations,
 .achieved {
 
@@ -11,10 +17,16 @@
     font-size: 16px;
   }
 }
-
-h1:hover {
-  color: blue;
+body {
+  color: $primary;
+}
+.main-title:hover {
   cursor: pointer;
+}
+
+a {
+  color: $links;
+  text-decoration: none;
 }
 
 h3 {
@@ -37,3 +49,33 @@ h3 {
     border-bottom: 1px solid black;
   }
 }
+
+button, .button {
+  background-color: $primary;
+  color: $white;
+  font-size: 1em;
+  font-family: inherit;
+  border-radius: 5px;
+  border: none;
+  font-weight: bold;
+  padding: 0.5em 1em;
+
+  &.small {
+    height: 2em;
+    padding: 0.5em 1em;
+    font-weight: initial;
+  }
+
+  &:hover {
+    cursor: pointer;
+    color: $secondary;
+    font-weight: bold;
+  }
+}
+
+
+  a {
+    &:hover {
+      font-weight: bold;
+    }
+  }

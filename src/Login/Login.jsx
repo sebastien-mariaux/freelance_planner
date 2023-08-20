@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import { formStyle } from "../mainStyles";
+import { buttonStyle, formStyle } from "../mainStyles";
 import { routes } from "../api/routes";
 import { urlGet, urlPost } from "../api/base";
 
@@ -44,7 +44,7 @@ export default function Login() {
   // }
 
   return (
-    <div className="login">
+    <div className="login" style={{maxWidth: '500px',  margin: 'auto'}}>
       <h1>Login</h1>
       <form onSubmit={handleSubmit(onSubmit)} style={formStyle.form}>
         {displayErrors && (
@@ -71,7 +71,7 @@ export default function Login() {
           />
           {errors.password && <span>Ce champ est obligatoire</span>}
         </div>
-        <input type="submit" style={formStyle.input} />
+        <input className='button' type="submit" value="C'est parti !" />
       </form>
     </div>
   );

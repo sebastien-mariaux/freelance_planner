@@ -1,8 +1,11 @@
+import { colors } from "./colors"
+
 export const mainStyles = {
   titleButton: {
     marginTop: 'auto',
     marginBottom: 'auto',
-    marginLeft: '25px'
+    marginLeft: '25px',
+    fontSize: 'initial',
   },
   info: {
     fontSize: '0.8em',
@@ -38,7 +41,12 @@ export const formStyle = {
     borderRadius: '5px',
     padding: '0.5em',
     marginBottom: '2em'
-  }
+  },
+  inlineForm: {
+    padding: "20px",
+    backgroundColor: "#eee",
+    borderRadius: "5px",
+  },
 }
 
 export const inlineStyle = {
@@ -46,7 +54,6 @@ export const inlineStyle = {
     display: 'flex',
     flexDirection: 'row',
     margin: 'auto',
-    marginBottom: '2em'
   },
   fieldWrapper: {
     display: 'flex',
@@ -54,6 +61,7 @@ export const inlineStyle = {
     marginRight: '2em',
   },
   label: {
+    marginBottom: '0.2em',
   },
   input: {
     height: '2em'
@@ -68,5 +76,29 @@ export const inlineStyle = {
   },
   submit: {
     alignSelf: 'flex-end'
+  },
+  formTitle: {
+    marginBottom: '1em',
+    marginTop: 0
+  }
+}
+
+export const buttonStyle = {
+  main: {
+    height: '2em',
+    backgroundColor: colors.primary,
+    color: colors.white,
+    fontSize: '1em',
+    fontFamily: 'inherit',
+    borderRadius: '5px',
+    border: 'none',
+  }
+}
+
+export const navStyle = {
+  navLink: {
+    color: colors.secondary,
+    textDecoration: "none",
+    padding: "0 10px",
   }
 }

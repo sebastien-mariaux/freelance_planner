@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { inlineStyle } from "../mainStyles";
+import { formStyle, inlineStyle } from "../mainStyles";
 import { urlPost } from "../api/base";
 import { routes } from "../api/routes";
 
@@ -25,8 +25,8 @@ export default function CompanyForm({ getCompanies }) {
   };
 
   return (
-    <div className="companyForm">
-      <h3>Nouvelle entreprise</h3>
+    <div className="companyForm" style={{...formStyle.inlineForm,  marginBottom: '2em'}}>
+      <h3 style={inlineStyle.formTitle}>Nouvelle entreprise</h3>
 
       {displayErrors && (
         <div style={inlineStyle.errorMessage}>
@@ -52,9 +52,10 @@ export default function CompanyForm({ getCompanies }) {
           />
         </div>
         <input
+        style={{alignSelf: "flex-end"}}
           type="submit"
           value="Créer l'entreprise"
-          style={{ ...inlineStyle.input, ...inlineStyle.submit }}
+          className="button small"
         />
       </form>
     </div>

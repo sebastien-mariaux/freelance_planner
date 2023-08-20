@@ -1,5 +1,6 @@
 import React from "react";
 import { logout } from "../api/authUser";
+import { navStyle } from "../mainStyles";
 
 export default function LoginMenuItem() {
   const token = localStorage.getItem('token')
@@ -7,8 +8,8 @@ export default function LoginMenuItem() {
     return (
       <a
         href='/login'
-        style={{ marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto' }}
         onClick={logout}
+        style={navStyle.navLink}
       >
         Logout
       </a>

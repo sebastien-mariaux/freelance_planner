@@ -179,7 +179,7 @@ export default function Simulations() {
                 key={index}
                 onClick={() => openExpensesModal(simulation.id)}
               >
-                Sélection{simulation.id}
+                Sélection
               </div>
             ))}
           </section>
