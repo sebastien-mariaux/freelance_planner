@@ -7,7 +7,7 @@ import SelectRow from "./SimulationRow/SelectRow";
 import TextRow from "./SimulationRow/TextRow";
 import { mainStyles } from "../mainStyles";
 import { useParams } from "react-router-dom";
-import { urlGet, urlPatch } from "../api/base";
+import { urlDelete, urlGet, urlPatch, urlPost } from "../api/base";
 import { routes } from "../api/routes";
 import { simulationStyles } from "./simulationStyles";
 import ExpensesModal from "../Expenses/ExpensesModal";
@@ -40,7 +40,6 @@ export default function Simulations() {
   const [fullView, setFullView] = useState(false);
   const [apiSimulations, setApiSimulations] = useState([]);
   const { companyId } = useParams();
-  console.log("companyId", companyId);
   const [simulationId, setSimulationId] = useState();
   const [displayExpensesModal, setDisplayExpensesModal] = useState(false);
 
@@ -59,10 +58,27 @@ export default function Simulations() {
     setDisplayExpensesModal(true);
   };
 
-  console.log(apiSimulations);
-
   const toggleFullView = () => {
     setFullView(!fullView);
+  };
+
+  const addSimulation = async () => {
+    urlPost(
+      routes.companySimulations(companyId),
+      { name: getNewName('Ma simulation') },
+      () => getSimulations(),
+      () => {}
+    );
+  };
+
+  const getNewName = (newName) => {
+    const existingNames = apiSimulations.map((simulation) => simulation.name);
+    let i = 1;
+    while (existingNames.includes(newName)) {
+      newName = `${newName} ${i}`;
+      i++;
+    }
+    return newName;
   };
 
   const updateSimulation = (index, label, value) => {
@@ -76,6 +92,56 @@ export default function Simulations() {
     );
   };
 
+  const deleteSimulation = async (index) => {
+    urlDelete(
+      routes.companySimulation(companyId, apiSimulations[index].id),
+      () => getSimulations(),
+      () => {}
+    );
+  };
+
+  const duplicateSimulation = async (index) => {
+    const currentSimulation = apiSimulations[index]
+    urlPost(
+      routes.companySimulations(companyId),
+      {
+        name: getNewName(`${currentSimulation.name} - copie`),
+        description: currentSimulation.description,
+        company_type: currentSimulation.company_type,
+        daily_rate: currentSimulation.daily_rate,
+        days_per_week: currentSimulation.days_per_week,
+        weeks_on: currentSimulation.weeks_on,
+        dividend_rate: currentSimulation.dividend_rate,
+
+      },
+      (data) => onDuplicateSuccess(currentSimulation, data),
+      () => {}
+    );
+  };
+
+  const onDuplicateSuccess = async (currentSimulation,  data) => {
+    urlPost(
+      routes.linkExpenses(companyId, data.id),
+      { expense_ids: currentSimulation.expenses.map(expense => expense.id) },
+      getSimulations,
+      () => {}
+    );
+  };
+
+  const runActions = (index, event) => {
+    const action = event.target.value
+    switch (action) {
+      case "delete":
+        deleteSimulation(index);
+        break;
+      case 'duplicate':
+        duplicateSimulation(index);
+        break;
+      default:
+        break;
+    }
+  };
+
   return (
     <div>
       <div className="simulations">
@@ -84,7 +150,7 @@ export default function Simulations() {
           <h2>Comparateur</h2>
           <button
             style={mainStyles.titleButton}
-            onClick={() => {}}
+            onClick={addSimulation}
             data-testid="add-simulation"
           >
             Ajouter une simulation
@@ -368,25 +434,31 @@ export default function Simulations() {
             simulations={apiSimulations}
           />
 
-          {/* <section style={simulationStyles.row}>
-          <div style={{ ...simulationStyles.leftCol }} ></div>
-          {simulations.map((simulation: SimulationData, index: number) => (
-            <div key={index} style={simulationStyles.col} >
-              <button
+          <section style={{...simulationStyles.row, marginTop: '1em'}}>
+            <div style={{ ...simulationStyles.leftCol }}></div>
+            {apiSimulations.map((simulation, index) => (
+              <div key={index} style={simulationStyles.col}>
+                {/* <button
                 onClick={() => duplicateSimulation(simulation)}
                 data-testid='duplicate-simulation'
               >
                 Dupliquer
-              </button>
-              <button
-                onClick={() => deleteSimulation(index)}
-                data-testid="remove-simulation"
-              >
-                Supprimer
-              </button>
-            </div>
-          ))}
-        </section> */}
+              </button> */}
+              <select onChange={(event) => runActions(index, event)} value =''>
+                <option value=''>Actions</option>
+                <option value='delete'>Supprimer</option>
+                <option value='duplicate'>Dupliquer</option>
+              </select>
+                {/* <button
+                  className="small"
+                  onClick={() => deleteSimulation(index)}
+                  data-testid="remove-simulation"
+                >
+                  Supprimer
+                </button> */}
+              </div>
+            ))}
+          </section>
         </div>
 
         <section style={styles.infoSection}>

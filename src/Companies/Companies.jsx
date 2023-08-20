@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import NavMenu from "../NavMenu/NavMenu";
 import CompanyForm from "./CompanyForm";
 import { mainStyles } from "../mainStyles";
 import { urlGet } from "../api/base";
@@ -16,7 +15,6 @@ export default function Companies() {
 
   const getCompanies = async () => {
     urlGet(routes.companiesList).then((data) => {
-      console.log(companies);
       setCompanies(data);
       localStorage.setItem("companies", JSON.stringify(data));
     });

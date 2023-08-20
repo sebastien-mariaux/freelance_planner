@@ -1,4 +1,4 @@
-import {clearData} from "./authUser";
+import { clearData } from "./authUser";
 
 const BaseUrl = "http://localhost:8000/";
 
@@ -21,7 +21,7 @@ export const urlGet = async (route) => {
     method: "GET",
     headers: headers()
   });
-  if (! res.ok) {
+  if (!res.ok) {
     clearData();
   }
   return await res.json();
@@ -35,7 +35,12 @@ export const urlCallWithBody = async (method, route, body, onSuccess, onError) =
   });
 
   if (res.ok) {
-    onSuccess(await res.json())
+    if (res.status === 204) {
+      onSuccess()
+      return
+    } else {
+      onSuccess(await res.json())
+    }
   } else {
     onError(await res.json())
   }
@@ -50,6 +55,6 @@ export const urlPatch = async (route, body, onSuccess, onError) => {
   urlCallWithBody("PATCH", route, body, onSuccess, onError);
 }
 
-export const urlDelete = async (route, body, onSuccess, onError) => {
-  urlCallWithBody("DELETE", route, body, onSuccess, onError);
+export const urlDelete = async (route, onSuccess, onError) => {
+  urlCallWithBody("DELETE", route, {}, onSuccess, onError);
 }

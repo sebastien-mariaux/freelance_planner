@@ -11,7 +11,6 @@ export default function ExpensesModal({
   companyId,
   setDisplayExpensesModal,
 }) {
-  console.log(simulationId);
   const [expenses, setExpenses] = React.useState([]);
   const [simulation, setSimulation] = React.useState({
     expenses: [],

@@ -14,7 +14,6 @@ export default function ExpensesForm({ afterCreate }) {
   };
 
   const createExpense = (data) => {
-    console.log(data);
     urlPost(
       routes.expenses,
       data,
