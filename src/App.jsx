@@ -4,7 +4,6 @@ import Simulations from "./Simulations/Simulations";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import About from "./About";
 import SiteLayout from "./Simulations/SiteLayout";
-import Expenses from "./Expenses/Expenses";
 import Achieved from "./Achieved/Achieved";
 import { ErrorBoundary } from "react-error-boundary";
 import MainFallbackError from "./errors/MainFallbackError";
@@ -33,7 +32,6 @@ function App() {
                 path="/companies/:companyId/simulations"
                 element={<Simulations />}
               />
-              <Route path="/expenses" element={<Expenses />} />
               <Route path="/achieved" element={<Achieved />} />
             </Route>
           </Route>

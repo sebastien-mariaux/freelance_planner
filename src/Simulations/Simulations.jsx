@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Simulation } from "../models/simulation";
 import NavMenu from "../NavMenu/NavMenu";
 import InputRow from "./SimulationRow/InputRow";
 import PercentTextRow from "./SimulationRow/PercentTextRow";
@@ -37,48 +36,13 @@ const styles = {
   },
 };
 
-export const defaultSimulations = [
-  new Simulation({
-    companyType: "SASU",
-    name: "SASU",
-    dailyRate: 500,
-    daysPerWeek: 5,
-    weeksOff: 10,
-    monthlyRepayableExpenses: 50,
-    monthlyTaxableRepayableExpenses: 300,
-  }).serialize(),
-  new Simulation({
-    companyType: "EURL",
-    name: "EURL",
-    dailyRate: 500,
-    daysPerWeek: 5,
-    weeksOff: 10,
-    monthlyRepayableExpenses: 50,
-    monthlyTaxableRepayableExpenses: 300,
-    monthlyNetSalary: 4500,
-  }).serialize(),
-];
-
 export default function Simulations() {
-  const [simulations, setSimulations] = useState(defaultSimulations);
-  // const [highlight, setHighlight] = useState(false);
-  // const location = useLocation();
-  // const { importData } = location?.state || false
   const [fullView, setFullView] = useState(false);
   const [apiSimulations, setApiSimulations] = useState([]);
   const { companyId } = useParams();
   console.log("companyId", companyId);
   const [simulationId, setSimulationId] = useState();
   const [displayExpensesModal, setDisplayExpensesModal] = useState(false);
-
-  // useEffect(() => {
-  //   if (importData) {
-  //     setHighlight(true);
-  //     setTimeout(() => {
-  //       setHighlight(false);
-  //     }, 5000);
-  //   }
-  // }, [importData])
 
   const getSimulations = async () => {
     urlGet(routes.companyDetailedSimulations(companyId)).then((data) => {
@@ -96,31 +60,6 @@ export default function Simulations() {
   };
 
   console.log(apiSimulations);
-
-  // const duplicateSimulation = (simulation: SimulationData) => {
-  //   let newSimulation = new Simulation(simulation);
-  //   newSimulation.name = newSimulation.name + ' (copie)';
-  //   setSimulations([...simulations, newSimulation.serialize()]);
-  // }
-
-  // const deleteSimulation = (index: number) => {
-  //   let newSimulations = [...simulations];
-  //   newSimulations.splice(index, 1);
-  //   setSimulations(newSimulations);
-  // }
-
-  // const updateSimulation = (index: number, label: string, value: any) => {
-  //   let newSimulations: any = simulations.map((simulation: SimulationData) => new Simulation(simulation));
-  //   newSimulations[index][label] = value;
-  //   newSimulations = newSimulations.map((simulation: Simulation) => simulation.serialize());
-  //   setSimulations([...newSimulations]);
-  //   saveSimulations(newSimulations)
-  // }
-
-  // const resetSimulations = () => {
-  //   localStorage.removeItem('simulations');
-  //   setSimulations(defaultSimulations);
-  // }
 
   const toggleFullView = () => {
     setFullView(!fullView);
@@ -145,9 +84,7 @@ export default function Simulations() {
           <h2>Comparateur</h2>
           <button
             style={mainStyles.titleButton}
-            onClick={() =>
-              setSimulations([...simulations, new Simulation().serialize()])
-            }
+            onClick={() => {}}
             data-testid="add-simulation"
           >
             Ajouter une simulation
