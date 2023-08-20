@@ -55,6 +55,6 @@ export const urlPatch = async (route, body, onSuccess, onError) => {
   urlCallWithBody("PATCH", route, body, onSuccess, onError);
 }
 
-export const urlDelete = async (route, onSuccess, onError) => {
-  urlCallWithBody("DELETE", route, {}, onSuccess, onError);
+export const urlDelete = async (route, body, onSuccess, onError) => {
+  urlCallWithBody("DELETE", route, body, onSuccess, onError);
 }

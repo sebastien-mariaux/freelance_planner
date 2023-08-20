@@ -95,6 +95,7 @@ export default function Simulations() {
   const deleteSimulation = async (index) => {
     urlDelete(
       routes.companySimulation(companyId, apiSimulations[index].id),
+      {},
       () => getSimulations(),
       () => {}
     );
