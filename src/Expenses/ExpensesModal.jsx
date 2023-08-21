@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { urlGet, urlPost } from "../api/base";
+import { urlDelete, urlGet, urlPost } from "../api/base";
 import { routes } from "../api/routes";
 import ExpensesTable from "./ExpensesTable";
 import ExpensesForm from "./ExpensesForm";
@@ -48,7 +48,12 @@ export default function ExpensesModal({
   };
 
   const deleteExpense = (index) => () => {
-    console.log(index);
+    urlDelete(
+      routes.expense(expenses[index].id),
+      {},
+      loadExpenses,
+      () => {}
+    );
   };
 
   return (

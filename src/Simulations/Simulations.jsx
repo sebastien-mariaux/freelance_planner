@@ -183,6 +183,12 @@ export default function Simulations() {
             title="Type de société"
             options={["SASU", "EURL"]}
           />
+          <InputRow
+            label="description"
+            title="Description"
+            simulations={apiSimulations}
+            updateSimulation={updateSimulation}
+          />
 
           <h3>Revenus</h3>
           <InputRow
@@ -403,7 +409,7 @@ export default function Simulations() {
                 simulations={apiSimulations}
               />
               <TextRow
-                label="expenses.repayed_yearly_expenses"
+                label="expenses_data.repayed_yearly_expenses"
                 title="Frais remboursés"
                 simulations={apiSimulations}
               />

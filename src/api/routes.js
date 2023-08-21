@@ -7,6 +7,7 @@ export const routes = {
   companySimulation: (companyId, simulationId) => `/companies/${companyId}/simulations/${simulationId}/`,
   companyDetailedSimulations: (companyId) => `/companies/${companyId}/detailed-simulations/`,
   expenses: '/expenses/',
+  expense: (expenseId) => `/expenses/${expenseId}/`,
   linkExpense: (companyId, simulationId) => `/companies/${companyId}/simulations/${simulationId}/link_expense/`,
   unlinkExpense: (companyId, simulationId) => `/companies/${companyId}/simulations/${simulationId}/unlink_expense/`,
   linkExpenses: (companyId, simulationId) => `/companies/${companyId}/simulations/${simulationId}/link_expenses/`,
