@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { urlGet } from "../api/base";
+import { urlDelete, urlGet } from "../api/base";
 import { routes } from "../api/routes";
 import { useParams } from "react-router-dom";
 import { tableStyle } from "../Expenses/ExpensesTable";
@@ -14,7 +14,7 @@ export default function TransactionPanel() {
   console.log(transactions);
 
   const getTransactions = async () => {
-    urlGet(routes.transactions(companyId, 2023)).then((data) => {
+    urlGet(routes.yearTransactions(companyId, 2023)).then((data) => {
       setTransactions(data);
     });
   };
@@ -46,10 +46,18 @@ export default function TransactionPanel() {
     }
   };
 
+  const deleteExpense = (id) => {
+    urlDelete(routes.transaction(companyId, id), {}, getTransactions, () => {});
+  };
+
+  const afterCreate = () => {
+    getTransactions();
+  };
+
   return (
     <div>
       <div style={{ ...formStyle.inlineForm, marginBottom: "1em" }}>
-        <TransactionsForm afterCreate={() => {}} />
+        <TransactionsForm afterCreate={afterCreate} companyId={companyId} />
       </div>
       <table
         style={{ ...tableStyle.table, maxWidth: "800px" }}
@@ -61,11 +69,15 @@ export default function TransactionPanel() {
             <th>Date</th>
             <th style={{ textAlign: "right", paddingRight: "0.5em" }}>Dépenses</th>
             <th style={{ textAlign: "right", paddingRight: "0.5em" }}>Revenus</th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           {transactions
-            .sort((transaction) => transaction.date)
+            .sort((a, b) =>{
+              return new Date(b.date) - new Date(a.date);
+
+            })
             .map((transaction) => (
               <tr key={transaction.id}>
                 <td>{transaction.name}</td>
@@ -75,6 +87,12 @@ export default function TransactionPanel() {
                 </td>
                 <td style={{ textAlign: "right", paddingRight: "0.5em" }}>
                   {getIncome(transaction)}
+                </td>
+                <td>
+                  <button
+                  className="small"
+              onClick={() => deleteExpense(transaction.id)}
+                  >Supprimer</button>
                 </td>
               </tr>
             ))}

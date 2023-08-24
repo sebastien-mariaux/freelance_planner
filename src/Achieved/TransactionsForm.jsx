@@ -3,12 +3,18 @@ import { useForm } from "react-hook-form";
 import { urlPost } from "../api/base";
 import { routes } from "../api/routes";
 
-export default function TransactionsForm({ afterCreate }) {
+export default function TransactionsForm({ afterCreate, companyId }) {
   const { register, handleSubmit,  reset } = useForm({
     shouldUseNativeValidation: true,
   });
 
   const createTransaction = (data) => {
+    urlPost(
+      routes.transactions(companyId),
+      data,
+      afterCreate,
+      () => {});
+
   }
 
 
@@ -35,6 +41,9 @@ export default function TransactionsForm({ afterCreate }) {
               <option value="I">Revenu</option>
               <option value="E">Dépense</option>
             </select>
+          </label>
+          <label style={styles.label}>
+            <input type="date" {...register("date", { required: true })} />
           </label>
 
         </div>
