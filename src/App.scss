@@ -6,9 +6,7 @@ $white: #ffffff;
 $font: #19647e;
 $links: #28AFB0;
 
-.simulations,
-.achieved {
-
+.simulations{
   input,
   select {
     border: none;
@@ -77,5 +75,18 @@ button, .button {
   a {
     &:hover {
       font-weight: bold;
+    }
+  }
+
+  .clickable {
+    &:hover {
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    &.active {
+      font-weight: bold;
+      background-color: $links;
+      color: $white;
     }
   }

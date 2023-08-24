@@ -2,6 +2,7 @@ import React from "react";
 import { displayAmount } from "../Simulations/simulationsHelper";
 import { urlDelete, urlPost } from "../api/base";
 import { routes } from "../api/routes";
+import { colors } from "../colors";
 
 export default function ExpensesTable({
   expenses,
@@ -76,8 +77,8 @@ export default function ExpensesTable({
   };
 
   return (
-    <table style={styles.table} className="bordered-table">
-      <thead style={styles.thead}>
+    <table style={tableStyle.table} className="bordered-table">
+      <thead style={tableStyle.thead}>
         <tr>
           <th>
             <input
@@ -123,13 +124,13 @@ export default function ExpensesTable({
   );
 }
 
-const styles = {
+export const tableStyle = {
   table: {
     width: "100%",
   },
   thead: {
     textAlign: "left",
-    backgroundColor: "#000",
+    backgroundColor: colors.primary,
     color: "#fff",
   },
 };

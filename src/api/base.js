@@ -21,7 +21,7 @@ export const urlGet = async (route) => {
     method: "GET",
     headers: headers()
   });
-  if (!res.ok) {
+  if (res.status === 401) {
     clearData();
   }
   return await res.json();

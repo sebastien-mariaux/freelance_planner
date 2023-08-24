@@ -32,7 +32,7 @@ function App() {
                 path="/companies/:companyId/simulations"
                 element={<Simulations />}
               />
-              <Route path="/achieved" element={<Achieved />} />
+              <Route path="/companies/:companyId/achieved" element={<Achieved />} />
             </Route>
           </Route>
         </Routes>

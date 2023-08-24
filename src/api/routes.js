@@ -11,5 +11,6 @@ export const routes = {
   linkExpense: (companyId, simulationId) => `/companies/${companyId}/simulations/${simulationId}/link_expense/`,
   unlinkExpense: (companyId, simulationId) => `/companies/${companyId}/simulations/${simulationId}/unlink_expense/`,
   linkExpenses: (companyId, simulationId) => `/companies/${companyId}/simulations/${simulationId}/link_expenses/`,
-  unlinkExpenses: (companyId, simulationId) => `/companies/${companyId}/simulations/${simulationId}/unlink_expenses/`
+  unlinkExpenses: (companyId, simulationId) => `/companies/${companyId}/simulations/${simulationId}/unlink_expenses/`,
+  transactions: (companyId, year = null) => `/companies/${companyId}/transactions/?year=${year}`,
 }

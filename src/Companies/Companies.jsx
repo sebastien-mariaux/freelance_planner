@@ -41,7 +41,12 @@ export default function Companies() {
         const url = `/companies/${company.id}/simulations`;
         return (
           <div key={company.id} style={styles.companyCard}>
-            <a href={url} style={styles.cardTitle}>{company.name}</a>
+            <a
+            href={url}
+            onClick={() => localStorage.setItem('companyId', company.id)}
+            style={styles.cardTitle}>
+              {company.name}
+              </a>
             {company.description && <div>{company.description}</div>}
           </div>
         );

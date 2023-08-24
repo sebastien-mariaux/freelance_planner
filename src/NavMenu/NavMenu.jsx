@@ -1,7 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 export default function NavMenu({ activeItem }) {
   const isPremium = false;
+
+  const [companyId, setCompanyId] = useState(null);
+
+  useEffect(() => {
+    setCompanyId(localStorage.getItem("companyId"));
+  }, []);
 
   return (
     <div style={styles.navMenu}>
@@ -19,7 +25,7 @@ export default function NavMenu({ activeItem }) {
       </div>
       <div style={itemStyle(activeItem, "simulations")}>
         <a
-          href="/simulations"
+          href={`/companies/${companyId}/simulations`}
           style={{
             marginLeft: "auto",
             marginTop: "auto",
@@ -32,7 +38,7 @@ export default function NavMenu({ activeItem }) {
       {isPremium ? (
         <div style={itemStyle(activeItem, "achieved")}>
           <a
-            href="/achieved"
+            href={`/companies/${companyId}/achieved`}
             style={{
               marginLeft: "auto",
               marginTop: "auto",
@@ -47,6 +53,18 @@ export default function NavMenu({ activeItem }) {
           <span title='En travaux' style={styles.disabledLink}>Réalisé</span>
         </div>
       )}
+      <div style={itemStyle(activeItem, "achieved")}>
+          <a
+            href={`/companies/${companyId}/achieved`}
+            style={{
+              marginLeft: "auto",
+              marginTop: "auto",
+              marginBottom: "auto",
+            }}
+          >
+            Réalisé
+          </a>
+        </div>
     </div>
   );
 }
