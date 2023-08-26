@@ -23,6 +23,8 @@ export const urlGet = async (route) => {
   });
   if (res.status === 401) {
     clearData();
+    // navigate to login
+    window.location.href = "/login";
   }
   return await res.json();
 }

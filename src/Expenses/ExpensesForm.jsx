@@ -20,6 +20,7 @@ export default function ExpensesForm({ afterCreate }) {
       (data) => {
         afterCreate(data.id)
         reset();
+        setDisplayTaxable(false);
       },
       () => {}
     );
@@ -60,7 +61,7 @@ export default function ExpensesForm({ afterCreate }) {
           {displayTaxable && (
             <label style={styles.label}>
               Imposable à l'IR
-              <input type="checkbox" {...register("taxable")} />
+              <input type="checkbox" {...register("is_taxable")} />
             </label>
           )}
         </div>
