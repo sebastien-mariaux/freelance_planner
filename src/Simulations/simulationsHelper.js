@@ -1,5 +1,5 @@
 export const displayAmount = (amount) => {
-  if (amount === undefined || amount === null) return '???';
+  if (amount === undefined || amount === null) return '-';
 
   return amount.toLocaleString('fr-FR', { style: 'currency', currency: 'EUR' });
 }

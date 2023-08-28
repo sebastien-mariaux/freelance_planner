@@ -4,14 +4,12 @@ import { routes } from "../api/routes";
 import { useParams } from "react-router-dom";
 import { tableStyle } from "../Expenses/ExpensesTable";
 import { displayAmount } from "../Simulations/simulationsHelper";
-import ExpensesForm from "../Expenses/ExpensesForm";
 import { formStyle } from "../mainStyles";
 import TransactionsForm from "./TransactionsForm";
 
 export default function TransactionPanel() {
   const [transactions, setTransactions] = useState([]);
   const { companyId } = useParams();
-  console.log(transactions);
 
   const getTransactions = async () => {
     const currentYear = new Date().getFullYear();
