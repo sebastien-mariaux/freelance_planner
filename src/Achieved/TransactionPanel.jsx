@@ -14,7 +14,8 @@ export default function TransactionPanel() {
   console.log(transactions);
 
   const getTransactions = async () => {
-    urlGet(routes.yearTransactions(companyId, 2023)).then((data) => {
+    const currentYear = new Date().getFullYear();
+    urlGet(routes.yearTransactions(companyId, currentYear)).then((data) => {
       setTransactions(data);
     });
   };

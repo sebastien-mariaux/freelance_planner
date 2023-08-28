@@ -10,6 +10,7 @@ import MainFallbackError from "./errors/MainFallbackError";
 import Login from "./Login/Login";
 import WithAuth from "./Login/WithAuth";
 import Companies from "./Companies/Companies";
+import Feedback from "./Feedback/Feedback.jsx";
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route element={<SiteLayout />}>
             <Route path="/login" element={<Login />} />
             <Route path="/a-propos" element={<About />} />
+            <Route path="/feedback" element={<Feedback />} />
             <Route element={<WithAuth />}>
               <Route path="/" element={<Companies />} />
               <Route path="/companies" element={<Companies />} />

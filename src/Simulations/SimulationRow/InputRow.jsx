@@ -9,7 +9,6 @@ export default function InputRow({
   updateSimulation,
   label,
   style,
-  highlight = false,
 }) {
   return (
     <section style={simulationStyles.row}>
@@ -23,7 +22,6 @@ export default function InputRow({
           index={index}
           label={label}
           updateData={updateSimulation}
-          highlight={highlight}
         />
       ))}
     </section>
@@ -36,21 +34,19 @@ export function SingleInput({
   label,
   style = {},
   updateData,
-  highlight,
 }) {
   const [value, setValue] = useState(data[label]);
   useEffect(() => {
     setValue(getDeepValue(data, label));
   }, [data, label]);
 
-  const extraStyle = highlight ? { backgroundColor: "antiquewhite" } : {};
 
   const field = label.split(".").pop() || label;
   return (
     <div key={index} style={simulationStyles.col}>
       <input
         data-testid={label}
-        style={{ width: "100%", ...style, ...extraStyle }}
+        style={{ width: "100%", ...style }}
         type="text"
         inputMode="numeric"
         value={value}

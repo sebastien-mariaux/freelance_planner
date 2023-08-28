@@ -25,6 +25,11 @@ export default function SiteLayout() {
           >
             À propos...
           </a>
+          <a style={navStyle.navLink}
+            href="/feedback"
+          >
+            Feedback
+          </a>
           <LoginMenuItem />
         </nav>
       </header>

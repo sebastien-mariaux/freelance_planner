@@ -23,6 +23,11 @@ export const formStyle = {
     margin: 'auto',
     maxWidth: '500px'
   },
+  largeForm: {
+    display: 'flex',
+    flexDirection: 'column',
+    maxWidth: '900px'
+  },
   fieldWrapper: {
     display: 'flex',
     flexDirection: 'column',

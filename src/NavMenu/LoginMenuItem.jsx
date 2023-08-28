@@ -4,6 +4,7 @@ import { navStyle } from "../mainStyles";
 
 export default function LoginMenuItem() {
   const token = localStorage.getItem('token')
+  console.log('token', token)
   if (token) {
     return (
       <a
@@ -19,9 +20,9 @@ export default function LoginMenuItem() {
   return (
     <a
     href='/login'
-    style={{ marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto' }}
+    style={{ marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto' , ...navStyle.navLink}}
   >
-
+    Login
   </a>
   )
 }

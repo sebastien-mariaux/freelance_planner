@@ -207,12 +207,12 @@ export default function Simulations() {
             label="days_per_week"
             title="Jours par semaine"
           />
-          {/* {fullView && <InputRow
+          {fullView && <InputRow
           simulations={apiSimulations}
-          updateSimulation={()=>{}}
-          label='weeks'
-          title='Semaines off'
-        />} */}
+          updateSimulation={updateSimulation}
+          label='weeks_off'
+          title='Semaines non travaillées'
+        />}
           <InputRow
             simulations={apiSimulations}
             updateSimulation={updateSimulation}
@@ -468,7 +468,7 @@ export default function Simulations() {
           </section>
         </div>
 
-        <section style={styles.infoSection}>
+        {/* <section style={styles.infoSection}>
           <div>
             * Frais remboursés par l'entreprise et non soumis à l'impôt sur le
             revenu (électricité, box internet...)
@@ -477,7 +477,7 @@ export default function Simulations() {
             ** Frais remboursés par l'entreprise et soumis à l'impôt sur le
             revenu (principalement les loyers versés au dirigeant·e)
           </div>
-        </section>
+        </section> */}
       </div>
       {displayExpensesModal && companyId && (
         <ExpensesModal
