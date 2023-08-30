@@ -36,7 +36,7 @@ export default function Companies() {
         )}
       </h2>
       {displayForm && <CompanyForm getCompanies={getCompanies} />}
-      <div style={styles.companiesContainer}>
+     {companies.length > 0 && <div style={styles.companiesContainer}>
         <table className="bordered-table">
           <thead style={{textAlign: 'left'}}>
             <tr>
@@ -69,7 +69,7 @@ export default function Companies() {
             })}
           </tbody>
         </table>
-      </div>
+      </div>}
       {companies.length === 0 && (
         <div>Vous n'avez créé aucune entreprise pour le moment !</div>
       )}

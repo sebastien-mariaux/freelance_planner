@@ -66,7 +66,7 @@ export default function TransactionPanel({year, setYear}) {
       <div style={{ ...formStyle.inlineForm, marginBottom: "1em", padding: '0.1em 0.5em' }}>
         <TransactionsForm afterCreate={afterCreate} companyId={companyId} />
       </div>
-      <table
+      {transactions.length > 0 &&<table
         style={{ ...tableStyle.table, maxWidth: "800px" }}
         className="bordered-table"
       >
@@ -109,7 +109,7 @@ export default function TransactionPanel({year, setYear}) {
               </tr>
             ))}
         </tbody>
-      </table>
+      </table>}
       {pagination?.num_pages > 1 && (
         <div style={styles.pagination}>
           {pagination.previous && <button
