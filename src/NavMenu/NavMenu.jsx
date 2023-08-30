@@ -36,33 +36,33 @@ export default function NavMenu({ activeItem }) {
         </a>
       </div>
       {isPremium ? (
-        <div style={itemStyle(activeItem, "achieved")}>
+        <div style={itemStyle(activeItem, "accounting")}>
           <a
-            href={`/companies/${companyId}/achieved`}
+            href={`/companies/${companyId}/accounting`}
             style={{
               marginLeft: "auto",
               marginTop: "auto",
               marginBottom: "auto",
             }}
           >
-            Réalisé
+            Comptabilité
           </a>
         </div>
       ) : (
-        <div style={itemStyle(activeItem, "achieved")}>
-          <span title='En travaux' style={styles.disabledLink}>Réalisé</span>
+        <div style={itemStyle(activeItem, "accounting")}>
+          <span title='En travaux' style={styles.disabledLink}>Comptabilité</span>
         </div>
       )}
-      <div style={itemStyle(activeItem, "achieved")}>
+      <div style={itemStyle(activeItem, "accounting")}>
           <a
-            href={`/companies/${companyId}/achieved`}
+            href={`/companies/${companyId}/accounting`}
             style={{
               marginLeft: "auto",
               marginTop: "auto",
               marginBottom: "auto",
             }}
           >
-            Réalisé
+            Comptabilité
           </a>
         </div>
     </div>

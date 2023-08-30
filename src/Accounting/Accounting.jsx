@@ -9,7 +9,7 @@ import { urlGet, urlPatch, urlPost } from "../api/base";
 import { routes } from "../api/routes";
 import SalaryPanel from "./SalaryPanel";
 
-export default function Achieved() {
+export default function Accounting() {
   const [panel, setPanel] = useState("transactions");
   const [company, setCompany] = useState({});
   const companyId = localStorage.getItem("companyId");
@@ -46,10 +46,10 @@ export default function Achieved() {
   };
 
   return (
-    <div className="achieved">
-      <NavMenu activeItem="achieved" />
+    <div className="accounting">
+      <NavMenu activeItem="accounting" />
       <div style={{ display: "flex", marginTop: "1em" }}>
-        <h2 style={{ margin: 0 }}>Réalisé</h2>
+        <h2 style={{ margin: 0 }}>Comptabilité</h2>
         <div style={{ alignSelf: "center", marginLeft: "2em" }}>
           <span style={{marginRight: '0.5em', fontStyle: 'italic'}}>Année :</span>
           <select onChange={(e) => setYear(e.target.value)}>
