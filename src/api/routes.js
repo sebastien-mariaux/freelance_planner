@@ -16,6 +16,9 @@ export const routes = {
   transactions: (companyId) => `/companies/${companyId}/transactions/`,
   transaction: (companyId, transactionId) => `/companies/${companyId}/transactions/${transactionId}/`,
   yearTransactions: (companyId, year = null, page=1) => `/companies/${companyId}/transactions/?year=${year}&page=${page}`,
+  yearSalaries: (companyId, year = null, page=1) => `/companies/${companyId}/salaries/?year=${year}&page=${page}`,
+  salaries: (companyId) => `/companies/${companyId}/salaries/`,
+  salary: (companyId, salaryId) => `/companies/${companyId}/salaries/${salaryId}/`,
   feedback: '/feedback/',
   summary: (companyId, year) => `/companies/${companyId}/summary/?year=${year}`,
 }

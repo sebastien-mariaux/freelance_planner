@@ -1,23 +1,23 @@
-import { useEffect, useState } from "react";
-import { urlDelete, urlGet } from "../api/base";
-import { routes } from "../api/routes";
 import { useParams } from "react-router-dom";
-import { tableStyle } from "../Expenses/ExpensesTable";
 import { displayAmount } from "../Simulations/simulationsHelper";
-import { formStyle } from "../mainStyles";
-import TransactionsForm from "./TransactionsForm";
 import { colors } from "../colors";
+import { useEffect, useState } from "react";
+import { routes } from "../api/routes";
+import { urlDelete, urlGet } from "../api/base";
+import { formStyle } from "../mainStyles";
+import SalaryForm from "./SalaryForm";
+import { tableStyle } from "../Expenses/ExpensesTable";
 
-export default function TransactionPanel({year}) {
-  const [transactions, setTransactions] = useState([]);
+export default function SalaryPanel({year, company}) {
+  const [salaries, setSalaries] = useState([]);
   const { companyId } = useParams();
   const [pagination, setPagination] = useState({});
   const [page_number, setPageNumber] = useState(1);
 
-  const getTransactions = async () => {
-    urlGet(routes.yearTransactions(companyId, year, page_number)).then(
+  const getSalaries = async () => {
+    urlGet(routes.yearSalaries(companyId, year, page_number)).then(
       (data) => {
-        setTransactions(data.results);
+        setSalaries(data.results);
         setPagination(data.pagination);
       }
     );
@@ -26,82 +26,57 @@ export default function TransactionPanel({year}) {
 
   useEffect(() => {
     console.log('useEffect')
-    getTransactions();
+    getSalaries();
   }, [page_number, year]);
 
-  // const getSignedAmount = (transaction) => {
-  //   let value = displayAmount(parseFloat(transaction.amount));
-
-  //   if (transaction.transaction_type === "I") {
-  //     return value;
-  //   } else {
-  //     return `- ${value}`;
-  //   }
-  // };
-
-  const getIncome = (transaction) => {
-    if (transaction.transaction_type === "I") {
-      return displayAmount(parseFloat(transaction.amount));
-    }
-  };
-
-  const getExpense = (transaction) => {
-    if (transaction.transaction_type === "E") {
-      const value = displayAmount(parseFloat(transaction.amount));
-      return `- ${value}`;
-    }
-  };
-
   const deleteExpense = (id) => {
-    urlDelete(routes.transaction(companyId, id), {}, getTransactions, () => {});
+    urlDelete(routes.salary(companyId, id), {}, getSalaries, () => {});
   };
 
   const afterCreate = () => {
-    getTransactions();
+    getSalaries();
   };
 
 
   return (
     <div>
       <div style={{ ...formStyle.inlineForm, marginBottom: "1em", padding: '0.1em 0.5em' }}>
-        <TransactionsForm afterCreate={afterCreate} companyId={companyId} />
+        <SalaryForm afterCreate={afterCreate} companyId={companyId} />
       </div>
-      {transactions.length > 0 &&<table
+      {salaries.length > 0 &&<table
         style={{ ...tableStyle.table, maxWidth: "800px" }}
         className="bordered-table"
       >
         <thead style={tableStyle.thead}>
           <tr>
-            <th>Name</th>
             <th>Date</th>
             <th style={{ textAlign: "right", paddingRight: "0.5em" }}>
-              Dépenses
+              Montant net
             </th>
             <th style={{ textAlign: "right", paddingRight: "0.5em" }}>
-              Revenus
+              Montant brut
             </th>
             <th></th>
           </tr>
         </thead>
         <tbody>
-          {transactions
+          {salaries
             .sort((a, b) => {
               return new Date(b.date) - new Date(a.date);
             })
-            .map((transaction) => (
-              <tr key={transaction.id}>
-                <td>{transaction.name}</td>
-                <td>{transaction.date}</td>
+            .map((salary) => (
+              <tr key={salary.id}>
+                <td>{salary.date}</td>
                 <td style={{ textAlign: "right", paddingRight: "0.5em" }}>
-                  {getExpense(transaction)}
+                  {salary.net_amount}
                 </td>
                 <td style={{ textAlign: "right", paddingRight: "0.5em" }}>
-                  {getIncome(transaction)}
+                  {salary.gross_amount}
                 </td>
                 <td style={styles.actions}>
                   <button
                     className="small table-button"
-                    onClick={() => deleteExpense(transaction.id)}
+                    onClick={() => deleteExpense(salary.id)}
                   >
                     Supprimer
                   </button>

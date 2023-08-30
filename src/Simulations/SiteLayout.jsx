@@ -8,7 +8,9 @@ export default function SiteLayout() {
   const navigate = useNavigate();
 
   return (
-    <>
+    <div class='global-wrapper' >
+      <div>
+
       <header style={styles.header}>
         <div
           className="main-title"
@@ -36,15 +38,17 @@ export default function SiteLayout() {
 
       <div style={styles.contentContainer}>
         <Outlet />
-        <footer style={{ marginTop: "50px" }}>
+      </div>
+      </div>
+
+        <footer style={{ margin: "50px" }}>
           <div style={{ display: "flex", justifyContent: "center" }}>
             <span>&copy;&nbsp;</span>
             <a href="https://sebastien-mariaux.com/">Sébastien Mariaux</a>
             <span>&nbsp;- 2023</span>
           </div>
         </footer>
-      </div>
-    </>
+    </div>
   );
 }
 

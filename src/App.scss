@@ -6,6 +6,13 @@ $white: #ffffff;
 $font: #19647e;
 $links: #28AFB0;
 
+.global-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
 .simulations{
   input,
   select {

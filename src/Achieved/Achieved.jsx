@@ -7,13 +7,12 @@ import SummaryPanel from "./SummaryPanel";
 import { colors } from "../colors";
 import { urlGet, urlPatch, urlPost } from "../api/base";
 import { routes } from "../api/routes";
+import SalaryPanel from "./SalaryPanel";
 
 export default function Achieved() {
   const [panel, setPanel] = useState("transactions");
   const [company, setCompany] = useState({});
   const companyId = localStorage.getItem("companyId");
-
-  console.log(company)
 
   useEffect(() => {
     getCompany();
@@ -83,6 +82,13 @@ export default function Achieved() {
           Transactions
         </div>
         <div
+          className={getClassList("salaries")}
+          onClick={() => selectTab("salaries")}
+          style={styles.tab}
+        >
+          Salaires
+        </div>
+        <div
           className={getClassList("summary")}
           onClick={() => selectTab("summary")}
           style={styles.tab}
@@ -92,11 +98,16 @@ export default function Achieved() {
       </div>
 
       <div>
-        {panel === "transactions" ? (
-          <TransactionPanel year={year} setYear={setYear} />
-        ) : (
-          <SummaryPanel year={year} setYear={setYear} />
-        )}
+        {
+        panel === "transactions" && <TransactionPanel year={year}  />
+        }
+        {
+        panel === "summary" && <SummaryPanel year={year} company={company} />
+        }
+        {
+        panel === "salaries" && <SalaryPanel year={year} />
+        }
+
       </div>
     </div>
   );
