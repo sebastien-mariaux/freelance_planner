@@ -4,17 +4,17 @@ import { routes } from "../api/routes";
 import { displayAmount } from "../Simulations/simulationsHelper";
 import { colors } from "../colors";
 
-export default function SummaryPanel() {
+export default function SummaryPanel({year, setYear}) {
   const [summary, setSummary] = useState([]);
   const companyId = localStorage.getItem("companyId");
   console.log(summary)
+
   useEffect(() => {
     loadSummary();
-  }, []);
+  }, [year]);
 
   const loadSummary = () => {
-    const currentYear = new Date().getFullYear();
-    urlGet(routes.summary(companyId, currentYear)).then((data) => {
+    urlGet(routes.summary(companyId, year)).then((data) => {
       setSummary(data);
     });
   };

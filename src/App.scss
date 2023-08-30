@@ -64,6 +64,10 @@ button, .button {
     font-weight: initial;
   }
 
+  &.table-button {
+    font-size: small;
+  }
+
   &:hover {
     cursor: pointer;
     color: $secondary;

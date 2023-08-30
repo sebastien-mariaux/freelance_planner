@@ -168,6 +168,10 @@ export default function Simulations() {
           </button>
         </div>
 
+        <p style={{ fontStyle: "italic" }}>
+          Modifiez les champs en bleu pour faire varier vos simulations.
+        </p>
+
         <div style={{ width: "fit-content" }}>
           <InputRow
             label="name"
@@ -183,12 +187,12 @@ export default function Simulations() {
             title="Type de société"
             options={["SASU", "EURL"]}
           />
-          <InputRow
+          {/* <InputRow
             label="description"
             title="Description"
             simulations={apiSimulations}
             updateSimulation={updateSimulation}
-          />
+          /> */}
 
           <h3>Revenus</h3>
           <InputRow
@@ -207,12 +211,14 @@ export default function Simulations() {
             label="days_per_week"
             title="Jours par semaine"
           />
-          {fullView && <InputRow
-          simulations={apiSimulations}
-          updateSimulation={updateSimulation}
-          label='weeks_off'
-          title='Semaines non travaillées'
-        />}
+          {fullView && (
+            <InputRow
+              simulations={apiSimulations}
+              updateSimulation={updateSimulation}
+              label="weeks_off"
+              title="Semaines non travaillées"
+            />
+          )}
           <InputRow
             simulations={apiSimulations}
             updateSimulation={updateSimulation}

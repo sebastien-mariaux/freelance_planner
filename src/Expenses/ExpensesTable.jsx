@@ -114,8 +114,8 @@ export default function ExpensesTable({
             <td>{frequencyLabel(expense.periodicity)}</td>
             <td>{expense.is_repayed ? "Oui" : "Non"}</td>
             <td>{expense.is_taxable ? "Oui" : "Non"}</td>
-            <td>
-              <button onClick={deleteExpense(index)}>Supprimer</button>
+            <td >
+              <button className="table-button small" onClick={deleteExpense(index)}>Supprimer</button>
             </td>
           </tr>
         ))}

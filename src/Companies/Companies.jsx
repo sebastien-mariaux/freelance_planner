@@ -37,20 +37,38 @@ export default function Companies() {
       </h2>
       {displayForm && <CompanyForm getCompanies={getCompanies} />}
       <div style={styles.companiesContainer}>
-      {companies.map((company) => {
-        const url = `/companies/${company.id}/simulations`;
-        return (
-          <div key={company.id} style={styles.companyCard}>
-            <a
-            href={url}
-            onClick={() => localStorage.setItem('companyId', company.id)}
-            style={styles.cardTitle}>
-              {company.name}
-              </a>
-            {company.description && <div>{company.description}</div>}
-          </div>
-        );
-      })}
+        <table className="bordered-table">
+          <thead style={{textAlign: 'left'}}>
+            <tr>
+              <th>Nom</th>
+              <th>Description</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            {companies.map((company) => {
+              const url = `/companies/${company.id}/simulations`;
+              return (
+                <tr key={company.id}>
+                  <td>
+                    {company.name}
+                  </td>
+                  <td>
+                    {company.description}
+                  </td>
+                  <td>
+                    <a
+                    href={url}
+                    onClick={() => localStorage.setItem('companyId', company.id)}
+                    style={{}}>
+                      Voir
+                      </a>
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
       </div>
       {companies.length === 0 && (
         <div>Vous n'avez créé aucune entreprise pour le moment !</div>

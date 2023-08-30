@@ -116,6 +116,7 @@ const styles = {
     backgroundColor: "rgb(0,0,0, 0.8)",
   },
   innerModal: {
+    overflow: 'scroll',
     backgroundColor: "#fefefe",
     opacity: 1,
     padding: "20px",

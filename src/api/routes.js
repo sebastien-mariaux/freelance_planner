@@ -3,6 +3,7 @@ export const routes = {
   userInfo: '/accounts/users/me/',
   logout: '/accounts/logout/',
   companiesList: '/companies/',
+  company: (companyId) => `/companies/${companyId}/`,
   companySimulations: (companyId) => `/companies/${companyId}/simulations/`,
   companySimulation: (companyId, simulationId) => `/companies/${companyId}/simulations/${simulationId}/`,
   companyDetailedSimulations: (companyId) => `/companies/${companyId}/detailed-simulations/`,
@@ -14,7 +15,7 @@ export const routes = {
   unlinkExpenses: (companyId, simulationId) => `/companies/${companyId}/simulations/${simulationId}/unlink_expenses/`,
   transactions: (companyId) => `/companies/${companyId}/transactions/`,
   transaction: (companyId, transactionId) => `/companies/${companyId}/transactions/${transactionId}/`,
-  yearTransactions: (companyId, year = null) => `/companies/${companyId}/transactions/?year=${year}`,
+  yearTransactions: (companyId, year = null, page=1) => `/companies/${companyId}/transactions/?year=${year}&page=${page}`,
   feedback: '/feedback/',
   summary: (companyId, year) => `/companies/${companyId}/summary/?year=${year}`,
 }

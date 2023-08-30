@@ -16,7 +16,8 @@ export default function TransactionsForm({ afterCreate, companyId }) {
       () => {});
 
   }
-
+  const curr = new Date();
+  const date = curr.toISOString().substring(0,10);
 
   return (
     <form onSubmit={handleSubmit(createTransaction)}>
@@ -43,11 +44,11 @@ export default function TransactionsForm({ afterCreate, companyId }) {
             </select>
           </label>
           <label style={styles.label}>
-            <input type="date" {...register("date", { required: true })} />
+            <input type="date" {...register("date", { required: true })} defaultValue={date} />
           </label>
 
         </div>
-        <input type="submit" value="Ajouter" />
+        <input type="submit" value="Ajouter" style={styles.submit} />
       </div>
     </form>
   );
@@ -57,4 +58,8 @@ const styles = {
   label: {
     padding: "0.5em",
   },
+  submit: {
+    height: 'fit-content',
+    alignSelf: 'center',
+  }
 };
