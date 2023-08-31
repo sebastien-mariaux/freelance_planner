@@ -7,11 +7,13 @@ import SiteLayout from "./Simulations/SiteLayout";
 import Accounting from "./Accounting/Accounting";
 import { ErrorBoundary } from "react-error-boundary";
 import MainFallbackError from "./errors/MainFallbackError";
-import Login from "./Login/Login";
-import WithAuth from "./Login/WithAuth";
+import Login from "./Access/Login";
+import WithAuth from "./Access/WithAuth";
 import Companies from "./Companies/Companies";
 import Feedback from "./Feedback/Feedback.jsx";
 import Profile from "./Profile/Profile";
+import Restricted from "./Access/Restricted";
+import Subscription from "./Access/Subscription";
 
 function App() {
   return (
@@ -35,8 +37,11 @@ function App() {
                 path="/companies/:companyId/simulations"
                 element={<Simulations />}
               />
-              <Route path="/companies/:companyId/accounting" element={<Accounting />} />
+              <Route element={<Restricted />}>
+                <Route path="/companies/:companyId/accounting" element={<Accounting />} />
+              </Route>
               <Route path="/profile" element={<Profile />} />
+              <Route path="/subscribe" element={<Subscription />} />
             </Route>
           </Route>
         </Routes>

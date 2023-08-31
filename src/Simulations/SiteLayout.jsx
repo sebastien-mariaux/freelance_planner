@@ -22,6 +22,11 @@ export default function SiteLayout() {
           FREELANCE PLANNER
         </div>
         <nav>
+        <a style={navStyle.navLink}
+            href="/"
+          >
+            Entreprises
+          </a>
           <a style={navStyle.navLink}
             href="/a-propos"
           >

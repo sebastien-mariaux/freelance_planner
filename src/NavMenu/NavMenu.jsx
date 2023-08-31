@@ -35,36 +35,18 @@ export default function NavMenu({ activeItem }) {
           Simulations
         </a>
       </div>
-      {isPremium ? (
-        <div style={itemStyle(activeItem, "accounting")}>
-          <a
-            href={`/companies/${companyId}/accounting`}
-            style={{
-              marginLeft: "auto",
-              marginTop: "auto",
-              marginBottom: "auto",
-            }}
-          >
-            Comptabilité
-          </a>
-        </div>
-      ) : (
-        <div style={itemStyle(activeItem, "accounting")}>
-          <span title='En travaux' style={styles.disabledLink}>Comptabilité</span>
-        </div>
-      )}
       <div style={itemStyle(activeItem, "accounting")}>
-          <a
-            href={`/companies/${companyId}/accounting`}
-            style={{
-              marginLeft: "auto",
-              marginTop: "auto",
-              marginBottom: "auto",
-            }}
-          >
-            Comptabilité
-          </a>
-        </div>
+        <a
+          href={`/companies/${companyId}/accounting`}
+          style={{
+            marginLeft: "auto",
+            marginTop: "auto",
+            marginBottom: "auto",
+          }}
+        >
+          Comptabilité
+        </a>
+      </div>
     </div>
   );
 }
@@ -74,9 +56,9 @@ const styles = {
     display: "flex",
   },
   disabledLink: {
-    fontStyle: 'italic',
-    color: 'grey',
-  }
+    fontStyle: "italic",
+    color: "grey",
+  },
 };
 
 const itemStyle = (activeItem, currentItem) => {
