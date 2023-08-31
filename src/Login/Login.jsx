@@ -26,18 +26,18 @@ export default function Login() {
       params,
       (data) => {
         localStorage.setItem("token", data.token);
-        getUserData();
+        // getUserData();
         navigate("/");
       },
       onError
     );
   };
 
-  const getUserData = async () => {
-    urlGet(routes.userInfo).then((data) => {
-      localStorage.setItem("userData", JSON.stringify(data));
-    });
-  };
+  // const getUserData = async () => {
+  //   urlGet(routes.userInfo).then((data) => {
+  //     localStorage.setItem("userData", JSON.stringify(data));
+  //   });
+  // };
 
   // const hideErrors = () => {
   //   setDisplayErrors(false)

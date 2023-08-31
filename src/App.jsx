@@ -11,6 +11,7 @@ import Login from "./Login/Login";
 import WithAuth from "./Login/WithAuth";
 import Companies from "./Companies/Companies";
 import Feedback from "./Feedback/Feedback.jsx";
+import Profile from "./Profile/Profile";
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
                 element={<Simulations />}
               />
               <Route path="/companies/:companyId/accounting" element={<Accounting />} />
+              <Route path="/profile" element={<Profile />} />
             </Route>
           </Route>
         </Routes>

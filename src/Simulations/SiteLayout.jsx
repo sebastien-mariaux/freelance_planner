@@ -8,7 +8,7 @@ export default function SiteLayout() {
   const navigate = useNavigate();
 
   return (
-    <div class='global-wrapper' >
+    <div className='global-wrapper' >
       <div>
 
       <header style={styles.header}>
@@ -31,6 +31,11 @@ export default function SiteLayout() {
             href="/feedback"
           >
             Feedback
+          </a>
+          <a style={navStyle.navLink}
+            href="/profile"
+          >
+            Mon compte
           </a>
           <LoginMenuItem />
         </nav>

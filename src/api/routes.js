@@ -21,4 +21,5 @@ export const routes = {
   salary: (companyId, salaryId) => `/companies/${companyId}/salaries/${salaryId}/`,
   feedback: '/feedback/',
   summary: (companyId, year) => `/companies/${companyId}/summary/?year=${year}`,
+  profile: '/accounts/users/',
 }

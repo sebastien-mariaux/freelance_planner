@@ -1,16 +1,25 @@
 import { useForm } from "react-hook-form";
 import { buttonStyle, formStyle } from "../mainStyles";
 import { routes } from "../api/routes";
-import { urlPost } from "../api/base";
+import { urlGet, urlPost } from "../api/base";
+import { useEffect, useState } from "react";
 
 export default function FeedbackForm() {
-  const userData = JSON.parse(localStorage.getItem("userData"));
-  const { register, handleSubmit, reset } = useForm({
-    defaultValues: {
-      email: userData?.email,
-      name: userData?.first_name + " " + userData?.last_name,
-    }
-  });
+  const { register, handleSubmit, reset } = useForm();
+
+  const getUserData = async () => {
+    urlGet(routes.userInfo).then((data) => {
+      reset({
+        email: data?.email,
+        name: data?.first_name + " " + data?.last_name,
+      })
+    });
+  };
+
+  useEffect(() => {
+    getUserData();
+  }, [  ]);
+
 
 
   const sendFeedback = (data) => {

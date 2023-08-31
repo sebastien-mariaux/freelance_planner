@@ -34,7 +34,8 @@ export const formStyle = {
     marginBottom: '1em'
   },
   label: {
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    marginBottom: '0.2em',
   },
   input: {
     height: '2em'
