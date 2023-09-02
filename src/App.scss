@@ -100,3 +100,8 @@ button, .button {
       color: $white;
     }
   }
+
+  label.required:after {
+    content: "*";
+    color: red;
+  }

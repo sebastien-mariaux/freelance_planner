@@ -17,11 +17,19 @@ export default function LoginMenuItem() {
   }
 
   return (
+    <>
     <a
     href='/login'
     style={{ marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto' , ...navStyle.navLink}}
   >
     Login
   </a>
+  <a
+  href='/login'
+  style={{ marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto' , ...navStyle.navLink}}
+>
+  Inscription
+</a>
+    </>
   )
 }

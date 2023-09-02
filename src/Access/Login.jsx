@@ -33,16 +33,6 @@ export default function Login() {
     );
   };
 
-  // const getUserData = async () => {
-  //   urlGet(routes.userInfo).then((data) => {
-  //     localStorage.setItem("userData", JSON.stringify(data));
-  //   });
-  // };
-
-  // const hideErrors = () => {
-  //   setDisplayErrors(false)
-  // }
-
   return (
     <div className="login" style={{maxWidth: '500px',  margin: 'auto'}}>
       <h1>Login</h1>
@@ -73,6 +63,9 @@ export default function Login() {
         </div>
         <input className='button' type="submit" value="C'est parti !" />
       </form>
+      <div style={{marginTop: '1em', fontStyle: 'italic'}}>
+        <a href="/signup">Pas encore inscrit·e ? Cliquez ici pour créer un compte.</a>
+      </div>
     </div>
   );
 }

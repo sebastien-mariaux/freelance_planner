@@ -22,4 +22,5 @@ export const routes = {
   feedback: '/feedback/',
   summary: (companyId, year) => `/companies/${companyId}/summary/?year=${year}`,
   profile: '/accounts/users/',
+  signup: '/accounts/signup/',
 }

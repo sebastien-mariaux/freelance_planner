@@ -3,7 +3,7 @@ import "./App.scss";
 import Simulations from "./Simulations/Simulations";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import About from "./About";
-import SiteLayout from "./Simulations/SiteLayout";
+import SiteLayout from "./SiteLayout";
 import Accounting from "./Accounting/Accounting";
 import { ErrorBoundary } from "react-error-boundary";
 import MainFallbackError from "./errors/MainFallbackError";
@@ -14,6 +14,7 @@ import Feedback from "./Feedback/Feedback.jsx";
 import Profile from "./Profile/Profile";
 import Restricted from "./Access/Restricted";
 import Subscription from "./Access/Subscription";
+import Signup from "./Access/Signup";
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
         <Routes>
           <Route element={<SiteLayout />}>
             <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
             <Route path="/a-propos" element={<About />} />
             <Route path="/feedback" element={<Feedback />} />
             <Route element={<WithAuth />}>
