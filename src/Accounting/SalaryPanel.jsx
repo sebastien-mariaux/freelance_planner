@@ -25,7 +25,6 @@ export default function SalaryPanel({year, company}) {
 
 
   useEffect(() => {
-    console.log('useEffect')
     getSalaries();
   }, [page_number, year]);
 

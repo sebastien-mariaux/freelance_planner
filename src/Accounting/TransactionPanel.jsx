@@ -25,7 +25,6 @@ export default function TransactionPanel({year}) {
 
 
   useEffect(() => {
-    console.log('useEffect')
     getTransactions();
   }, [page_number, year]);
 

@@ -7,7 +7,6 @@ import { colors } from "../colors";
 export default function SummaryPanel({ year, company }) {
   const [summary, setSummary] = useState([]);
   const companyId = localStorage.getItem("companyId");
-  console.log(summary);
 
   useEffect(() => {
     loadSummary();
