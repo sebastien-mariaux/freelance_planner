@@ -15,6 +15,7 @@ import Profile from "./Profile/Profile";
 import Restricted from "./Access/Restricted";
 import Subscription from "./Access/Subscription";
 import Signup from "./Access/Signup";
+import ResetPassword from "./Access/ResetPassword";
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
         <Routes>
           <Route element={<SiteLayout />}>
             <Route path="/login" element={<Login />} />
+            <Route path="/reset-password" element={<ResetPassword />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/a-propos" element={<About />} />
             <Route path="/feedback" element={<Feedback />} />

@@ -23,4 +23,6 @@ export const routes = {
   summary: (companyId, year) => `/companies/${companyId}/summary/?year=${year}`,
   profile: '/accounts/users/',
   signup: '/accounts/signup/',
+  resetPassword: '/accounts/password/reset/',
+  resetPasswordConfirm: '/accounts/password/reset/verified/',
 }

@@ -49,7 +49,7 @@ export default function Signup() {
       });
     }
   };
-  console.log('errorsList', errorsList)
+
   return (
     <div className="signup" style={{ maxWidth: "500px", margin: "auto" }}>
       <h1>Créer un compte</h1>

@@ -64,8 +64,14 @@ export default function Login() {
         <input className='button' type="submit" value="C'est parti !" />
       </form>
       <div style={{marginTop: '1em', fontStyle: 'italic'}}>
-        <a href="/signup">Pas encore inscrit·e ? Cliquez ici pour créer un compte.</a>
+      Pas encore inscrit·e ? <a href="/signup">Cliquez ici pour créer un compte.</a>
       </div>
+      <div style={{marginTop: '1em', fontStyle: 'italic'}}>
+        <a
+        href="/reset-password"
+        >Mot de passe oublié ?</a>
+      </div>
+
     </div>
   );
 }
