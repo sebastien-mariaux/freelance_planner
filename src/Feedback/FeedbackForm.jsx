@@ -17,7 +17,10 @@ export default function FeedbackForm() {
   };
 
   useEffect(() => {
-    getUserData();
+    const token = localStorage.getItem("token");
+    if (token) {
+      getUserData();
+    }
   }, [  ]);
 
 
