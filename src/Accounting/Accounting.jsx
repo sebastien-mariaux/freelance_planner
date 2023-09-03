@@ -57,7 +57,7 @@ export default function Accounting() {
               .fill()
               .map((_, i) => {
                 return (
-                  <option value={i + 2021} selected={i + 2021 === currentYear}>
+                  <option key={i} value={i + 2021} selected={i + 2021 === currentYear}>
                     {i + 2021}
                   </option>
                 );
