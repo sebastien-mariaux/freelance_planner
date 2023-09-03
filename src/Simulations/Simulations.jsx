@@ -42,6 +42,7 @@ export default function Simulations() {
   const { companyId } = useParams();
   const [simulationId, setSimulationId] = useState();
   const [displayExpensesModal, setDisplayExpensesModal] = useState(false);
+  const [workingDaysMode, setWorkingDaysMode] = useState("COMPUTED");
 
   const getSimulations = async () => {
     urlGet(routes.companyDetailedSimulations(companyId)).then((data) => {
@@ -49,9 +50,19 @@ export default function Simulations() {
     });
   };
 
+  const getUserData = async () => {
+    urlGet(routes.userInfo).then((data) => {
+      setWorkingDaysMode(data.working_day_mode);
+    });
+  };
+
   useEffect(() => {
     getSimulations();
   }, [displayExpensesModal]);
+
+  useEffect(() => {
+    getUserData();
+  }, []);
 
   const openExpensesModal = (id) => {
     setSimulationId(id);
@@ -205,26 +216,37 @@ export default function Simulations() {
               </>
             }
           />
-          <InputRow
-            simulations={apiSimulations}
-            updateSimulation={updateSimulation}
-            label="days_per_week"
-            title="Jours par semaine"
-          />
-          {fullView && (
+          {workingDaysMode === "COMPUTED" ? (
+            <>
+              <InputRow
+                simulations={apiSimulations}
+                updateSimulation={updateSimulation}
+                label="days_per_week"
+                title="Jours par semaine"
+              />
+              {fullView && (
+                <InputRow
+                  simulations={apiSimulations}
+                  updateSimulation={updateSimulation}
+                  label="weeks_off"
+                  title="Semaines non travaillées"
+                />
+              )}
+              <InputRow
+                simulations={apiSimulations}
+                updateSimulation={updateSimulation}
+                label="weeks_on"
+                title="Semaines travaillées"
+              />
+            </>
+          ) : (
             <InputRow
               simulations={apiSimulations}
               updateSimulation={updateSimulation}
-              label="weeks_off"
-              title="Semaines non travaillées"
+              label="days_per_year"
+              title="Jours travaillés par an"
             />
           )}
-          <InputRow
-            simulations={apiSimulations}
-            updateSimulation={updateSimulation}
-            label="weeks_on"
-            title="Semaines travaillées"
-          />
 
           <TextRow
             label="sales.sales"
