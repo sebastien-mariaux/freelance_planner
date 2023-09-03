@@ -21,7 +21,7 @@ export default function FeedbackForm() {
     if (token) {
       getUserData();
     }
-  }, [  ]);
+  }, []);
 
 
 

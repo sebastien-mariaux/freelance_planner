@@ -29,6 +29,18 @@ export const urlGet = async (route) => {
   return await res.json();
 }
 
+export const urlGetWithResponse = async (route, onSuccess, onError) => {
+  const res = await fetch(getFullUrl(route), {
+    method: "GET",
+    headers: headers()
+  });
+  if (res.ok) {
+    onSuccess(await res.json())
+  } else {
+    onError(await res.json())
+  }
+}
+
 export const urlCallWithBody = async (method, route, body, onSuccess, onError) => {
   const res = await fetch(getFullUrl(route), {
     method: method,

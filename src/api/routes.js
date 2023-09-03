@@ -25,4 +25,5 @@ export const routes = {
   signup: '/accounts/signup/',
   resetPassword: '/accounts/password/reset/',
   resetPasswordConfirm: '/accounts/password/reset/verified/',
+  signupVerify: (code) => `/accounts/signup/verify/?code=${code}`,
 }

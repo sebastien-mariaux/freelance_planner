@@ -25,7 +25,7 @@ export default function LoginMenuItem() {
     Login
   </a>
   <a
-  href='/login'
+  href='/signup'
   style={{ marginLeft: 'auto', marginTop: 'auto', marginBottom: 'auto' , ...navStyle.navLink}}
 >
   Inscription
